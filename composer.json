@@ -1,0 +1,36 @@
+{
+	"name": "openthc/common",
+	"description": "OpenTHC Common Library",
+	"license": "proprietary",
+	"autoload": {
+		"files": [
+			"lib/php.php"
+		],
+		"psr-4": {
+			"OpenTHC\\": "./lib"
+		}
+	},
+	"require": {
+		"php": ">=7.2.0",
+		"ext-curl": "*",
+		"ext-date": "*",
+		"ext-gettext": "*",
+		"ext-json": "*",
+		"ext-PDO": "*",
+		"ext-session": "*",
+		"ext-sockets": "*",
+		"giggsey/libphonenumber-for-php": "8.10.5",
+		"guzzlehttp/guzzle": "6.3.3",
+		"slim/slim": "3.12.1",
+		"slim/twig-view": "2.5.0",
+		"twig/twig": "2.11.3"
+	},
+	"require-dev": {
+		"behat/behat": "3.5.0",
+		"facebook/webdriver": "1.7.1",
+		"phpmd/phpmd": "2.7.0",
+		"phpstan/phpstan": "0.11.12",
+		"phpunit/phpunit": "8.3.4",
+		"sebastian/phpcpd": "4.1.0"
+	}
+}
