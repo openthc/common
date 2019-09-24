@@ -1,7 +1,7 @@
 {
 	"name": "openthc/common",
 	"description": "OpenTHC Common Library",
-	"license": "proprietary",
+	"license": "GPL-3.0-only",
 	"autoload": {
 		"files": [
 			"lib/php.php"
