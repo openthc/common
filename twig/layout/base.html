@@ -31,7 +31,7 @@
 {% block html_body %}
 <body>
 
-{% include "block/menu-zero.html" %}
+{% include "block/menu-zero.html" ignore missing %}
 
 {% block body_head %}
 {% endblock %}
@@ -51,7 +51,7 @@
 
 </div>
 
-{% include "block/footer-pub.html" %}
+{% include "block/footer-pub.html" ignore missing %}
 
 {% block foot_script %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
