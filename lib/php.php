@@ -8,6 +8,14 @@ function h($x)
 	return htmlspecialchars($x, ENT_COMPAT|ENT_HTML5, 'utf-8', true);
 }
 
+function base64_encode_url($x) {
+	return str_replace(['+','/','='], ['-','_',''], base64_encode($x));
+}
+
+function base64_decode_url($x) {
+	return base64_decode(str_replace(['-','_'], ['+','/'], $x));
+}
+
 function _curl_init($uri)
 {
 	$ch = curl_init($uri);
@@ -384,16 +392,13 @@ function _url_assemble($uri)
 	Cheap Hacks for Encrypt/Decrypt
 	@param $x Is a String to Encrypt or Decrypt
 */
-function _enbase64url($x) { return rtrim(strtr(base64_encode($x), '+/', '-_'), '='); }
-function _debase64url($x) { return base64_decode(str_pad(strtr($x, '-_', '+/'), (strlen($x) % 4), '=', STR_PAD_RIGHT)); }
-
 function _encrypt($d, $k=null)
 {
 	if (null == $k) {
 		$k = APP_SALT;
 	}
 	$d = openssl_encrypt($d, 'AES-256-ECB', $k, true);
-	return _enbase64url($d);
+	return base64_encode_url($d);
 }
 
 function _decrypt($d, $k=null)
@@ -401,7 +406,7 @@ function _decrypt($d, $k=null)
 	if (null == $k) {
 		$k = APP_SALT;
 	}
-	$d = _debase64url($d);
+	$d = base64_decode_url($d);
 	return trim(openssl_decrypt($d, 'AES-256-ECB', $k, true));
 }
 
