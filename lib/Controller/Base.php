@@ -66,4 +66,29 @@ class Base
 		return $data;
 
 	}
+
+
+	/**
+	 * Adds a Session Flash Message
+	 * @param $data Twig Data Array
+	 * @return Twig Data Array w/Flash Messages
+	 */
+	protected function makeTwigData(array $data = null) : array
+	{
+		$x = \Edoceo\Radix\Session::flash();
+		if (empty($x)) {
+			return($data);
+		}
+
+		// Rewrite Radix Style to Bootstrap Style
+		$x = str_replace('<div class="good">', '<div class="alert alert-success alert-dismissible" role="alert">', $x);
+		$x = str_replace('<div class="info">', '<div class="alert alert-info alert-dismissible" role="alert">', $x);
+		$x = str_replace('<div class="warn">', '<div class="alert alert-warning alert-dismissible" role="alert">', $x);
+		$x = str_replace('<div class="fail">', '<div class="alert alert-danger alert-dismissible" role="alert">', $x);
+
+		// Add Close Button
+		$x = str_replace('</div>', '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden=true">&times;</span></button></div>', $x);
+
+		return array_merge([ 'alert' => $x ], $data ?: []);
+	}
 }

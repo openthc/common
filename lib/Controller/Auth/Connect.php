@@ -165,17 +165,15 @@ class Connect extends \OpenTHC\Controller\Base
 
 
 		// OK
+		$_SESSION['Contact'] = $Contact;
+		$_SESSION['uid'] = $AppUser['id'];
+
 		$_SESSION['Company'] = $Company;
 		$_SESSION['gid'] = $Company['id'];
 
 		$_SESSION['License'] = $License;
-		$_SESSION['Contact'] = $Contact;
-
-		$_SESSION['AppUser'] = $AppUser; // @deprcated
-		$_SESSION['uid'] = $AppUser['id'];
 
 		// Canon
-		//var_dump($tmp_auth);
 		if (!empty($tmp_auth['cre'])) {
 			$_SESSION['cre'] = array(
 				'engine' => $tmp_auth['cre']['engine'],
