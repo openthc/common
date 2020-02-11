@@ -11,13 +11,13 @@ class Contact extends \OpenTHC\SQL\Record
 {
 	const TABLE = 'contact';
 
-	const FLAG_MAILGOOD = 0x00000001;
-	const FLAG_EMAIL_OK = 0x00000001;
-
-	const FlAG_PHONE_OK = 0x00000002;
+	const FLAG_EMAIL_GOOD = 0x00000001;
+	const FlAG_PHONE_GOOD = 0x00000002;
+	const FLAG_EMAIL_WANT = 0x00000004;
+	const FLAG_PHONE_WANT = 0x00000008;
 
 	const FLAG_ROOT     = 0x00000010;
-	const FlAG_BILL     = 0x00000020;
+	const FLAG_BILL     = 0x00000020;
 
 	const FLAG_DISABLED = 0x01000000;
 

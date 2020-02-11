@@ -22,16 +22,8 @@
 
 --ignore-dir=.git
 --ignore-dir=doxygen
---ignore-dir=node_modules
---ignore-dir=scrape
 --ignore-dir=var
 --ignore-dir=vendor
---ignore-dir=webroot/assets
---ignore-dir=webroot/doc
---ignore-dir=webroot/dox
---ignore-dir=webroot/lib
---ignore-dir=webroot/sdk
 
 --ignore-file=is:composer.lock
 --ignore-file=is:composer.phar
---ignore-file=is:phpcpd.phar
