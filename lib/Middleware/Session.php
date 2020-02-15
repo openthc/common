@@ -44,5 +44,9 @@ class Session extends \OpenTHC\Middleware\Base
 
 		session_start();
 
+		if (empty($_SESSION['crypt-key'])) {
+			$_SESSION['crypt-key'] = sha1(openssl_random_pseudo_bytes(256));
+		}
+
 	}
 }
