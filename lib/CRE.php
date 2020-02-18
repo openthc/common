@@ -9,8 +9,6 @@ class CRE
 {
 	const ENGINE = 'openthc';
 
-	protected $_api_base = 'https://pipe.openthc.com';
-
 	protected $_c; // Client Connection
 
 	/**
@@ -18,22 +16,24 @@ class CRE
 	*/
 	function __construct($sid=null)
 	{
+		$cfg = \OpenTHC\Config::get('openthc_pipe');
+
 		$jar = new \GuzzleHttp\Cookie\CookieJar();
 
 		if (!empty($sid)) {
-			$c = new \GuzzleHttp\Cookie\SetCookie(array(
-				'Domain' => 'pipe.openthc.com',
-				'Name' => 'poc',
+			$c = new \GuzzleHttp\Cookie\SetCookie([
+				'Domain' => $cfg['host'],
+				'Name' => $cfg['cookie_name'],
 				'Value' => $sid,
-			));
+			]);
 			$jar->setCookie($c);
 		}
 
 		$this->_c = new \GuzzleHttp\Client(array(
-			'base_uri' => $this->_api_base,
+			'base_uri' => $cfg['url'],
 			'cookies' => $jar,
 			'headers' => array(
-				'user-agent' => 'OpenTHC/420.18.304',
+				'user-agent' => 'OpenTHC/420.19.048',
 			),
 			'allow_redirects' => false,
 			'http_errors' => false
@@ -91,24 +91,6 @@ class CRE
 	{
 		$r = $this->_c->post('/auth/open', array('form_params' => $p));
 		return json_decode($r->getBody(), true);
-
-		$this->_auth = $auth;
-
-		$post = array(
-			'cre' => $this->_auth['system'],
-			'license' => $this->_auth['license'],
-			'license-key' => $this->_auth['secret'],
-		);
-		$res = $this->post('/auth/open', $post);
-		switch ($res['status']) {
-		case 'failure':
-			return $res;
-			break;
-		case 'success':
-			$this->_auth['session-id'] = $res['result'];
-			return $res;
-			break;
-		}
 	}
 
 	function ping()
