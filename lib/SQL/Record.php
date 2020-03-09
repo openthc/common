@@ -9,20 +9,35 @@ use Edoceo\Radix\DB\SQL;
 
 class Record implements \ArrayAccess
 {
+	private $_dbc; // An Edoceo\Radix\DB\SQL object
+
 	protected $_pk = null;
-	protected $_data; // Object Data
-	protected $_diff = array();  // Array of Changed Properties
 	protected $_table;
 	protected $_sequence;
 
+	protected $_data; // Object Data
+	protected $_diff = array();  // Array of Changed Properties
+
 	/**
-		ImperiumBase Model Constructor
-	*/
-	function __construct($x=null)
+	 * Record Constructor
+	 */
+	function __construct($dbc=null, $obj=null)
 	{
 		// Detect Sequence Name
 		if (strlen($this->_sequence) == 0) {
 			$this->_sequence = $this->_table . '_id_seq';
+		}
+
+		// If Single Parameter
+		// Promote first parameter to second parameter
+		// Since the caller is not specifying the DB Connection to use
+		if (!empty($dbc) && empty($obj)) {
+			$obj = $dbc;
+			$dbc = null;
+		}
+
+		if (!empty($dbc) && is_object($dbc) && ($dbc instanceof SQL)) {
+			$this->_dbc = $dbc;
 		}
 
 // Detect Object Properties from Table if not Specified
@@ -38,24 +53,32 @@ class Record implements \ArrayAccess
 //		}
 
 		// Do Nothing
-		if (empty($x)) {
+		if (empty($obj)) {
 			return;
 		}
 
 		// Load Database Record
-		if (is_string($x) || is_numeric($x)) {
+		if (is_string($obj) || is_numeric($obj)) {
+
 			$sql = sprintf("SELECT * FROM \"%s\" where id = ?", $this->_table);
-			$x = SQL::fetch_row($sql, array($x));
+
+			// Class or Static?
+			if (!empty($this->_dbc)) {
+				$obj = $this->_dbc->fetchRow($sql, array($obj));
+			} else {
+				$obj = SQL::fetch_row($sql, array($obj));
+			}
+
 		}
 
 		// Copy properties from Given object to me!
-		if (is_object($x)) {
-			$p = get_object_vars($x);
+		if (is_object($obj)) {
+			$p = get_object_vars($obj);
 			foreach ($p as $k=>$v) {
-				$this->_data[$k] = $x->$k;
+				$this->_data[$k] = $obj->$k;
 			}
-		} elseif (is_array($x)) {
-			$this->_data = $x;
+		} elseif (is_array($obj)) {
+			$this->_data = $obj;
 		}
 
 		if (!empty($this->_data['id'])) {
@@ -70,7 +93,18 @@ class Record implements \ArrayAccess
 	*/
 	function delete()
 	{
-		SQL::query("DELETE FROM \"{$this->_table}\" WHERE id = ?", array($this->_data['id']));
+		$ret = null;
+
+		$sql = "DELETE FROM \"{$this->_table}\" WHERE id = ?";
+		$arg = [ $this->_data['id'] ];
+
+		if (!empty($this->_dbc)) {
+			$ret = $this->_dbc->query($sql, $arg);
+		} else {
+			$ret = SQL::query($sql, $arg);
+		}
+
+		return $ret;
 	}
 
 	/**
@@ -101,9 +135,21 @@ class Record implements \ArrayAccess
 			if (count($this->_diff)) {
 				//Base_Diff::diff($this);
 			}
-			$res = SQL::update($this->_table, $rec, array('id' => $this->_pk));
+
+			if (!empty($this->_dbc)) {
+				$res = $this->_dbc->update($this->_table, $rec, array('id' => $this->_pk));
+			} else {
+				$res = SQL::update($this->_table, $rec, array('id' => $this->_pk));
+			}
+
 		} else {
-			$this->_pk = SQL::insert($this->_table, $rec);
+
+			if (!empty($this->_dbc)) {
+				$this->_pk = $this->_dbc->insert($this->_table, $rec);
+			} else {
+				$this->_pk = SQL::insert($this->_table, $rec);
+			}
+
 			$this->_data['id'] = $this->_pk;
 			// if (empty($this->_pk)) {
 			// 	throw new \Exception('Unexpected error saving: ' . get_class($this), __LINE__, new Exception("SQL Error: " . SQL::lastError()));
