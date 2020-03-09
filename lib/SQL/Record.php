@@ -5,11 +5,9 @@
 
 namespace OpenTHC\SQL;
 
-use Edoceo\Radix\DB\SQL;
-
 class Record implements \ArrayAccess
 {
-	private $_dbc; // An Edoceo\Radix\DB\SQL object
+	protected $_dbc; // An Edoceo\Radix\DB\SQL object
 
 	protected $_pk = null;
 	protected $_table;
@@ -28,16 +26,17 @@ class Record implements \ArrayAccess
 			$this->_sequence = $this->_table . '_id_seq';
 		}
 
+		// First Parameter is DBC?
+		if (!empty($dbc) && is_object($dbc) && ($dbc instanceof \Edoceo\Radix\DB\SQL)) {
+			$this->_dbc = $dbc;
+		}
+
 		// If Single Parameter
 		// Promote first parameter to second parameter
 		// Since the caller is not specifying the DB Connection to use
 		if (!empty($dbc) && empty($obj)) {
 			$obj = $dbc;
 			$dbc = null;
-		}
-
-		if (!empty($dbc) && is_object($dbc) && ($dbc instanceof SQL)) {
-			$this->_dbc = $dbc;
 		}
 
 // Detect Object Properties from Table if not Specified
@@ -66,7 +65,7 @@ class Record implements \ArrayAccess
 			if (!empty($this->_dbc)) {
 				$obj = $this->_dbc->fetchRow($sql, array($obj));
 			} else {
-				$obj = SQL::fetch_row($sql, array($obj));
+				$obj = \Edoceo\Radix\DB\SQL::fetch_row($sql, array($obj));
 			}
 
 		}
@@ -101,7 +100,7 @@ class Record implements \ArrayAccess
 		if (!empty($this->_dbc)) {
 			$ret = $this->_dbc->query($sql, $arg);
 		} else {
-			$ret = SQL::query($sql, $arg);
+			$ret = \Edoceo\Radix\DB\SQL::query($sql, $arg);
 		}
 
 		return $ret;
@@ -139,7 +138,7 @@ class Record implements \ArrayAccess
 			if (!empty($this->_dbc)) {
 				$res = $this->_dbc->update($this->_table, $rec, array('id' => $this->_pk));
 			} else {
-				$res = SQL::update($this->_table, $rec, array('id' => $this->_pk));
+				$res = \Edoceo\Radix\DB\SQL::update($this->_table, $rec, array('id' => $this->_pk));
 			}
 
 		} else {
@@ -147,7 +146,7 @@ class Record implements \ArrayAccess
 			if (!empty($this->_dbc)) {
 				$this->_pk = $this->_dbc->insert($this->_table, $rec);
 			} else {
-				$this->_pk = SQL::insert($this->_table, $rec);
+				$this->_pk = \Edoceo\Radix\DB\SQL::insert($this->_table, $rec);
 			}
 
 			$this->_data['id'] = $this->_pk;
