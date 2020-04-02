@@ -4,7 +4,8 @@
 	"license": "GPL-3.0-only",
 	"autoload": {
 		"files": [
-			"lib/php.php"
+			"lib/php.php",
+			"lib/stat.php"
 		],
 		"psr-4": {
 			"OpenTHC\\": "./lib"
