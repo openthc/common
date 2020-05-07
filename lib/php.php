@@ -339,6 +339,17 @@ function _phone_nice($p, $l='US')
 	return $r;
 }
 
+
+/**
+ * Generate a good Random Hash
+ * @return string base64-url encoded sha256 of 256 random bytes
+ */
+function _random_hash()
+{
+	return base64_encode_url(hash('sha256', openssl_random_pseudo_bytes(256), true));
+}
+
+
 /*
  * Returns a File that will magically be cleaned up
  */
