@@ -14,7 +14,7 @@ class Record implements \ArrayAccess
 	protected $_sequence;
 
 	protected $_data; // Object Data
-	protected $_diff = array();  // Array of Changed Properties
+	protected $_diff = [];  // Array of Changed Properties
 
 	/**
 	 * Record Constructor
@@ -29,6 +29,7 @@ class Record implements \ArrayAccess
 		// First Parameter is DBC?
 		if (!empty($dbc) && is_object($dbc) && ($dbc instanceof \Edoceo\Radix\DB\SQL)) {
 			$this->_dbc = $dbc;
+			$dbc = null;
 		}
 
 		// If Single Parameter
@@ -60,7 +61,6 @@ class Record implements \ArrayAccess
 		if (is_string($obj) || is_numeric($obj)) {
 
 			$sql = sprintf("SELECT * FROM \"%s\" where id = ?", $this->_table);
-
 			// Class or Static?
 			if (!empty($this->_dbc)) {
 				$obj = $this->_dbc->fetchRow($sql, array($obj));
@@ -70,19 +70,23 @@ class Record implements \ArrayAccess
 
 		}
 
-		// Copy properties from Given object to me!
-		if (is_object($obj)) {
-			$p = get_object_vars($obj);
-			foreach ($p as $k=>$v) {
-				$this->_data[$k] = $obj->$k;
-			}
-		} elseif (is_array($obj)) {
-			$this->_data = $obj;
+		$this->setData($obj);
+
+	}
+
+	/**
+	 * Load from Database to this Object Instance
+	 */
+	function loadBy($key, $val)
+	{
+		$sql = sprintf('SELECT * FROM "%s" where "%s" = ?', $this->_table, $key);
+		$rec = $this->_dbc->fetchRow($sql, $val);
+		if (!empty($rec[$key])) {
+			$this->setData($rec);
+			return true;
 		}
 
-		if (!empty($this->_data['id'])) {
-			$this->_pk = $this->_data['id'];
-		}
+		return false;
 
 	}
 
@@ -243,4 +247,28 @@ class Record implements \ArrayAccess
 		@return void
 	*/
 	public function offsetUnset($k) { unset($this->_data[$k]); }
+
+	/**
+	 * Set Data on this Object
+	 */
+	protected function setData($rec)
+	{
+		$this->_data = [];
+		$this->_diff = [];
+
+		if (is_object($rec)) {
+			$p = get_object_vars($rec);
+			foreach ($p as $k=>$v) {
+				$this->_data[$k] = $rec->$k;
+			}
+		} elseif (is_array($rec)) {
+			$this->_data = $rec;
+		}
+
+		if (!empty($this->_data['id'])) {
+			$this->_pk = $this->_data['id'];
+		}
+
+	}
+
 }
