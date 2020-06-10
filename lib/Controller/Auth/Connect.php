@@ -13,6 +13,8 @@ use OpenTHC\Contact;
 
 class Connect extends \OpenTHC\Controller\Base
 {
+	protected $_connect_info;
+
 	function __invoke($REQ, $RES, $ARG)
 	{
 		$_SESSION = array();
