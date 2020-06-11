@@ -42,20 +42,15 @@ class Company extends \OpenTHC\SQL\Record
 	/**
 		Get or Set Options with Caching
 	*/
-	static function opt($k, $v=null)
+	function opt($k, $v=null)
 	{
 		if ($v !== null) {
 			self::setOption($k, $v);
-			//$_SESSION['company'][$k] = $v;
 			return $v;
 		}
 
-		// Use or Load Cache
-		//$r = $_SESSION['company'][$k];
-
 		if (empty($r)) {
 			$r = self::getOption($k);
-			//$_SESSION['company'][$k] = $r;
 		}
 
 		return $r;
@@ -69,8 +64,8 @@ class Company extends \OpenTHC\SQL\Record
 	{
 		$key = strtolower(trim($key));
 		$sql = 'DELETE FROM company_option WHERE company_id = ? AND key = ?';
-		$arg = array($_SESSION['gid'], $key);
-		$res = SQL::fetch_one($sql, $arg);
+		$arg = array($this->_data['id'], $key);
+		$res = $this->_dbc->query($sql, $arg);
 		return $res;
 	}
 
@@ -82,8 +77,8 @@ class Company extends \OpenTHC\SQL\Record
 	{
 		$key = strtolower(trim($key));
 		$sql = 'SELECT val FROM company_option WHERE company_id = ? AND key = ?';
-		$arg = array($_SESSION['gid'], $key);
-		$res = SQL::fetch_one($sql, $arg);
+		$arg = array($this->_data['id'], $key);
+		$res = $this->_dbc->fetchOne($sql, $arg);
 		if (!empty($res)) {
 			$res = json_decode($res, true);
 		}
@@ -102,11 +97,11 @@ class Company extends \OpenTHC\SQL\Record
 			throw new \Exception('Invalid Key [OLC#104]');
 		}
 
-		SQL::query('BEGIN');
+		$this->_dbc->query('BEGIN');
 
 		$sql = 'SELECT key FROM company_option WHERE company_id = ? AND key = ? FOR UPDATE';
-		$arg = array($_SESSION['gid'], $key);
-		$chk = SQL::fetch_one($sql, $arg);
+		$arg = array($this->_data['id'], $key);
+		$chk = $this->_dbc->fetchOne($sql, $arg);
 
 		if (empty($chk)) {
 			$sql = 'INSERT INTO company_option (company_id, key, val) VALUES (:c, :k, :v)';
@@ -115,35 +110,15 @@ class Company extends \OpenTHC\SQL\Record
 		}
 
 		$arg = array(
-			':c' => $_SESSION['gid'],
+			':c' => $this->_data['id'],
 			':k' => $key,
 			':v' => json_encode($val)
 		);
 
-		SQL::query($sql, $arg);
+		$this->_dbc->query($sql, $arg);
 
-		SQL::query('COMMIT');
+		$this->_dbc->query('COMMIT');
 
-		// Invalidate Cache
-		// unset($_SESSION['company'][$key]);
-
-	}
-
-
-	/**
-	*/
-	static function getAllRooms($kind=null)
-	{
-		// Show Users
-		$sql = 'SELECT room.*';
-		// $sql.= ', asset_tag.id AS asset_id, asset_tag.govt AS asset_govt';
-		$sql.= ' FROM room';
-		// $sql.= ' JOIN asset_tag ON room.asset_id = asset_tag.id';
-		$sql.= ' WHERE room.gid = ?';
-		$sql.= ' ORDER BY room.kind, room.name';
-		$arg = array($_SESSION['gid']);
-		$res = SQL::fetch_all($sql, $arg);
-		return $res;
 	}
 
 
@@ -153,17 +128,17 @@ class Company extends \OpenTHC\SQL\Record
 	{
 		$sql = 'SELECT * FROM auth_contact WHERE company_id = ? ORDER BY id ASC';
 		$arg = array($this->_data['id']);
-		$res = SQL::fetch_all($sql, $arg);
+		$res = $this->_dbc->fetchAll($sql, $arg);
 		switch (count($res)) {
 		case 0:
 			// Fail
 			return null;
 			break;
 		case 1:
-			return new Contact($res[0]);
+			return new Contact($this->_dbc, $res[0]);
 			break;
 		default:
-			return new Contact($res[0]);
+			return new Contact($this->_dbc, $res[0]);
 			foreach ($res as $rec) {
 				// @todo Somehow Match the X?
 			}
