@@ -15,13 +15,13 @@ class OpenTHC
 	function __construct($svc)
 	{
 		$cfg = \OpenTHC\Config::get(sprintf('openthc_%s', $svc));
-		$this->_api_base = $cfg['api_base'];
-		$this->_api_auth = $cfg['api_auth'];
+		$this->_api_base = sprintf('https://%s/', $cfg['hostname']);
+		$this->_api_auth = $cfg['secret'];
 
 		$this->_ghc = new \GuzzleHttp\Client([
 			'base_uri' => $this->_api_base,
 			'headers' => [
-				'user-agent' => 'OpenTHC/420.20.040',
+				'user-agent' => 'OpenTHC/420.20.170',
 				'authorization' => sprintf('Bearer %s', $this->_api_auth),
 			],
 			'http_errors' => false
