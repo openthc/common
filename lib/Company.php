@@ -5,12 +5,8 @@
 
 namespace OpenTHC;
 
-use Edoceo\Radix\DB\SQL;
-
 class Company extends \OpenTHC\SQL\Record
 {
-	const TABLE = 'company';
-
 	const FLAG_LIVE       = 0x00000001;
 	const FLAG_PARENT     = 0x00000002;
 
@@ -40,17 +36,17 @@ class Company extends \OpenTHC\SQL\Record
 
 
 	/**
-		Get or Set Options with Caching
-	*/
+	 * Get or Set Options with Caching
+	 */
 	function opt($k, $v=null)
 	{
 		if ($v !== null) {
-			self::setOption($k, $v);
+			$this->setOption($k, $v);
 			return $v;
 		}
 
 		if (empty($r)) {
-			$r = self::getOption($k);
+			$r = $this->getOption($k);
 		}
 
 		return $r;
@@ -58,9 +54,9 @@ class Company extends \OpenTHC\SQL\Record
 
 
 	/**
-		Delete Option, No Cache
-	*/
-	static function delOption($key)
+	 * Delete Option, No Cache
+	 */
+	function delOption($key)
 	{
 		$key = strtolower(trim($key));
 		$sql = 'DELETE FROM company_option WHERE company_id = ? AND key = ?';
@@ -71,9 +67,9 @@ class Company extends \OpenTHC\SQL\Record
 
 
 	/**
-		Get Option, No Cache
-	*/
-	static function getOption($key)
+	 * Get Option, No Cache
+	 */
+	function getOption($key)
 	{
 		$key = strtolower(trim($key));
 		$sql = 'SELECT val FROM company_option WHERE company_id = ? AND key = ?';
@@ -87,9 +83,9 @@ class Company extends \OpenTHC\SQL\Record
 
 
 	/**
-		Set Option, No Cache
-	*/
-	static function setOption($key, $val=null)
+	 * Set Option, No Cache
+	 */
+	function setOption($key, $val=null)
 	{
 		$key = strtolower(trim($key));
 
