@@ -79,8 +79,8 @@ class Record implements \ArrayAccess
 	 */
 	function loadBy($key, $val)
 	{
-		$sql = sprintf('SELECT * FROM "%s" where "%s" = ?', $this->_table, $key);
-		$rec = $this->_dbc->fetchRow($sql, $val);
+		$sql = sprintf('SELECT * FROM "%s" where "%s" = :v0', $this->_table, $key);
+		$rec = $this->_dbc->fetchRow($sql, [ ':v0' => $val ]);
 		if (!empty($rec[$key])) {
 			$this->setData($rec);
 			return true;
@@ -172,6 +172,14 @@ class Record implements \ArrayAccess
 		ksort($diff);
 
 		return $diff;
+	}
+
+	function getHash()
+	{
+		$data = $this->_data;
+		 _ksort_r($data);
+		$hash = md5(json_encode($data));
+		return $hash;
 	}
 
 	/**
