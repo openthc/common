@@ -62,17 +62,17 @@ class App extends \Slim\App
 			$view = new \Slim\Views\Twig($path, $args);
 
 			if ($this->__cfg['debug']) {
-				$view->addExtension(new \Twig_Extension_Debug());
+				$view->addExtension(new \Twig\Extension\DebugExtension());
 			}
 
 			// Base64 Filter (for Email)
-			$tfb = new \Twig_Filter('base64', function($x) {
+			$tfb = new \Twig\TwigFilter('base64', function($x) {
 				return chunk_split(base64_encode($x), 72);
 			});
 			$view->getEnvironment()->addFilter($tfb);
 
 			// Markdown Filter
-			$tfm = new \Twig_Filter('markdown', function($x) {
+			$tfm = new \Twig\TwigFilter('markdown', function($x) {
 				return _markdown($x);
 			}, array('is_safe' => array('html')));
 
