@@ -460,22 +460,22 @@ function _twig($file, $data=null)
 	// $path = sprintf('%s/twig', APP_ROOT);
 	//}
 
-	$tlf = new Twig_Loader_Filesystem(array(
+	$tlf = new \Twig\Loader\FilesystemLoader(array(
 		$path,
 		sprintf('%s/twig', APP_ROOT)
 	));
 	$cfg = array(
-		'strict_variables' => true,
-		'debug' => true,
+		'strict_variables' => false,
+		// 'debug' => true,
 		'cache' => '/tmp/twig',
 	);
-	$twig = new Twig_Environment($tlf, $cfg);
-	//$twig->addFilter(new Twig_Filter('base64', function($x) {
+	$twig = new \Twig\Environment($tlf, $cfg);
+	//$twig->addFilter(new \Twig\TwigFilter('base64', function($x) {
 	//      return chunk_split(base64_encode($x), 72);
 	//}));
 
 	if (empty($data)) {
-		$data = array();
+		$data = [];
 	}
 
 	$html = $twig->render($base, $data);
