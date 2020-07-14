@@ -6,15 +6,19 @@
 function h($x)
 {
 	return htmlspecialchars($x, ENT_COMPAT|ENT_HTML5, 'utf-8', true);
+	// return htmlentities($x, ENT_QUOTES, 'UTF-8', true);
 }
+
 
 function base64_encode_url($x) {
 	return str_replace(['+','/','='], ['-','_',''], base64_encode($x));
 }
 
+
 function base64_decode_url($x) {
 	return base64_decode(str_replace(['-','_'], ['+','/'], $x));
 }
+
 
 function _curl_init($uri)
 {
@@ -45,7 +49,7 @@ function _curl_init($uri)
 	// curl_setopt($ch, CURLOPT_SSLVERSION, 3); // 2, 3 or GnuTLS
 	curl_setopt($ch, CURLOPT_TIMEOUT, 600);
 
-	curl_setopt($ch, CURLOPT_USERAGENT, 'OpenTHC/420.18.201');
+	curl_setopt($ch, CURLOPT_USERAGENT, 'OpenTHC/420.20.196');
 
 	return $ch;
 }
@@ -65,6 +69,11 @@ function _date($f, $d=null, $tz=null)
 		return '-';
 	}
 
+	if (empty($tz)) {
+		$tz = $_SESSION['tz'];
+	}
+
+
 	if (!empty($r)) {
 		// Match UNIX Timestamp (may be negative)
 		if (preg_match('/^\-?\d+$/', $r)) {
@@ -76,6 +85,10 @@ function _date($f, $d=null, $tz=null)
 		if (is_string($tz)) {
 			$tz = new DateTimeZone($tz);
 		}
+	}
+
+	if (empty($tz)) {
+		$tz = new DateTimeZone('UTC');
 	}
 
 	try {
@@ -134,11 +147,11 @@ function _exit_json($data, $code=200)
 	_http_code($code);
 
 	if (!is_string($data)) {
-		$data = json_encode($data, JSON_PRETTY_PRINT);
+		$data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 	}
 
-	header('Cache-Control: no-cache');
-	header('Content-Type: application/json; charset=utf-8');
+	header('cache-control: no-cache');
+	header('content-type: application/json; charset=utf-8');
 
 	echo $data;
 
@@ -174,6 +187,7 @@ function _exit_403($text='Not Authorized')
 	_exit_text($text, 403);
 }
 
+
 /**
 	Exit with a 404
 */
@@ -201,6 +215,7 @@ function _http_code($code)
 		405 => 'Method Not Allowed',
 		406 => 'Not Acceptable',
 		409 => 'Conflict',
+		410 => 'Gone',
 		500 => 'Server Error',
 		503 => 'Unavailable',
 		504 => 'Gateway Timeout',
@@ -287,6 +302,7 @@ function _markdown($x)
 
 }
 
+
 /**
  * Generates Stub type Text
  */
@@ -300,7 +316,6 @@ function _text_stub($x)
 }
 
 
-
 /**
 	Extended _parse_str()
 */
@@ -311,6 +326,7 @@ function _parse_str($x)
 	return $r;
 }
 
+
 // Format Phone
 function _phone_e164($p, $l='US')
 {
@@ -319,10 +335,14 @@ function _phone_e164($p, $l='US')
 		return null;
 	}
 
-	$pnu = \libphonenumber\PhoneNumberUtil::getInstance();
-	$r = $pnu->parse($p, $l);
-	$r = $pnu->format($r, \libphonenumber\PhoneNumberFormat::E164);
-	return $r;
+	try {
+		$pnu = \libphonenumber\PhoneNumberUtil::getInstance();
+		$r = $pnu->parse($p, $l);
+		$r = $pnu->format($r, \libphonenumber\PhoneNumberFormat::E164);
+		return $r;
+	} catch (Exception $e) {
+		return $p;
+	}
 }
 
 // Format Phone
@@ -330,14 +350,19 @@ function _phone_nice($p, $l='US')
 {
 	$p = trim($p);
 	if (empty($p)) {
-		return null;
+		return $p;
 	}
 
-	$pnu = \libphonenumber\PhoneNumberUtil::getInstance();
-	$r = $pnu->parse($p, $l);
-	$r = $pnu->format($r, \libphonenumber\PhoneNumberFormat::INTERNATIONAL);
-	return $r;
+	try {
+		$pnu = \libphonenumber\PhoneNumberUtil::getInstance();
+		$r = $pnu->parse($p, $l);
+		$r = $pnu->format($r, \libphonenumber\PhoneNumberFormat::INTERNATIONAL);
+		return $r;
+	} catch (Exception $e) {
+		return $p;
+	}
 }
+
 
 
 /**
