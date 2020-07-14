@@ -5,7 +5,7 @@
 
 namespace OpenTHC\SQL;
 
-class Record implements \ArrayAccess
+class Record implements \ArrayAccess, \JsonSerializable
 {
 	protected $_dbc; // An Edoceo\Radix\DB\SQL object
 
@@ -277,6 +277,11 @@ class Record implements \ArrayAccess
 			$this->_pk = $this->_data['id'];
 		}
 
+	}
+
+	function jsonSerialize()
+	{
+		return $this->toArray();
 	}
 
 }
