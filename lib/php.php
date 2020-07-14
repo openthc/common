@@ -109,7 +109,7 @@ function _date($f, $d=null, $tz=null)
 	} else {
 		$tz0 = date_default_timezone_get();
 		if ($tz) {
-			date_default_timezone_set($tz);
+			date_default_timezone_set($tz->getName());
 		}
 		$r = strftime($f, $dt->getTimestamp());
 		date_default_timezone_set($tz0);
@@ -128,8 +128,8 @@ function _exit_html($html, $code=200)
 
 	_http_code($code);
 
-	header('Cache-Control: no-cache');
-	header('Content-Type: text/html; charset=utf-8');
+	header('cache-control: no-cache');
+	header('content-type: text/html; charset=utf-8');
 
 	echo $html;
 
@@ -167,8 +167,8 @@ function _exit_text($text, $code=200)
 
 	_http_code($code);
 
-	header('Cache-Control: no-cache');
-	header('Content-Type: text/plain; charset=utf-8');
+	header('cache-control: no-cache');
+	header('content-type: text/plain; charset=utf-8');
 
 	if (!is_string($text)) {
 		$text = json_encode($text, JSON_PRETTY_PRINT);
@@ -178,6 +178,7 @@ function _exit_text($text, $code=200)
 
 	exit(0);
 }
+
 
 /**
 	Exit with a 403
