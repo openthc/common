@@ -19,15 +19,15 @@ class Connect extends \OpenTHC\Controller\Base
 	{
 		$_SESSION = array();
 
-		$db_conf = \OpenTHC\Config::get('database_auth');
-		if (empty($db_conf)) {
+		$cfg = \OpenTHC\Config::get('database_main');
+		if (empty($cfg)) {
 			return $RES->withJSON([
 				'meta' => [ 'detail' => 'Fatal Database Error [CAC#024]'],
 				'data' => [],
 			], 500);
 		}
 
-		$dbc = new SQL(sprintf('pgsql:host=%s;dbname=%s', $db_conf['hostname'], $db_conf['database']), $db_conf['username'], $db_conf['password']);
+		$dbc = new SQL(sprintf('pgsql:host=%s;dbname=%s', $cfg['hostname'], $cfg['database']), $cfg['username'], $cfg['password']);
 
 		// Find the Program or Service that is connecting
 		if (empty($_GET['client_id'])) {
