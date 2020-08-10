@@ -19,6 +19,32 @@ class Config
 			return $_ENV[$k];
 		}
 
+		// New Path Based
+		$k_want = str_replace('.', '/', $k);
+		$k_want = trim($k_want, '/');
+		$k_path = sprintf('%s/etc/%s', APP_ROOT, $k_want);
+		if (is_file($k_path)) {
+			$ret = file_get_contents($k_path);
+			return trim($ret);
+		}
+
+		// Asking for a Directory returns all it's files
+		if (is_dir($k_path)) {
+			$ret = [];
+			$k_want_list = glob(sprintf('%s/*', $k_path));
+			foreach ($k_want_list as $k_file) {
+				if (is_file($k_file)) {
+					$key = basename($k_file);
+					$val = file_get_contents($k_file);
+					$ret[$key] = trim($val);
+				}
+			}
+			if (count($ret)) {
+				return $ret;
+			}
+		}
+
+		// Legacy Way from INI file
 		self::_load();
 
 		$k_path = explode('.', $k);
