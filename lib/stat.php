@@ -13,10 +13,11 @@ function _stat_send($d)
 
 	if (empty($s)) {
 
-		$h = $_ENV['statsd']['host'];
+		$h = $_ENV['statsd']['hostname'];
 		if (empty($h)) {
 			$h = 'udp://127.0.0.1';
 		}
+
 		$p = $_ENV['statsd']['port'];
 		if (empty($p)) {
 			$p = '8125';
@@ -30,11 +31,16 @@ function _stat_send($d)
 
 }
 
+
 /**
  * @param $s Stat Path
  * @param $v Counter Value
  */
-function _stat_counter($s, $v)
+function _stat_count($s, $v)
+{
+	_stat_send(sprintf('%s:%d|c', $s, $v));
+}
+function _stat_counter($s, $v)  // @alias
 {
 	_stat_send(sprintf('%s:%d|c', $s, $v));
 }
