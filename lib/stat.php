@@ -36,7 +36,7 @@ function _stat_send($d)
  * @param $s Stat Path
  * @param $v Counter Value
  */
-function _stat_count($s, $v)
+function _stat_count($s, $v=1)
 {
 	_stat_send(sprintf('%s:%d|c', $s, $v));
 }
