@@ -19,6 +19,11 @@ class Contact extends \OpenTHC\SQL\Record
 	const FLAG_ROOT     = 0x00000010;
 	const FLAG_BILL     = 0x00000020;
 
+	const FLAG_B2B_VENDOR = 0x00001000;
+	const FLAG_B2B_CLIENT = 0x00002000;
+	const FLAG_B2C_VENDOR = 0x00004000;
+	const FLAG_B2C_CLIENT = 0x00008000;
+
 	const FLAG_DISABLED = 0x01000000;
 
 	const FLAG_MUTE     = 0x04000000;
