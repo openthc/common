@@ -21,7 +21,7 @@
 		"ext-session": "*",
 		"ext-sockets": "*",
 		"giggsey/libphonenumber-for-php": "8.12.1",
-		"guzzlehttp/guzzle": "6.5.2",
+		"guzzlehttp/guzzle": "6.5.5",
 		"slim/slim": "3.12.3",
 		"slim/twig-view": "2.5.1",
 		"twig/twig": "2.12.5"
