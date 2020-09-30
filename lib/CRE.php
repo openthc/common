@@ -85,14 +85,18 @@ class CRE
 	}
 
 	/**
-		Authnentication Interfaces
-	*/
-	function auth($p)
+	 * Authentication Interfaces
+	 */
+	function auth($arg)
 	{
-		$r = $this->_c->post('/auth/open', array('form_params' => $p));
-		return json_decode($r->getBody(), true);
+		$res = $this->_c->post('/auth/open', [ 'form_params' => $arg ]);
+		$raw = $res->getBody()->getContents();
+		$ret = json_decode($raw, true);
+		return ($ret ? $ret : $raw);
 	}
 
+	/**
+	 */
 	function ping()
 	{
 		$r = $this->_c->get('/auth/ping');
