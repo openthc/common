@@ -5,21 +5,37 @@
 
 namespace OpenTHC\Controller\Auth;
 
-use Edoceo\Radix;
-use Edoceo\Radix\Session;
 use Edoceo\Radix\DB\SQL;
-
-use OpenTHC\Contact;
 
 class Connect extends \OpenTHC\Controller\Base
 {
-	protected $_connect_info;
+	protected $_connect_info; // @deprecated
+
+	protected $_Company_Auth;
+	protected $_Company_Base;
+
+	protected $_Contact_Auth;
+	protected $_Contact_Base;
+
+	protected $_License;
+
+	protected $_Service;
 
 	function __invoke($REQ, $RES, $ARG)
 	{
+		// Reset Session
 		$_SESSION = array();
 
-		$cfg = \OpenTHC\Config::get('database_main');
+		// Find the Program or Service that is connecting
+		if (empty($_GET['client_id'])) {
+			return $RES->withJSON([
+				'data' => [],
+				'meta' => [ 'detail' => 'Invalid Application [CAC#027]'],
+			], 400);
+		}
+
+		// Auth Database Connection
+		$cfg = \OpenTHC\Config::get('database/auth');
 		if (empty($cfg)) {
 			return $RES->withJSON([
 				'meta' => [ 'detail' => 'Fatal Database Error [CAC#024]'],
@@ -27,39 +43,32 @@ class Connect extends \OpenTHC\Controller\Base
 			], 500);
 		}
 
-		$dbc = new SQL(sprintf('pgsql:host=%s;dbname=%s', $cfg['hostname'], $cfg['database']), $cfg['username'], $cfg['password']);
+		$dbc_auth = new SQL(sprintf('pgsql:host=%s;dbname=%s', $cfg['hostname'], $cfg['database']), $cfg['username'], $cfg['password']);
 
-		// Find the Program or Service that is connecting
-		if (empty($_GET['client_id'])) {
-			return $RES->withJSON([
-				'meta' => [ 'detail' => 'Invalid Application [CAC#027]'],
-				'data' => [],
-			], 400);
-		}
-
-		$sql = 'SELECT * FROM auth_program WHERE code = ?';
+		// Lookup Program
+		$sql = 'SELECT * FROM auth_service WHERE code = ?';
 		$arg = array($_GET['client_id']);
-		$App = $dbc->fetchRow($sql, $arg);
+		$App = $dbc_auth->fetchRow($sql, $arg);
 		if (empty($App['id'])) {
 			return $RES->withJSON([
+				'data' => null,
 				'meta' => [ 'detail' => 'Invalid Application [CAC#034]'],
-				'data' => [],
 			], 400);
 		}
 
 		// Only Live Applications
 		if (200 != $App['stat']) {
 			return $RES->withJSON([
+				'data' => null,
 				'meta' => [ 'detail' => 'Invalid Application [CAC#042]'],
-				'data' => [],
 			], 400);
 		}
 
 		// With Live Flag
 		if (($App['flag'] & 0x00000001) == 0) {
 			return $RES->withJSON([
+				'data' => null,
 				'meta' => [ 'detail' => 'Invalid Application [CAC#039]'],
-				'data' => [],
 			], 400);
 		}
 
@@ -67,16 +76,16 @@ class Connect extends \OpenTHC\Controller\Base
 		$tmp_auth = _decrypt($_GET['_'], $App['hash']);
 		if (empty($tmp_auth)) {
 			return $RES->withJSON([
+				'data' => null,
 				'meta' => [ 'detail' => 'Invalid Parameters [CAC#051]'],
-				'data' => [],
 			], 400);
 		}
 
 		$tmp_auth = json_decode($tmp_auth, true);
 		if (empty($tmp_auth)) {
 			return $RES->withJSON([
+				'data' => null,
 				'meta' => [ 'detail' => 'Invalid Parameters [CAC#056]'],
-				'data' => [],
 			], 400);
 		}
 
@@ -86,14 +95,49 @@ class Connect extends \OpenTHC\Controller\Base
 		//var_dump($tmp_auth);
 		//var_dump($_SESSION);
 
+		// Lookup Auth_Company
+		try {
+			$this->_Company_Auth = $dbc_auth->fetchRow('SELECT * FROM auth_company WHERE id = :c0', [
+				':c0' => $tmp_auth['company']['id']
+			]);
+		} catch (\Exception $e) {
+			// Ignore
+		}
+
+		// Legacy Search
+		try {
+			$this->_Company_Auth = $dbc_auth->fetchRow('SELECT * FROM auth_company WHERE ulid = :c0', [
+				':c0' => $tmp_auth['company']['id']
+			]);
+			$this->_Company_Auth['id'] = $this->_Company_Auth['ulid'];
+			unset($this->_Company_Auth['ulid']);
+		} catch (\Exception $e) {
+			// Ignore
+		}
+
+		// Lookup Auth_Contact
+		$sql = 'SELECT * FROM auth_contact WHERE username = ?';
+		$arg = array($tmp_auth['contact']['email']);
+		$this->_Contact_Auth = $dbc_auth->fetchRow($sql, $arg);
+
+		// Main Database Connection
+		$cfg = \OpenTHC\Config::get('database/main');
+		if (empty($cfg)) {
+			return $RES->withJSON([
+				'meta' => [ 'detail' => 'Fatal Database Error [CAC#125]'],
+				'data' => [],
+			], 500);
+		}
+
+		$dbc_main = new SQL(sprintf('pgsql:host=%s;dbname=%s', $cfg['hostname'], $cfg['database']), $cfg['username'], $cfg['password']);
+
 		// Lookup Company
-		$sql = 'SELECT * FROM company WHERE id = ?';
-		$arg = array($tmp_auth['company']['id']);
-		$res = $dbc->fetchRow($sql, $arg);
+		$sql = 'SELECT * FROM company WHERE id = :c0';
+		$res = $dbc_main->fetchRow($sql, [ ':c0' => $this->_Company_Auth['id'] ]);
 		if (empty($res['id'])) {
 			return $RES->withJSON([
-				'meta' => [ 'detail' => sprintf('Invalid Company "%s" [CAC#067]', $tmp_auth['company']['id']) ],
-				'data' => [],
+				'data' => null,
+				'meta' => [ 'detail' => sprintf('Invalid Company "%s" [CAC#067]', $this->_Company_Auth['id']) ],
 			], 400);
 		}
 		$Company = $res;
@@ -101,19 +145,15 @@ class Connect extends \OpenTHC\Controller\Base
 		// Lookup License
 		$sql = 'SELECT * FROM license WHERE company_id = ? AND id = ?';
 		$arg = array($Company['id'], $tmp_auth['license']['id']);
-		$License = $dbc->fetchRow($sql, $arg);
+		$License = $dbc_main->fetchRow($sql, $arg);
 		if (empty($License['id'])) {
 			return $RES->withJSON([
+				'data' => null,
 				'meta' => [ 'detail' => sprintf('Invalid License "%s" [CAC#076]', $tmp_auth['license']['id']) ],
-				'data' => [],
 			], 400);
 		}
 
 		// Lookup Contact
-		if (!empty($tmp_auth['contact']['id'])) {
-
-		}
-
 		$x = $tmp_auth['contact']['email'];
 		$x = strtolower(trim($x));
 		if (!filter_var($x, FILTER_VALIDATE_EMAIL)) {
@@ -123,56 +163,47 @@ class Connect extends \OpenTHC\Controller\Base
 
 		$sql = 'SELECT * FROM contact WHERE company_id = ? AND email = ?';
 		$arg = array($Company['id'], $tmp_auth['contact']['email']);
-		$Contact = $dbc->fetchRow($sql, $arg);
-		if (empty($Contact['id'])) {
-			$Contact = array(
+		$this->_Contact_Base = $dbc_main->fetchRow($sql, $arg);
+		if (empty($this->_Contact_Base['id'])) {
+			$this->_Contact_Base = array(
 				'id' => _ulid(),
 				'company_id' => $Company['id'],
 				'email' => $tmp_auth['contact']['email']
 			);
-			$Contact['id'] = $dbc->insert('contact', $Contact);
+			$this->_Contact_Base['id'] = $dbc->insert('contact', $this->_Contact_Base);
 		}
 
-		// Lookup Auth_Contact
-		$sql = 'SELECT * FROM auth_contact WHERE username = ?';
-		$arg = array($tmp_auth['contact']['email']);
-		$AppUser = $dbc->fetchRow($sql, $arg);
-		if (empty($AppUser['id'])) {
-			$AppUser = array(
-				'id' => $Contact['id'],
-				'contact_id' => $Contact['id'],
-				'company_id' => $Company['id'],
-				'username' => $tmp_auth['contact']['email'],
-				'password' => sha1($_GET['_']),
-			);
-			$AppUser['id'] = $dbc->insert('auth_contact', $AppUser);
+		// Validate Contact_Auth <=> Contact_Base
+		if (empty($this->_Contact_Auth['id'])) {
+			// $this->_Contact_Auth = array(
+			// 	'id' => $this->_Contact_Base['id'],
+			// 	'contact_id' => $this->_Contact_Base['id'],
+			// 	'company_id' => $Company['id'],
+			// 	'username' => $tmp_auth['contact']['email'],
+			// 	'password' => sha1($_GET['_']),
+			// );
+			// $this->_Contact_Auth['id'] = $dbc->insert('auth_contact', $this->_Contact_Auth);
 		}
 
-		if ($AppUser['company_id'] != $Company['id']) {
-			_exit_text('Please Contact Support [CAC#124]');
+		// if ($this->_Contact_Auth['company_id'] != $Company['id']) {
+		// 	_exit_text([
+		// 		'this' => $this->_Contact_Auth,
+		// 		'Company' => $Company,
+		// 	]);
+		// 	_exit_text('Please Contact Support [CAC#192]');
+		// }
+
+		if ($this->_Contact_Auth['ulid'] != $this->_Contact_Base['id']) {
+			//_exit_text([
+			//	'CA' => $this->_Contact_Auth,
+			//	'CB' => $this->_Contact_Base
+			//]);
+			_exit_text('Please Contact Support [CAC#137]', 409);
 		}
 
-		// Validate Contact
-		if (empty($AppUser['contact_id'])) {
-			$AppUser['contact_id'] = $Contact['id'];
-			$sql = 'UPDATE auth_contact SET contact_id = ? WHERE id = ?';
-			$arg = array($Contact['id'], $AppUser['id']);
-			$dbc->query($sql, $arg);
-		}
-		if ($AppUser['contact_id'] != $Contact['id']) {
-			//print_r($AppUser);
-			//print_r($Contact);
-			_exit_text('Please Contact Support [CAC#137]');
-		}
-
-
-		// OK
-		$_SESSION['Contact'] = $Contact;
-		$_SESSION['uid'] = $AppUser['id'];
-
+		// Primary Objects
+		$_SESSION['Contact'] = $this->_Contact_Base;
 		$_SESSION['Company'] = $Company;
-		$_SESSION['gid'] = $Company['id'];
-
 		$_SESSION['License'] = $License;
 
 		// Canon
