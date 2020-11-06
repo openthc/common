@@ -23,47 +23,36 @@ class License_Type
 			$x = 'CO-OP';
 			break;
 		case 'CULTIVATOR':
-			$x = 'G';
+			$x = 'Grower';
 			break;
+		case 'J':
 		case 'CULTIVATOR_PRODUCTION':
-			$x = 'G,P';
+			$x = 'Grower,Processor';
 			break;
 		case 'DISPENSARY': // Retailer in MJF/LD
-			$x = 'R';
+		case 'MARIJUANA RETAILER':
+			$x = 'Retail';
 			break;
 		case 'LABORATORY':
 		case 'MARIJUANA TESTING FACILITY': // Oregon?
-			$x = 'QA';
+			$x = 'Laboratory';
 			break;
 		case 'M':
-			$x = 'P';
-			break;
 		case 'MARIJUANA PROCESSOR':
-			$x = 'P';
+		case 'PRODUCTION': // This is a Processor Only Type in LeafData
+			$x = 'Processor';
 			break;
 		case 'MARIJUANA PRODUCER TIER 1':
-			$x = 'G1';
-			break;
 		case 'MARIJUANA PRODUCER TIER 2':
-			$x = 'G2';
-			break;
 		case 'MARIJUANA PRODUCER TIER 3':
-			$x = 'G3';
-			break;
-		case 'MARIJUANA RETAILER':
-			$x = 'R';
+			$x = 'Grower';
 			break;
 		case 'MARIJUANA TRANSPORTATION':
-			$x = 'C';
+		case 'TRANSPORTER':
+			$x = 'Carrier';
 			break;
 		case 'MEDICAL MARIJUANA':
 			$x = '+MMJ';
-			break;
-		case 'PRODUCTION': // This is a Processor Only Type in LeafData
-			$x = 'P';
-			break;
-		case 'TRANSPORTER':
-			$x = 'C';
 			break;
 		}
 
