@@ -20,7 +20,7 @@ class Shut extends \OpenTHC\Controller\Base
 			session_unset();
 			session_gc();
 
-			// Clear Cookies?
+			// Clear Cookies Manually
 			//foreach ($_COOKIE as $k => $v) {
 			//	if ($k == $snm) {
 			//		setcookie($k, '', time() - 3600);
@@ -32,7 +32,9 @@ class Shut extends \OpenTHC\Controller\Base
 			unset($scp['lifetime']);
 			setcookie($snm, '', $scp);
 
-			session_regenerate_id(true);
+			// this will set a new cookie
+			// session_regenerate_id(true);
+
 			session_destroy();
 			session_write_close();
 
