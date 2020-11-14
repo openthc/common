@@ -89,36 +89,28 @@ class Connect extends \OpenTHC\Controller\Base
 			], 400);
 		}
 
+		$tmp_auth['contact']['id'] = strtoupper($tmp_auth['contact']['id']);
 		$tmp_auth['company']['id'] = strtoupper($tmp_auth['company']['id']);
 		$tmp_auth['license']['id'] = strtoupper($tmp_auth['license']['id']);
 
-		//var_dump($tmp_auth);
-		//var_dump($_SESSION);
-
-		// Lookup Auth_Company
-		try {
-			$this->_Company_Auth = $dbc_auth->fetchRow('SELECT * FROM auth_company WHERE id = :c0', [
-				':c0' => $tmp_auth['company']['id']
-			]);
-		} catch (\Exception $e) {
-			// Ignore
-		}
-
-		// Legacy Search
-		try {
-			$this->_Company_Auth = $dbc_auth->fetchRow('SELECT * FROM auth_company WHERE ulid = :c0', [
-				':c0' => $tmp_auth['company']['id']
-			]);
-			$this->_Company_Auth['id'] = $this->_Company_Auth['ulid'];
-			unset($this->_Company_Auth['ulid']);
-		} catch (\Exception $e) {
-			// Ignore
-		}
 
 		// Lookup Auth_Contact
 		$sql = 'SELECT * FROM auth_contact WHERE username = ?';
 		$arg = array($tmp_auth['contact']['email']);
 		$this->_Contact_Auth = $dbc_auth->fetchRow($sql, $arg);
+
+		$this->_Company_Auth = $dbc_auth->fetchRow('SELECT * FROM auth_company WHERE id = :c0', [
+			':c0' => $tmp_auth['company']['id']
+		]);
+
+		if (empty($this->_Contact_Auth['id']) || empty($this->_Company_Auth['id'])) {
+			return $RES->withJSON([
+				'data' => null,
+				'meta' => [ 'detail' => 'Invalid Company or Contact [CAC#109]' ]
+			], 403);
+		}
+
+
 
 		// Main Database Connection
 		$cfg = \OpenTHC\Config::get('database/main');
@@ -192,14 +184,6 @@ class Connect extends \OpenTHC\Controller\Base
 		// 	]);
 		// 	_exit_text('Please Contact Support [CAC#192]');
 		// }
-
-		if ($this->_Contact_Auth['ulid'] != $this->_Contact_Base['id']) {
-			//_exit_text([
-			//	'CA' => $this->_Contact_Auth,
-			//	'CB' => $this->_Contact_Base
-			//]);
-			_exit_text('Please Contact Support [CAC#137]', 409);
-		}
 
 		// Primary Objects
 		$_SESSION['Contact'] = $this->_Contact_Base;
