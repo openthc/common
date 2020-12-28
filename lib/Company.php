@@ -25,6 +25,8 @@ class Company extends \OpenTHC\SQL\Record
 
 	static function findByGUID($x)
 	{
+		syslog(LOG_NOTICE, '@deprecated Company::findByGUID');
+
 		$sql = 'SELECT * FROM company WHERE guid = ?';
 		$arg = array($x);
 		$res = SQL::fetch_row($sql, $arg);
@@ -59,8 +61,8 @@ class Company extends \OpenTHC\SQL\Record
 	function delOption($key)
 	{
 		$key = strtolower(trim($key));
-		$sql = 'DELETE FROM company_option WHERE company_id = ? AND key = ?';
-		$arg = array($this->_data['id'], $key);
+		$sql = 'DELETE FROM base_option WHERE key = ?';
+		$arg = array($key);
 		$res = $this->_dbc->query($sql, $arg);
 		return $res;
 	}
@@ -72,8 +74,8 @@ class Company extends \OpenTHC\SQL\Record
 	function getOption($key)
 	{
 		$key = strtolower(trim($key));
-		$sql = 'SELECT val FROM company_option WHERE company_id = ? AND key = ?';
-		$arg = array($this->_data['id'], $key);
+		$sql = 'SELECT val FROM base_option WHERE key = ?';
+		$arg = array($key);
 		$res = $this->_dbc->fetchOne($sql, $arg);
 		if (!empty($res)) {
 			$res = json_decode($res, true);
@@ -95,18 +97,17 @@ class Company extends \OpenTHC\SQL\Record
 
 		$this->_dbc->query('BEGIN');
 
-		$sql = 'SELECT key FROM company_option WHERE company_id = ? AND key = ? FOR UPDATE';
-		$arg = array($this->_data['id'], $key);
+		$sql = 'SELECT key FROM base_option WHERE key = ? FOR UPDATE';
+		$arg = array($key);
 		$chk = $this->_dbc->fetchOne($sql, $arg);
 
 		if (empty($chk)) {
-			$sql = 'INSERT INTO company_option (company_id, key, val) VALUES (:c, :k, :v)';
+			$sql = 'INSERT INTO base_option (key, val) VALUES (:k, :v)';
 		} else {
-			$sql = 'UPDATE company_option SET val = :v WHERE company_id = :c AND key = :k';
+			$sql = 'UPDATE base_option SET val = :v WHERE key = :k';
 		}
 
 		$arg = array(
-			':c' => $this->_data['id'],
 			':k' => $key,
 			':v' => json_encode($val)
 		);

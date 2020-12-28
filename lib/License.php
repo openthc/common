@@ -47,6 +47,8 @@ class License extends \OpenTHC\SQL\Record
 
 	static function findByGUID($x)
 	{
+		syslog(LOG_NOTICE, '@deprecated License::findByGUID');
+
 		$sql = 'SELECT license.*';
 		$sql.= ' FROM company';
 		$sql.= ' JOIN license ON company.id = license.company_id';
