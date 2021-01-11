@@ -1,7 +1,7 @@
 <?php
 /**
-	Base Controller
-*/
+ * Base Controller
+ */
 
 namespace OpenTHC\Controller;
 
@@ -91,4 +91,88 @@ class Base
 
 		return array_merge([ 'alert' => $x ], $data ?: []);
 	}
+
+
+	function render($RES, $file, $data)
+	{
+		// Private Anon-Class/Object for View
+		$view = $this->_render_class($file, $data)
+
+	}
+
+
+	function _render_class($file, $data)
+	{
+		$view =  new class($data) {
+
+			private $head;
+			private $body; // Main Content Body
+			private $foot;
+
+			private $data;
+			private $layout_file;
+
+			function __construct($file, $data)
+			{
+				$this->layout_file = sprintf('%s/view/_layout/html.php', APP_ROOT);
+
+				$this->output_file = $file;
+				// $this->layout_file = sprintf('%s/view/html-left.php', APP_ROOT);
+				// $this->layout_file = sprintf('%s/view/html.php', APP_ROOT);
+				$this->data = $data;
+
+			}
+
+			/**
+			 * Render a Block File
+			 */
+			function block($f, $d)
+			{
+				$f = ltrim($f, '/');
+				$f = basename($f, '.php');
+				$f = sprintf('%s/view/_block/%s.php', APP_ROOT, $f);
+
+				if (is_file($f)) {
+					ob_start();
+					require_once($f);
+					return ob_get_clean();
+				}
+
+			}
+
+			function _block($f, $d)
+			{
+
+			}
+
+			function render($file)
+			{
+				$file = ltrim($file, '/');
+				$file = sprintf('%s/view/%s', APP_ROOT, $file);
+
+				$data = $this->data;
+
+				ob_start();
+				require_once($file);
+				$body = ob_get_clean();
+
+				// Strip out JavaScript and add it to the TAIL
+				if (preg_match_all('/(<script.+?<\/script>)/ms', $body, $m)) {
+					foreach ($m[1] as $s) {
+						$foot_script[] = $s;
+						$body = str_replace($s, "\n", $body);
+					}
+				}
+
+				$this->body = $body;
+				$this->foot_script = implode("\n", $foot_script);
+				$this->body = ob_get_clean();
+
+			}
+
+		};
+
+		return $view;
+	}
+
 }
