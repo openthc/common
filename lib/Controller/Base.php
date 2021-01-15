@@ -1,6 +1,6 @@
 <?php
 /**
- * Base Controller
+ * OpenTHC Base Controller
  */
 
 namespace OpenTHC\Controller;
@@ -10,47 +10,48 @@ class Base
 	protected $_container;
 
 	/**
-		Save the Container
-	*/
+	 * Save the Container from Slim
+	 */
 	function __construct($c)
 	{
 		$this->_container = $c;
 	}
 
 	/**
-		Extenders should implement this
-	*/
+	 * Extenders should implement this
+	 */
 	function __invoke($REQ, $RES, $ARG)
 	{
-		die("Not Implemented");
+		_exit_text('Not Implemented [OCB-025]', 501);
 	}
 
 	/**
-		Parse some JSON Input
-	*/
+	 * Parse some JSON Input
+	 */
 	function parseJSON()
 	{
 		if ('POST' != $_SERVER['REQUEST_METHOD']) {
 			_exit_json(array(
-				'meta' => [ 'detail' => 'Invalid Verb [ALU#036]' ]
+				'data' => null,
+				'meta' => [ 'detail' => 'Invalid Verb [OCB-036]' ]
 			), 405);
 		}
 		$x = strtok($_SERVER['CONTENT_TYPE'], ';');
 		if ('application/json' != $x) {
-
 			_exit_json(array(
+				'data' => null,
 				'meta' => [
-					'detail' => 'Invalid Content Type [ALU#043]',
+					'detail' => 'Invalid Content Type [OCB-043]',
 					'type' => $x,
 				]
 			), 405);
-
 		}
 
 		$data = file_get_contents('php://input');
 		if (empty($data)) {
 			_exit_json(array(
-				'meta' => [ 'detail' => 'Invalid Input [ALU#017]' ]
+				'data' => null,
+				'meta' => [ 'detail' => 'Invalid Input [OCB-017]' ]
 			), 400);
 		}
 
@@ -59,7 +60,11 @@ class Base
 		}
 		if (empty($data)) {
 			_exit_json(array(
-				'meta' => [ 'detail' => 'Invalid Input [ALU#027]' ]
+				'data' => null,
+				'meta' => [
+					'detail' => 'Invalid Input [OCB-027]',
+					'error_message' => json_last_error_msg(),
+				]
 			), 400);
 		}
 
@@ -92,68 +97,120 @@ class Base
 		return array_merge([ 'alert' => $x ], $data ?: []);
 	}
 
-
-	function render($RES, $file, $data)
+	/**
+	 * Directly execute this script
+	 * no buffering
+	 * script is responsible for headers
+	 */
+	function direct($file, $data)
 	{
-		// Private Anon-Class/Object for View
-		$view = $this->_render_class($file, $data)
+		while (ob_get_level()) { ob_end_clean(); }
 
+		$x = ltrim($file, '/');
+		$x = basename($x, '.php');
+		$x = sprintf('%s/view/%s.php', APP_ROOT, $x);
+
+		require_once($x);
+
+		exit(0);
 	}
 
-
-	function _render_class($file, $data)
+	/**
+	 * top level render, called by controller
+	 */
+	function render($file, $data)
 	{
-		$view =  new class($data) {
+		$view = $this->_render_class($file, $data);
+		return $view->render();
+	}
+
+	/**
+	 * Underlying Render Class (@todo seperate file (../View.php))
+	 */
+	function _render_class($f0, $d0)
+	{
+		// Private Anon-Class/Object for View
+		$view = new class($f0, $d0) {
+
+			private $layout_file;
+			private $output_file;
 
 			private $head;
 			private $body; // Main Content Body
 			private $foot;
 
 			private $data;
-			private $layout_file;
 
-			function __construct($file, $data)
+			function __construct($f, $d)
 			{
 				$this->layout_file = sprintf('%s/view/_layout/html.php', APP_ROOT);
-
-				$this->output_file = $file;
 				// $this->layout_file = sprintf('%s/view/html-left.php', APP_ROOT);
-				// $this->layout_file = sprintf('%s/view/html.php', APP_ROOT);
-				$this->data = $data;
+
+				$this->output_file = $f;
+				$this->data = $d;
 
 			}
 
 			/**
 			 * Render a Block File
 			 */
-			function block($f, $d)
+			function block($f, $data=null)
 			{
+				// Upscale Data
+				if (empty($data)) {
+					$data = $this->data;
+				}
+
+				// File
 				$f = ltrim($f, '/');
 				$f = basename($f, '.php');
 				$f = sprintf('%s/view/_block/%s.php', APP_ROOT, $f);
 
 				if (is_file($f)) {
 					ob_start();
-					require_once($f);
+					include($f);
 					return ob_get_clean();
 				}
 
 			}
 
-			function _block($f, $d)
+			/**
+			 * Try to Further Isolate the Context for Bloxks?
+			 */
+			function _block($f, $data)
 			{
+				// $x = function($file, $data) { include($file); };
 
+				// Anon-Subclass for Context Isolation?
+				// $view = new class($file, $data) {
+
+				//      protected $data;
+				//      function __construct($file, $data)
+				//      {
+				//              $this->data = $data;
+				//              $this->file = $file;
+				//      }
+
+				//      function render()
+				//      {
+				//              $data = $this->data;
+				//              return include($this->file);
+				//      }
+
+				// };
+
+				// return $view->render();
 			}
 
-			function render($file)
+			/**
+			 * Render the Requested View
+			 */
+			function render()
 			{
-				$file = ltrim($file, '/');
-				$file = sprintf('%s/view/%s', APP_ROOT, $file);
-
 				$data = $this->data;
 
 				ob_start();
-				require_once($file);
+				require_once($this->output_file);
 				$body = ob_get_clean();
 
 				// Strip out JavaScript and add it to the TAIL
@@ -166,7 +223,10 @@ class Base
 
 				$this->body = $body;
 				$this->foot_script = implode("\n", $foot_script);
-				$this->body = ob_get_clean();
+
+				ob_start();
+				require_once($this->layout_file);
+				return ob_get_clean();
 
 			}
 
