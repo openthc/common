@@ -146,7 +146,12 @@ class Base
 				$this->layout_file = sprintf('%s/view/_layout/html.php', APP_ROOT);
 				// $this->layout_file = sprintf('%s/view/html-left.php', APP_ROOT);
 
+				$f = ltrim($f, '/');
+				$f = preg_replace('/\.php$/', '', $f);
+				$f = sprintf('%s/view/%s.php', APP_ROOT, $f);
+
 				$this->output_file = $f;
+
 				$this->data = $d;
 
 			}
