@@ -219,6 +219,7 @@ class Base
 				$body = ob_get_clean();
 
 				// Strip out JavaScript and add it to the TAIL
+				$foot_script = [];
 				if (preg_match_all('/(<script.+?<\/script>)/ms', $body, $m)) {
 					foreach ($m[1] as $s) {
 						$foot_script[] = $s;
