@@ -32,7 +32,8 @@ class Base
 	{
 		if ('POST' != $_SERVER['REQUEST_METHOD']) {
 			_exit_json(array(
-				'meta' => [ 'detail' => 'Invalid Verb [ALU#036]' ]
+				'meta' => [ 'detail' => 'Invalid Verb [ALU#036]' ],
+				'data' => null,
 			), 405);
 		}
 		$x = strtok($_SERVER['CONTENT_TYPE'], ';');
@@ -41,7 +42,9 @@ class Base
 			_exit_json(array(
 				'meta' => [
 					'detail' => 'Invalid Content Type [ALU#043]',
-					'type' => $x,
+					'data' => [
+						'type' => $x,
+					]
 				]
 			), 405);
 
@@ -50,7 +53,8 @@ class Base
 		$data = file_get_contents('php://input');
 		if (empty($data)) {
 			_exit_json(array(
-				'meta' => [ 'detail' => 'Invalid Input [ALU#017]' ]
+				'meta' => [ 'detail' => 'Invalid Input [ALU#017]' ],
+				'data' => null,
 			), 400);
 		}
 
@@ -59,7 +63,8 @@ class Base
 		}
 		if (empty($data)) {
 			_exit_json(array(
-				'meta' => [ 'detail' => 'Invalid Input [ALU#027]' ]
+				'meta' => [ 'detail' => 'Invalid Input [ALU#027]' ],
+				'data' => null,
 			), 400);
 		}
 
