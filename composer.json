@@ -4,6 +4,7 @@
 	"license": "GPL-3.0-only",
 	"autoload": {
 		"files": [
+			"lib/err.php",
 			"lib/php.php",
 			"lib/stat.php"
 		],
