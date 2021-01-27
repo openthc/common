@@ -1,4 +1,6 @@
 <?php
+
+namespace OpenTHC;
 /**
  * StatsD Metrics Functions
  */

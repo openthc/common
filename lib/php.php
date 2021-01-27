@@ -1,4 +1,6 @@
 <?php
+
+namespace OpenTHC;
 /**
  * Top Level PHP Functions, utility wrappers
  */
