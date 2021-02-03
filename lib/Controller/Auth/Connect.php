@@ -30,7 +30,7 @@ class Connect extends \OpenTHC\Controller\Base
 		if (empty($_GET['client_id'])) {
 			return $RES->withJSON([
 				'data' => [],
-				'meta' => [ 'detail' => 'Invalid Application [CAC#027]'],
+				'meta' => [ 'detail' => 'Invalid Application [CAC-027]'],
 			], 400);
 		}
 
@@ -38,7 +38,7 @@ class Connect extends \OpenTHC\Controller\Base
 		$cfg = \OpenTHC\Config::get('database/auth');
 		if (empty($cfg)) {
 			return $RES->withJSON([
-				'meta' => [ 'detail' => 'Fatal Database Error [CAC#024]'],
+				'meta' => [ 'detail' => 'Fatal Database Error [CAC-024]'],
 				'data' => [],
 			], 500);
 		}
@@ -52,7 +52,7 @@ class Connect extends \OpenTHC\Controller\Base
 		if (empty($App['id'])) {
 			return $RES->withJSON([
 				'data' => null,
-				'meta' => [ 'detail' => 'Invalid Application [CAC#034]'],
+				'meta' => [ 'detail' => 'Invalid Application [CAC-034]'],
 			], 400);
 		}
 
@@ -60,7 +60,7 @@ class Connect extends \OpenTHC\Controller\Base
 		if (200 != $App['stat']) {
 			return $RES->withJSON([
 				'data' => null,
-				'meta' => [ 'detail' => 'Invalid Application [CAC#042]'],
+				'meta' => [ 'detail' => 'Invalid Application [CAC-042]'],
 			], 400);
 		}
 
@@ -68,7 +68,7 @@ class Connect extends \OpenTHC\Controller\Base
 		if (($App['flag'] & 0x00000001) == 0) {
 			return $RES->withJSON([
 				'data' => null,
-				'meta' => [ 'detail' => 'Invalid Application [CAC#039]'],
+				'meta' => [ 'detail' => 'Invalid Application [CAC-039]'],
 			], 400);
 		}
 
@@ -77,7 +77,7 @@ class Connect extends \OpenTHC\Controller\Base
 		if (empty($tmp_auth)) {
 			return $RES->withJSON([
 				'data' => null,
-				'meta' => [ 'detail' => 'Invalid Parameters [CAC#051]'],
+				'meta' => [ 'detail' => 'Invalid Parameters [CAC-051]'],
 			], 400);
 		}
 
@@ -85,7 +85,7 @@ class Connect extends \OpenTHC\Controller\Base
 		if (empty($tmp_auth)) {
 			return $RES->withJSON([
 				'data' => null,
-				'meta' => [ 'detail' => 'Invalid Parameters [CAC#056]'],
+				'meta' => [ 'detail' => 'Invalid Parameters [CAC-056]'],
 			], 400);
 		}
 
@@ -106,7 +106,7 @@ class Connect extends \OpenTHC\Controller\Base
 		if (empty($this->_Contact_Auth['id']) || empty($this->_Company_Auth['id'])) {
 			return $RES->withJSON([
 				'data' => null,
-				'meta' => [ 'detail' => 'Invalid Company or Contact [CAC#109]' ]
+				'meta' => [ 'detail' => 'Invalid Company or Contact [CAC-109]' ]
 			], 403);
 		}
 
@@ -116,7 +116,7 @@ class Connect extends \OpenTHC\Controller\Base
 		$cfg = \OpenTHC\Config::get('database/main');
 		if (empty($cfg)) {
 			return $RES->withJSON([
-				'meta' => [ 'detail' => 'Fatal Database Error [CAC#125]'],
+				'meta' => [ 'detail' => 'Fatal Database Error [CAC-125]'],
 				'data' => [],
 			], 500);
 		}
@@ -129,7 +129,7 @@ class Connect extends \OpenTHC\Controller\Base
 		if (empty($res['id'])) {
 			return $RES->withJSON([
 				'data' => null,
-				'meta' => [ 'detail' => sprintf('Invalid Company "%s" [CAC#067]', $this->_Company_Auth['id']) ],
+				'meta' => [ 'detail' => sprintf('Invalid Company "%s" [CAC-067]', $this->_Company_Auth['id']) ],
 			], 400);
 		}
 		$Company = $res;
@@ -141,7 +141,7 @@ class Connect extends \OpenTHC\Controller\Base
 		if (empty($License['id'])) {
 			return $RES->withJSON([
 				'data' => null,
-				'meta' => [ 'detail' => sprintf('Invalid License "%s" [CAC#076]', $tmp_auth['license']['id']) ],
+				'meta' => [ 'detail' => sprintf('Invalid License "%s" [CAC-076]', $tmp_auth['license']['id']) ],
 			], 400);
 		}
 
@@ -162,28 +162,8 @@ class Connect extends \OpenTHC\Controller\Base
 				'company_id' => $Company['id'],
 				'email' => $tmp_auth['contact']['email']
 			);
-			$this->_Contact_Base['id'] = $dbc->insert('contact', $this->_Contact_Base);
+			$this->_Contact_Base['id'] = $dbc_main->insert('contact', $this->_Contact_Base);
 		}
-
-		// Validate Contact_Auth <=> Contact_Base
-		if (empty($this->_Contact_Auth['id'])) {
-			// $this->_Contact_Auth = array(
-			// 	'id' => $this->_Contact_Base['id'],
-			// 	'contact_id' => $this->_Contact_Base['id'],
-			// 	'company_id' => $Company['id'],
-			// 	'username' => $tmp_auth['contact']['email'],
-			// 	'password' => sha1($_GET['_']),
-			// );
-			// $this->_Contact_Auth['id'] = $dbc->insert('auth_contact', $this->_Contact_Auth);
-		}
-
-		// if ($this->_Contact_Auth['company_id'] != $Company['id']) {
-		// 	_exit_text([
-		// 		'this' => $this->_Contact_Auth,
-		// 		'Company' => $Company,
-		// 	]);
-		// 	_exit_text('Please Contact Support [CAC#192]');
-		// }
 
 		// Primary Objects
 		$_SESSION['Contact'] = $this->_Contact_Base;
