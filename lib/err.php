@@ -52,11 +52,19 @@ body {
 	width: 100%;
 }
 a {
-	color: 0000cc;
+	background: #303030;
+	color: #00cc00;
+	padding: 0 0.25rem;
 }
 h1, h2, p, pre {
 	margin: 0 0 1rem 0;
 	padding: 0;
+}
+pre {
+	background: #f0f0f0;
+	color: #101010;
+	padding: 0.50rem;
+	white-space: break-spaces;
 }
 </style>
 <title>System Error</title>
