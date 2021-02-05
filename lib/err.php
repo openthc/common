@@ -17,9 +17,13 @@ function _error_handler_exit($err=null)
 
 	$done = true;
 
-	$$hint = null;
+	$hint = null;
 	if (!empty($_ENV['_error_handler']['hint'])) {
 		$hint = $_ENV['_error_handler']['hint'];
+	}
+	if (!empty($err['hint'])) {
+		$hint = $err['hint'];
+		unset($err['hint']);
 	}
 
 	// Purge Output Buffer
