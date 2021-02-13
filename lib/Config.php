@@ -1,7 +1,8 @@
 <?php
 /**
-	Configuration Helper
-*/
+ * Configuration Helper
+ * Application and System Level Configuration Variables
+ */
 
 namespace OpenTHC;
 
@@ -10,15 +11,59 @@ class Config
 	private static $_cfg;
 
 	/**
-		Get Config from '.' separated path
-		@param $k Key to Get
-	*/
+	 * Get Config from '/' separated path
+	 * @param $k Key to Get
+	 */
 	static function get($k)
 	{
-		if (!empty($_ENV[$k])) {
-			return $_ENV[$k];
+		// Patch Names
+		// $k = str_replace('.', '/', $k);
+		// $k = str_replace('_', '/', $k);
+
+		// Per Request Caching
+		// Or Maybe No Caching at all?
+		if (empty($_ENV['OPENTHC_CONFIG'])) {
+			$_ENV['OPENTHC_CONFIG'] = [];
+		}
+		if (!empty($_ENV['OPENTHC_CONFIG'][$k])) {
+			return $_ENV['OPENTHC_CONFIG'][$k];
 		}
 
+		self::_load();
+		$ret = self::$_cfg;
+
+		// Legacy Way from INI file
+		$k_path = explode('/', $k);
+		while ($k1 = array_shift($k_path)) {
+			$ret = $ret[$k1];
+		}
+
+		return $ret;
+
+		// Try Local Shared Memory First
+		// $ret = self::shm_get($k);
+		// if ($ret) {
+		// 	$_ENV['OPENTHC_CONFIG'][$k] = $ret;
+		// 	return $ret;
+		// }
+
+		// // Local Configuration Path
+		// $ret = self::etc_path_get($k);
+		// if ($ret) {
+		// 	// Promote Caching Layer
+		// 	$_ENV['OPENTHC_CONFIG'][$k] = $ret;
+		// 	// self::shm_set($k, $ret);
+		// 	return $ret;
+		// }
+
+	}
+
+	/**
+	 * @deprecated
+	 * Read Local Config Path
+	 */
+	static function etc_path_get($k)
+	{
 		// New Path Based
 		$k_want = str_replace('.', '/', $k);
 		$k_want = trim($k_want, '/');
@@ -44,51 +89,97 @@ class Config
 			}
 		}
 
-		// Legacy Way from INI file
-		self::_load();
+		return(null);
+	}
 
-		$k_path = explode('.', $k);
 
-		$r = self::$_cfg;
-		while ($k = array_shift($k_path)) {
-			$r = $r[$k];
+	static function shm_open()
+	{
+		static $shm;
+		if (empty($shm)) {
+			$key = ftok(__FILE__, 'o');
+			$shm = shm_attach($key, 16384);
+		}
+		return($shm);
+	}
+	/**
+	 * Get SHM
+	 */
+	static function shm_get($key)
+	{
+		$shm = self::shm_open();
+		if ($shm) {
+			$key = crc32($key);
+			if (shm_has_var($shm, $key)) {
+				$ret = shm_get_var($shm, $key);
+				return($ret);
+			}
 		}
 
-		return $r;
+		return(null);
 
 	}
 
 	/**
-		Load Config from INI file
-	*/
-	private static function _load()
+	 * Set SHM
+	 */
+	static function shm_set($key, $val)
 	{
-		if (!empty(self::$_cfg)) {
-			return(0);
+		$shm = self::shm_open();
+		if ($shm) {
+			return shm_put_var($shm, crc32($key), $val);
 		}
 
-		// App Defaults
-		$file = sprintf('%s/etc/app.ini', APP_ROOT);
-		if (!is_file($file)) {
-			return(null);
-			//die('Application Config Missing');
-		}
-
-		$cfg = parse_ini_file($file, true, INI_SCANNER_RAW);
-		$cfg = array_change_key_case($cfg);
-
-		// Reduce to Singular Values
-		foreach ($cfg as $k0=>$opt) {
-			foreach ($opt as $k1=>$x) {
-				if (is_array($cfg[$k0][$k1])) {
-					die("Key: $k0 has $k1 as Big");
-					$cfg[$k0][$k1] = array_pop($cfg[$k0][$k1]);
-				}
-			}
-		}
-
-		self::$_cfg = $cfg;
+		return(false);
 
 	}
 
+	/**
+	 * Load Config from INI file
+	 */
+	private static function _load()
+	{
+		if (!empty(self::$_cfg)) {
+			return(true);
+		}
+
+		// Base Path
+		$base = '';
+		if (defined('APP_ROOT')) {
+			$base = APP_ROOT;
+		} elseif (!empty($_SERVER['DOCUMENT_ROOT'])) {
+			// DOCUMENT_ROOT is the Webroot, Go one UP from there
+			$base = dirname($_SERVER['DOCUMENT_ROOT']);
+		} elseif (!empty($_SERVER['PWD'])) {
+			$base = $_SERVER['PWD'];
+		}
+
+		$file = sprintf('%s/etc/app.ini', $base);
+		if (!is_file($file)) {
+			_exit_text(sprintf('Invalid Configuration "%s" [OLC-159]', $file), 500);
+		}
+
+		$cfg_source = parse_ini_file($file, true, INI_SCANNER_RAW);
+		$cfg_source = array_change_key_case($cfg_source);
+
+		// $key_list = array_keys($cfg_source);
+		// foreach ($key_list as $i => $k) {
+		// 	$k = explode('/', $k);
+		// }
+
+		// Reduce to Singular Values
+		// foreach ($cfg as $k0 => $opt) {
+		// 	foreach ($opt as $k1 => $x) {
+		// 		if (is_array($cfg[$k0][$k1])) {
+		// 			die("Key: $k0 has $k1 as Big");
+		// 			$cfg[$k0][$k1] = array_pop($cfg[$k0][$k1]);
+		// 		}
+		// 	}
+		// }
+
+		self::$_cfg = $cfg_source;
+
+		return(true);
+
+	}
 }
