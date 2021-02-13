@@ -12,13 +12,19 @@ class Ping extends \OpenTHC\Controller\Base
 		ksort($_COOKIE);
 		ksort($_SESSION);
 
-		return $RES->withJSON([
+		$code = 200;
+
+		$data = [
 			'data' => [
 				'_COOKIE' => $_COOKIE,
 				'_SESSION' => $_SESSION,
 			],
 			'meta' => []
-		]);
+		];
+
+		$flag = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
+
+		return $RES->withJSON($data, $code, $flag);
 
 	}
 }
