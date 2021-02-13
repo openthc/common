@@ -18,10 +18,20 @@ class Redis
 
 	protected static function _init()
 	{
-		$hostname = Config::get('redis.hostname') ?: '127.0.0.1';
+		$url = getenv('OPENTHC_REDIS_URL');
+		if (!empty($url)) {
+			$url = parse_url($url);
+		}
+		if (empty($url['host'])) {
+			$url['host'] = Config::get('redis/hostname');
+		}
+		if (empty($url['host'])) {
+			$url['host'] = '127.0.0.1';
+		}
+
 		if (empty(self::$_r)) {
 			self::$_r = new \Redis();
-			self::$_r->connect($hostname);
+			self::$_r->connect($url['host']);
 		}
 	}
 

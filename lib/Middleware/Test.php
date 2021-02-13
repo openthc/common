@@ -16,7 +16,7 @@ class Test extends Base
 		}
 
 		if (!empty($_GET['_t'])) {
-			$key = \OpenTHC\Config::get('application_test.secret');
+			$key = \OpenTHC\Config::get('test/secret');
 			if ($_GET['_t'] == $key) {
 				$test = true;
 				setcookie('test', 'true', 0, '/', '', true, true);

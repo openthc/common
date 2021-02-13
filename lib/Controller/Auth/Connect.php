@@ -35,7 +35,7 @@ class Connect extends \OpenTHC\Controller\Base
 		}
 
 		// Auth Database Connection
-		$cfg = \OpenTHC\Config::get('database/auth');
+		$cfg = \OpenTHC\Config::get('database_auth');
 		if (empty($cfg)) {
 			return $RES->withJSON([
 				'meta' => [ 'detail' => 'Fatal Database Error [CAC-024]'],
@@ -113,7 +113,7 @@ class Connect extends \OpenTHC\Controller\Base
 
 
 		// Main Database Connection
-		$cfg = \OpenTHC\Config::get('database/main');
+		$cfg = \OpenTHC\Config::get('database_main');
 		if (empty($cfg)) {
 			return $RES->withJSON([
 				'meta' => [ 'detail' => 'Fatal Database Error [CAC-125]'],

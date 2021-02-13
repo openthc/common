@@ -16,7 +16,7 @@ class CRE
 	*/
 	function __construct($sid=null)
 	{
-		$cfg = \OpenTHC\Config::get('openthc_pipe');
+		$cfg = \OpenTHC\Config::get('pipe');
 
 		$jar = new \GuzzleHttp\Cookie\CookieJar();
 
