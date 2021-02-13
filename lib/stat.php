@@ -13,17 +13,17 @@ function _stat_send($d)
 
 	if (empty($s)) {
 
-		$h = $_ENV['statsd']['hostname'];
-		if (empty($h)) {
-			$h = 'udp://127.0.0.1';
+		$url = getenv('OPENTHC_STATSD_URL');
+		if (empty($url)) {
+			$url = [
+				'host' => '127.0.0.1',
+				'port' => 8125,
+			];
+		} else {
+			$url = parse_url($url);
 		}
 
-		$p = $_ENV['statsd']['port'];
-		if (empty($p)) {
-			$p = '8125';
-		}
-
-		$s = fsockopen($h, $p, $eno, $esz, 1);
+		$s = fsockopen(sprintf('udp://%s', $url['host']), $url['port'], $eno, $esz, 1);
 
 	}
 

@@ -8,91 +8,90 @@ namespace OpenTHC;
 
 class Config
 {
-	private static $_cfg;
+	private static $conf = [];
+
+	private static $path;
+
+	function dump()
+	{
+		return [
+			'conf' => self::$conf,
+			'path' => self::$path,
+		];
+	}
+
+	static function init($p=null)
+	{
+		self::$conf = [];
+
+		if (empty($p)) {
+			if (defined('APP_ROOT')) {
+				$p = APP_ROOT;
+			} elseif (!empty($_SERVER['DOCUMENT_ROOT'])) {
+				// assumes our context is in a webroot
+				$p = dirname($_SERVER['DOCUMENT_ROOT']);
+			}
+		}
+
+		self::$path = rtrim($p, '/');
+
+	}
 
 	/**
 	 * Get Config from '/' separated path
 	 * @param $k Key to Get
 	 */
-	static function get($k)
+	static function get($k0)
 	{
 		// Patch Names
-		// $k = str_replace('.', '/', $k);
-		// $k = str_replace('_', '/', $k);
+		// $k0 = str_replace('.', '/', $k0);
+		// $k0 = str_replace('_', '/', $k0);
+		$k0 = trim($k0, '/');
 
 		// Per Request Caching
-		// Or Maybe No Caching at all?
-		if (empty($_ENV['OPENTHC_CONFIG'])) {
-			$_ENV['OPENTHC_CONFIG'] = [];
-		}
-		if (!empty($_ENV['OPENTHC_CONFIG'][$k])) {
-			return $_ENV['OPENTHC_CONFIG'][$k];
+		if (!empty(self::$conf[$k0])) {
+			return self::$conf[$k0];
 		}
 
-		self::_load();
-		$ret = self::$_cfg;
+		$k_path = explode('/', $k0);
 
-		// Legacy Way from INI file
-		$k_path = explode('/', $k);
+		// Specific Config File?
+		$file = sprintf('%s/etc/%s.ini', self::$path, $k_path[0]);
+		if (is_file($file)) {
+			array_shift($k_path);
+		} else {
+			if (!is_file($file)) {
+				$file = sprintf('%s/etc/main.ini', self::$path);
+			}
+			if (!is_file($file)) {
+				$file = sprintf('%s/etc/app.ini', self::$path);
+			}
+		}
+
+		$v = parse_ini_file($file, true, INI_SCANNER_RAW);
+		$v = array_change_key_case($v);
+
+		// Shift Out the Desired Key?
 		while ($k1 = array_shift($k_path)) {
-			$ret = $ret[$k1];
+			$v = @$v[$k1];
 		}
 
-		return $ret;
+		self::$conf[$k0] = $v;
+
+		return $v;
 
 		// Try Local Shared Memory First
 		// $ret = self::shm_get($k);
 		// if ($ret) {
-		// 	$_ENV['OPENTHC_CONFIG'][$k] = $ret;
-		// 	return $ret;
-		// }
-
-		// // Local Configuration Path
-		// $ret = self::etc_path_get($k);
-		// if ($ret) {
-		// 	// Promote Caching Layer
-		// 	$_ENV['OPENTHC_CONFIG'][$k] = $ret;
-		// 	// self::shm_set($k, $ret);
+		// 	self::$conf[$k] = $ret;
 		// 	return $ret;
 		// }
 
 	}
 
 	/**
-	 * @deprecated
-	 * Read Local Config Path
+	 * Open Shared Memory
 	 */
-	static function etc_path_get($k)
-	{
-		// New Path Based
-		$k_want = str_replace('.', '/', $k);
-		$k_want = trim($k_want, '/');
-		$k_path = sprintf('%s/etc/%s', APP_ROOT, $k_want);
-		if (is_file($k_path)) {
-			$ret = file_get_contents($k_path);
-			return trim($ret);
-		}
-
-		// Asking for a Directory returns all it's files
-		if (is_dir($k_path)) {
-			$ret = [];
-			$k_want_list = glob(sprintf('%s/*', $k_path));
-			foreach ($k_want_list as $k_file) {
-				if (is_file($k_file)) {
-					$key = basename($k_file);
-					$val = file_get_contents($k_file);
-					$ret[$key] = trim($val);
-				}
-			}
-			if (count($ret)) {
-				return $ret;
-			}
-		}
-
-		return(null);
-	}
-
-
 	static function shm_open()
 	{
 		static $shm;
@@ -102,6 +101,7 @@ class Config
 		}
 		return($shm);
 	}
+
 	/**
 	 * Get SHM
 	 */
@@ -134,52 +134,4 @@ class Config
 
 	}
 
-	/**
-	 * Load Config from INI file
-	 */
-	private static function _load()
-	{
-		if (!empty(self::$_cfg)) {
-			return(true);
-		}
-
-		// Base Path
-		$base = '';
-		if (defined('APP_ROOT')) {
-			$base = APP_ROOT;
-		} elseif (!empty($_SERVER['DOCUMENT_ROOT'])) {
-			// DOCUMENT_ROOT is the Webroot, Go one UP from there
-			$base = dirname($_SERVER['DOCUMENT_ROOT']);
-		} elseif (!empty($_SERVER['PWD'])) {
-			$base = $_SERVER['PWD'];
-		}
-
-		$file = sprintf('%s/etc/app.ini', $base);
-		if (!is_file($file)) {
-			_exit_text(sprintf('Invalid Configuration "%s" [OLC-159]', $file), 500);
-		}
-
-		$cfg_source = parse_ini_file($file, true, INI_SCANNER_RAW);
-		$cfg_source = array_change_key_case($cfg_source);
-
-		// $key_list = array_keys($cfg_source);
-		// foreach ($key_list as $i => $k) {
-		// 	$k = explode('/', $k);
-		// }
-
-		// Reduce to Singular Values
-		// foreach ($cfg as $k0 => $opt) {
-		// 	foreach ($opt as $k1 => $x) {
-		// 		if (is_array($cfg[$k0][$k1])) {
-		// 			die("Key: $k0 has $k1 as Big");
-		// 			$cfg[$k0][$k1] = array_pop($cfg[$k0][$k1]);
-		// 		}
-		// 	}
-		// }
-
-		self::$_cfg = $cfg_source;
-
-		return(true);
-
-	}
 }
