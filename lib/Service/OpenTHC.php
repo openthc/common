@@ -14,7 +14,7 @@ class OpenTHC
 
 	function __construct($svc)
 	{
-		$cfg = \OpenTHC\Config::get(sprintf('%s', $svc));
+		$cfg = \OpenTHC\Config::get(sprintf('openthc_%s', $svc));
 		$this->_api_base = sprintf('https://%s/', $cfg['hostname']);
 		$this->_api_auth = $cfg['secret'];
 
