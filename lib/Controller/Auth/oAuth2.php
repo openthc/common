@@ -50,6 +50,8 @@ class oAuth2 extends \OpenTHC\Controller\Base
 			'verify' => true
 		]);
 
+		return $p;
+
 	}
 
 	/**
