@@ -168,7 +168,7 @@ class Base
 
 				// File
 				$f = ltrim($f, '/');
-				$f = basename($f, '.php');
+				$f = preg_replace('/\.php$/', '', $f);
 				$f = sprintf('%s/view/_block/%s.php', APP_ROOT, $f);
 
 				if (is_file($f)) {
