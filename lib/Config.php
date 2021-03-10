@@ -46,6 +46,7 @@ class Config
 		// Patch Names
 		// $k0 = str_replace('.', '/', $k0);
 		// $k0 = str_replace('_', '/', $k0);
+		$k0 = strtolower($k0);
 		$k0 = trim($k0, '/');
 
 		// Per Request Caching
@@ -69,11 +70,15 @@ class Config
 		}
 
 		$v = parse_ini_file($file, true, INI_SCANNER_RAW);
+		if (empty($v)) {
+			return null;
+		}
+
 		$v = array_change_key_case($v);
 
 		// Shift Out the Desired Key?
 		while ($k1 = array_shift($k_path)) {
-			$v = @$v[$k1];
+			$v = $v[$k1];
 		}
 
 		self::$conf[$k0] = $v;
