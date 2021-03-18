@@ -38,8 +38,8 @@ class Connect extends \OpenTHC\Controller\Base
 		$cfg = \OpenTHC\Config::get('database_auth');
 		if (empty($cfg)) {
 			return $RES->withJSON([
-				'meta' => [ 'detail' => 'Fatal Database Error [CAC-024]'],
 				'data' => [],
+				'meta' => [ 'detail' => 'Fatal Database Error [CAC-024]'],
 			], 500);
 		}
 
@@ -52,15 +52,15 @@ class Connect extends \OpenTHC\Controller\Base
 		if (empty($App['id'])) {
 			return $RES->withJSON([
 				'data' => null,
-				'meta' => [ 'detail' => 'Invalid Application [CAC-034]'],
+				'meta' => [ 'detail' => 'Invalid Service [CAC-034]'],
 			], 400);
 		}
 
-		// Only Live Applications
+		// Only Live Service
 		if (200 != $App['stat']) {
 			return $RES->withJSON([
 				'data' => null,
-				'meta' => [ 'detail' => 'Invalid Application [CAC-042]'],
+				'meta' => [ 'detail' => 'Invalid Service [CAC-042]'],
 			], 400);
 		}
 
@@ -68,7 +68,7 @@ class Connect extends \OpenTHC\Controller\Base
 		if (($App['flag'] & 0x00000001) == 0) {
 			return $RES->withJSON([
 				'data' => null,
-				'meta' => [ 'detail' => 'Invalid Application [CAC-039]'],
+				'meta' => [ 'detail' => 'Invalid Service [CAC-039]'],
 			], 400);
 		}
 
@@ -95,8 +95,8 @@ class Connect extends \OpenTHC\Controller\Base
 
 
 		// Lookup Auth_Contact
-		$sql = 'SELECT * FROM auth_contact WHERE username = ?';
-		$arg = array($tmp_auth['contact']['email']);
+		$sql = 'SELECT * FROM auth_contact WHERE id = :ct';
+		$arg = [ ':ct' => $tmp_auth['contact']['id'] ];
 		$this->_Contact_Auth = $dbc_auth->fetchRow($sql, $arg);
 
 		$this->_Company_Auth = $dbc_auth->fetchRow('SELECT * FROM auth_company WHERE id = :c0', [
@@ -110,8 +110,6 @@ class Connect extends \OpenTHC\Controller\Base
 			], 403);
 		}
 
-
-
 		// Main Database Connection
 		$cfg = \OpenTHC\Config::get('database_main');
 		if (empty($cfg)) {
@@ -123,7 +121,7 @@ class Connect extends \OpenTHC\Controller\Base
 
 		$dbc_main = new SQL(sprintf('pgsql:host=%s;dbname=%s', $cfg['hostname'], $cfg['database']), $cfg['username'], $cfg['password']);
 
-		// Lookup Company
+		// Lookup Main Company
 		$sql = 'SELECT * FROM company WHERE id = :c0';
 		$res = $dbc_main->fetchRow($sql, [ ':c0' => $this->_Company_Auth['id'] ]);
 		if (empty($res['id'])) {
@@ -149,24 +147,23 @@ class Connect extends \OpenTHC\Controller\Base
 		$x = $tmp_auth['contact']['email'];
 		$x = strtolower(trim($x));
 		if (!filter_var($x, FILTER_VALIDATE_EMAIL)) {
-			_exit_text('Invalid Contact [CAC#084]', 400);
+			_exit_text('Invalid Contact [CAC-084]', 400);
 		}
 		$tmp_auth['contact']['email'] = $x;
 
-		$sql = 'SELECT * FROM contact WHERE company_id = ? AND email = ?';
-		$arg = array($Company['id'], $tmp_auth['contact']['email']);
+		$sql = 'SELECT id, flag, email, phone FROM contact WHERE id = :ct0';
+		$arg = [ ':ct0' => $this->_Contact_Auth['id'] ];
 		$this->_Contact_Base = $dbc_main->fetchRow($sql, $arg);
 		if (empty($this->_Contact_Base['id'])) {
-			$this->_Contact_Base = array(
-				'id' => _ulid(),
-				'company_id' => $Company['id'],
+			$this->_Contact_Base = [
+				'id' => $tmp_auth['contact']['id'],
 				'email' => $tmp_auth['contact']['email']
-			);
+			];
 			$this->_Contact_Base['id'] = $dbc_main->insert('contact', $this->_Contact_Base);
 		}
 
 		// Primary Objects
-		$_SESSION['Contact'] = $this->_Contact_Base;
+		$_SESSION['Contact'] = array_merge($this->_Contact_Base, $this->_Contact_Auth);
 		$_SESSION['Company'] = $Company;
 		$_SESSION['License'] = $License;
 
@@ -183,7 +180,6 @@ class Connect extends \OpenTHC\Controller\Base
 			);
 		} else {
 			// Legacy Shit
-			// Save State
 			$_SESSION['cre'] = array(
 				'code' => 'usa/wa',
 				'engine' => 'leafdata',
