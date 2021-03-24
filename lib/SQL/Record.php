@@ -122,30 +122,35 @@ class Record implements \ArrayAccess, \JsonSerializable
 		if (empty($this->_data['id'])) {
 			unset($this->_data['id']);
 		}
-		if (!empty($this->_data['json'])) {
+
+		if (!empty($this->_data['json'])) { // @deprecated
 			if (is_array($this->_data['json'])) {
 				$this->_data['json'] = json_encode($this->_data['json']);
 			}
 		}
 
-		$rec = array();
-		foreach ($this->_data as $k=>$v) {
-			$rec[$k] = $v;
-		}
-
 		if ($this->_pk) {
+
 			// Record Delta?
-			if (count($this->_diff)) {
-				//Base_Diff::diff($this);
+			$rec = [];
+			foreach ($this->_diff as $k => $v) {
+				$rec[$k] = $this->_data[$k];
 			}
 
-			if (!empty($this->_dbc)) {
-				$res = $this->_dbc->update($this->_table, $rec, array('id' => $this->_pk));
-			} else {
-				$res = \Edoceo\Radix\DB\SQL::update($this->_table, $rec, array('id' => $this->_pk));
+			if (!empty($rec)) {
+				if (!empty($this->_dbc)) {
+					$res = $this->_dbc->update($this->_table, $rec, array('id' => $this->_pk));
+				} else {
+					$res = \Edoceo\Radix\DB\SQL::update($this->_table, $rec, array('id' => $this->_pk));
+				}
 			}
 
 		} else {
+
+			$rec = [];
+			foreach ($this->_data as $k=>$v) {
+				$rec[$k] = $v;
+			}
 
 			if (!empty($this->_dbc)) {
 				$this->_pk = $this->_dbc->insert($this->_table, $rec);
@@ -154,9 +159,7 @@ class Record implements \ArrayAccess, \JsonSerializable
 			}
 
 			$this->_data['id'] = $this->_pk;
-			// if (empty($this->_pk)) {
-			// 	throw new \Exception('Unexpected error saving: ' . get_class($this), __LINE__, new Exception("SQL Error: " . SQL::lastError()));
-			// }
+
 		}
 
 		return true;
