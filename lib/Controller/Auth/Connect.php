@@ -64,14 +64,6 @@ class Connect extends \OpenTHC\Controller\Base
 			], 400);
 		}
 
-		// With Live Flag
-		if (($App['flag'] & 0x00000001) == 0) {
-			return $RES->withJSON([
-				'data' => null,
-				'meta' => [ 'detail' => 'Invalid Service [CAC-039]'],
-			], 400);
-		}
-
 		// Decrypt passed in data with the App Secret
 		$tmp_auth = _decrypt($_GET['_'], $App['hash']);
 		if (empty($tmp_auth)) {
@@ -89,9 +81,17 @@ class Connect extends \OpenTHC\Controller\Base
 			], 400);
 		}
 
-		$tmp_auth['contact']['id'] = strtoupper($tmp_auth['contact']['id']);
+		// Cleanup Data
 		$tmp_auth['company']['id'] = strtoupper($tmp_auth['company']['id']);
 		$tmp_auth['license']['id'] = strtoupper($tmp_auth['license']['id']);
+		$tmp_auth['contact']['id'] = strtoupper($tmp_auth['contact']['id']);
+		$tmp_auth['contact']['email'] = strtolower(trim($tmp_auth['contact']['email']));
+		if (!filter_var($tmp_auth['contact']['email'], FILTER_VALIDATE_EMAIL)) {
+			return $RES->withJSON([
+				'data' => null,
+				'meta' => [ 'detail' => 'Invalid Contact [CAC-093]' ]
+			], 400);
+		}
 
 
 		// Lookup Auth_Contact
@@ -123,14 +123,13 @@ class Connect extends \OpenTHC\Controller\Base
 
 		// Lookup Main Company
 		$sql = 'SELECT * FROM company WHERE id = :c0';
-		$res = $dbc_main->fetchRow($sql, [ ':c0' => $this->_Company_Auth['id'] ]);
-		if (empty($res['id'])) {
+		$Company = $dbc_main->fetchRow($sql, [ ':c0' => $this->_Company_Auth['id'] ]);
+		if (empty($Company['id'])) {
 			return $RES->withJSON([
 				'data' => null,
 				'meta' => [ 'detail' => sprintf('Invalid Company "%s" [CAC-067]', $this->_Company_Auth['id']) ],
 			], 400);
 		}
-		$Company = $res;
 
 		// Lookup License
 		$sql = 'SELECT * FROM license WHERE company_id = ? AND id = ?';
@@ -144,13 +143,6 @@ class Connect extends \OpenTHC\Controller\Base
 		}
 
 		// Lookup Contact
-		$x = $tmp_auth['contact']['email'];
-		$x = strtolower(trim($x));
-		if (!filter_var($x, FILTER_VALIDATE_EMAIL)) {
-			_exit_text('Invalid Contact [CAC-084]', 400);
-		}
-		$tmp_auth['contact']['email'] = $x;
-
 		$sql = 'SELECT id, flag, email, phone FROM contact WHERE id = :ct0';
 		$arg = [ ':ct0' => $this->_Contact_Auth['id'] ];
 		$this->_Contact_Base = $dbc_main->fetchRow($sql, $arg);
@@ -169,26 +161,11 @@ class Connect extends \OpenTHC\Controller\Base
 
 		// Canon
 		if (!empty($tmp_auth['cre'])) {
-			$_SESSION['cre'] = array(
-				'engine' => $tmp_auth['cre']['engine'],
-				'client' => $tmp_auth['cre']['client'],
-			);
+			$_SESSION['cre'] = $tmp_auth['cre'];
 			$_SESSION['cre-auth'] = array(
 				'company' => $Company['guid'],
 				'license' => $tmp_auth['cre']['client']['license'],
 				'license-key' => $tmp_auth['cre']['client']['license-key'],
-			);
-		} else {
-			// Legacy Shit
-			$_SESSION['cre'] = array(
-				'code' => 'usa/wa',
-				'engine' => 'leafdata',
-			);
-			$_SESSION['cre-base'] = 'leafdata';
-			$_SESSION['cre-auth'] = array(
-				'company' => $Company['guid'],
-				'license' => $tmp_auth['cre']['auth']['license'],
-				'license-key' => $tmp_auth['cre']['auth']['secret'],
 			);
 		}
 
