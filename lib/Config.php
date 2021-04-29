@@ -9,20 +9,25 @@ namespace OpenTHC;
 class Config
 {
 	private static $conf = [];
-
+	private static $data = [];
 	private static $path;
 
 	function dump()
 	{
 		return [
 			'conf' => self::$conf,
+			'data' => self::$data,
 			'path' => self::$path,
 		];
 	}
 
+	/**
+	 *
+	 */
 	static function init($p=null)
 	{
 		self::$conf = [];
+		self::$data = [];
 
 		if (empty($p)) {
 			if (defined('APP_ROOT')) {
@@ -54,12 +59,29 @@ class Config
 			return self::$conf[$k0];
 		}
 
-		$k_path = explode('/', $k0);
+		$key_list = explode('/', $k0);
+
+		if (empty(self::$data)) {
+			$cfg_file = sprintf('%s/etc/config.php', self::$path);
+			if (is_file($cfg_file)) {
+				$x = include($cfg_file);
+				if (is_array($x)) {
+					self::$data = $x;
+				}
+			}
+		}
+		if (!empty(self::$data)) {
+			$ret = self::$data;
+			while ($key = array_shift($key_list)) {
+				$ret = $ret[$key];
+			}
+			return $ret;
+		}
 
 		// Specific Config File?
-		$file = sprintf('%s/etc/%s.ini', self::$path, $k_path[0]);
+		$file = sprintf('%s/etc/%s.ini', self::$path, $key_list[0]);
 		if (is_file($file)) {
-			array_shift($k_path);
+			array_shift($key_list);
 		} else {
 			if (!is_file($file)) {
 				$file = sprintf('%s/etc/main.ini', self::$path);
@@ -77,7 +99,7 @@ class Config
 		$v = array_change_key_case($v);
 
 		// Shift Out the Desired Key?
-		while ($k1 = array_shift($k_path)) {
+		while ($k1 = array_shift($key_list)) {
 			$v = $v[$k1];
 		}
 
