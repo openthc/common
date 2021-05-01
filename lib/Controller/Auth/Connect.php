@@ -35,7 +35,7 @@ class Connect extends \OpenTHC\Controller\Base
 		}
 
 		// Auth Database Connection
-		$cfg = \OpenTHC\Config::get('database_auth');
+		$cfg = \OpenTHC\Config::get('database/auth');
 		if (empty($cfg)) {
 			return $RES->withJSON([
 				'data' => [],
@@ -111,7 +111,7 @@ class Connect extends \OpenTHC\Controller\Base
 		}
 
 		// Main Database Connection
-		$cfg = \OpenTHC\Config::get('database_main');
+		$cfg = \OpenTHC\Config::get('database/main');
 		if (empty($cfg)) {
 			return $RES->withJSON([
 				'meta' => [ 'detail' => 'Fatal Database Error [CAC-125]'],
@@ -162,11 +162,6 @@ class Connect extends \OpenTHC\Controller\Base
 		// Canon
 		if (!empty($tmp_auth['cre'])) {
 			$_SESSION['cre'] = $tmp_auth['cre'];
-			$_SESSION['cre-auth'] = array(
-				'company' => $Company['guid'],
-				'license' => $tmp_auth['cre']['client']['license'],
-				'license-key' => $tmp_auth['cre']['client']['license-key'],
-			);
 		}
 
 		$_SESSION['sql-hash'] = sha1(json_encode($tmp_auth['cre']));
