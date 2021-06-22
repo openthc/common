@@ -1,8 +1,8 @@
 <?php
 /**
+ * Test Bootstrap
  */
 
-define('APP_ROOT', realpath(dirname(__DIR__)));
+define('APP_ROOT', dirname(__DIR__));
 
-// require_once(__DIR__ . '/../lib/php.php');
-require_once(__DIR__ . '/../vendor/autoload.php');
+require_once(APP_ROOT . '/vendor/autoload.php');

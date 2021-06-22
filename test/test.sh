@@ -5,79 +5,100 @@
 
 set -o errexit
 set -o nounset
-# set -o pipefail
 
 f=$(readlink -f "$0")
 d=$(dirname "$f")
-dt=$(date)
 
 cd "$d"
 
-report_path="../webroot/test-report"
-if [ ! -d "$report_path" ]
+output_base="../webroot/test-output"
+output_main="$output_base/index.html"
+mkdir -p "$output_base"
+
+
+#
+# Lint
+if [ ! -f "$output_base/phplint.txt" ]
 then
-	mkdir "$report_path"
+	echo '<h1>Linting...</h1>' > "$output_main"
+	search_list=(
+		../lib/
+		../test/
+	)
+	find "${search_list[@]}" -type f -name '*.php' -exec php -l {} \; \
+		| grep -v 'No syntax' || true \
+		>"$output_base/phplint.txt" 2>&1
+	[ -s "$output_base/phplint.txt" ] || echo "Linting OK" >"$output_base/phplint.txt"
 fi
 
-report_home="$report_path/index.html"
 
-echo '<h1>Tests Started</h1>' > "$report_home"
+#
+# PHPStan
+if [ ! -f "$output_base/phpstan.html" ]
+then
+	echo '<h1>PHPStan...</h1>' > "$output_main"
+	../vendor/bin/phpstan analyze --error-format=junit --no-progress > "$output_base/phpstan.xml" || true
+	[ -f "phpstan.xsl" ] || wget -q 'https://openthc.com/pub/phpstan.xsl'
+	xsltproc \
+		--nomkdir \
+		--output "$output_base/phpstan.html" \
+		phpstan.xsl \
+		"$output_base/phpstan.xml"
+fi
 
 
 #
-#
+# PHPUnit
+echo '<h1>PHPUnit...</h1>' > "$output_main"
 ../vendor/bin/phpunit \
-	--log-junit "$report_path/output.xml" \
-	--testdox-html "$report_path/testdox.html" \
-	--testdox-text "$report_path/testdox.txt" \
-	--testdox-xml "$report_path/testdox.xml" \
-	"$@" 2>&1 | tee "$report_path/output.txt"
+	--verbose \
+	--log-junit "$output_base/phpunit.xml" \
+	--testdox-html "$output_base/testdox.html" \
+	--testdox-text "$output_base/testdox.txt" \
+	--testdox-xml "$output_base/testdox.xml" \
+	"$@" 2>&1 | tee "$output_base/phpunit.txt"
 
-# if [[ $ret != 0 ]]
-# then
-# 	echo "PHPUnit Failed"
-# 	exit 1;
-# fi
-note=$(tail -n1 "$report_path/output.txt")
-
-echo '<h1>Tests Completed</h1>' > "$report_home"
 
 #
-# Get Transform
-echo '<h1>Transforming...</h1>' > "$report_home"
-curl -qs https://openthc.com/pub/phpunit/report.xsl > report.xsl
+# Transform
+echo '<h1>Transforming...</h1>' > "$output_main"
+[ -f "report.xsl" ] || wget -q 'https://openthc.com/pub/phpunit/report.xsl'
 xsltproc \
 	--nomkdir \
-	--output "$report_path/output.html" \
+	--output "$output_base/phpunit.html" \
 	report.xsl \
-	"$report_path/output.xml"
+	"$output_base/phpunit.xml"
+
 
 #
-# Final Ouptut
-cat <<HTML > "$report_home"
+# Final Output
+dt=$(date)
+note=$(tail -n1 "$output_base/phpunit.txt")
+
+cat <<HTML > "$output_main"
 <html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1, user-scalable=yes">
-<meta name="theme-color" content="#247420">
-<link rel="stylesheet" href="https://cdn.openthc.com/bootstrap/4.4.1/bootstrap.css" integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous">
-<title>Test Result $dt</title>
+<meta name="theme-color" content="#069420">
+<style>
+html {
+	font-family: sans-serif;
+	font-size: 1.5rem;
+}
+</style>
+<title>Test Result ${dt}</title>
 </head>
 <body>
-<div class="container mt-4">
-<div class="jumbotron">
 
-<h1>Test Result $dt</h1>
-<h2>$note</h2>
+<h1>Test Result ${dt}</h1>
+<h2>${note}</h2>
 
-<p>You can view the <a href="output.txt">raw script output</a>,
-or the <a href="output.xml">Unit Test XML</a>
-which we've processed <small>(via XSL)</small> to <a href="output.html">a pretty report</a>
-which is also in <a href="testdox.html">testdox format</a>.
-</p>
+<p>Linting: <a href="phplint.txt">phplint.txt</a></p>
+<p>PHPStan: <a href="phpstan.xml">phpstan.xml</a> and <a href="phpstan.html">phpstan.html</a></p>
+<p>PHPUnit: <a href="phpunit.txt">phpunit.txt</a>, <a href="phpunit.xml">phpunit.xml</a> and <a href="phpunit.html">phpunit.html</a></p>
+<p>Textdox: <a href="testdox.txt">testdox.txt</a>, <a href="testdox.xml">testdox.xml</a> and <a href="testdox.html">testdox.html</a></p>
 
-</div>
-</div>
 </body>
 </html>
 HTML
