@@ -13,27 +13,25 @@
 		}
 	},
 	"require": {
-		"php": ">=7.2.0",
+		"php": ">=7.3.0",
 		"ext-curl": "*",
 		"ext-date": "*",
-		"ext-gettext": "*",
 		"ext-json": "*",
-		"ext-PDO": "*",
-		"ext-redis": "*",
 		"ext-session": "*",
 		"ext-sockets": "*",
-		"giggsey/libphonenumber-for-php": "8.12.1",
+		"ext-PDO": "*",
+		"giggsey/libphonenumber-for-php": "8.12.27",
 		"guzzlehttp/guzzle": "6.5.5",
 		"slim/slim": "3.12.3",
 		"slim/twig-view": "2.5.1",
-		"twig/twig": "2.13.1"
+		"twig/twig": "2.14.6"
 	},
 	"require-dev": {
-		"behat/behat": "3.7.0",
-		"php-webdriver/webdriver": "1.9.0",
-		"phpmd/phpmd": "2.9.1",
-		"phpstan/phpstan": "0.12.76",
-		"phpunit/phpunit": "9.5.2",
+		"behat/behat": "3.8.1",
+		"php-webdriver/webdriver": "1.11.1",
+		"phpmd/phpmd": "2.10.1",
+		"phpstan/phpstan": "0.12.92",
+		"phpunit/phpunit": "9.5.6",
 		"sebastian/phpcpd": "6.0.3"
 	}
 }
