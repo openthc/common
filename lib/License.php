@@ -69,26 +69,15 @@ class License extends \OpenTHC\SQL\Record
 
 		// Current Types
 		$tmp = explode(',', $this->_data['type']);
-		foreach ($tmp as $x) {
-			$x = trim($x);
-			if (!empty($x)) {
-				$mix[] = $x;
-			}
-		}
+		$mix = array_merge($mix, $tmp);
 
 		// New Types Being Added
 		$tmp = explode(',', $t);
-		foreach ($tmp as $x) {
-			$x = trim($x);
-			if (!empty($x)) {
-				$mix[] = $x;
-			}
-		}
+		$mix = array_merge($mix, $tmp);
 
-		$mix = array_unique($mix);
-		sort($mix);
+		$mix = array_filter($mix);
 
-		$tmp = array();
+		$ret = [];
 		foreach ($mix as $x) {
 
 			$y = License_Type::map($x);
@@ -96,17 +85,16 @@ class License extends \OpenTHC\SQL\Record
 			if (empty($y)) {
 				throw new \Exception("Cannot Map: $x");
 			}
-			$tmp[] = $y;
+			$ret[] = $y;
 		}
 
-		$tmp = array_unique($tmp);
-		sort($tmp);
+		$ret = array_unique($ret);
+		sort($ret);
 
-		$ret = implode(',', $tmp);
-		$ret = str_replace('G,G', 'G', $ret);
+		$ret = implode(',', $ret);
+		$this->offsetSet('type', $ret);
 
-		return $ret;
-
+		return true;
 	}
 
 }
