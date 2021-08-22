@@ -21,20 +21,23 @@ class App extends \Slim\App
 			),
 		);
 
+		// Update App Container
+		$con = new \Slim\Container($this->__cfg);
+
 		// Default Twig Directory, or Specific Option?
 		$this->__cfg['twig'] = APP_ROOT . '/twig';
 		if (!empty($opt['twig'])) {
 			$this->__cfg['twig'] = $opt['twig'];
 		}
+		if (is_dir($this->__cfg['twig'])) {
+			$con = $this->addTwig($con);
+		}
 
-		// Create App Container
-		$con = new \Slim\Container($this->__cfg);
-		$con = $this->addTwig($con);
-
+		//
 		$con['notFoundHandler'] = function($c) {
 			return function ($REQ, $RES) {
 				return $RES->withJSON([
-					'meta' => [ 'detail' => 'Not Found [CLA#037]' ]
+					'meta' => [ 'detail' => 'Not Found [CLA-037]' ]
 				], 404);
 			};
 		};
