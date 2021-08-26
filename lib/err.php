@@ -26,65 +26,15 @@ function _error_handler_exit($err=null)
 		unset($err['hint']);
 	}
 
-	// Purge Output Buffer
-	while (ob_get_level() > 0) { ob_end_clean(); }
-
-	header('HTTP/1.1 500 Server Error', true, 500);
-	header('cache-control: no-cache');
-	header('content-type: text/html; charset="utf-8"', true);
-
-	$html = <<<HTML
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="initial-scale=1, user-scalable=yes">
-<style>
-* {
-	box-sizing: border-box;
-}
-body {
-	background: #202020;
-	border-left: 2vw solid #cc0000;
-	border-right: 2vw solid #cc0000;
-	color: #fdfdfd;
-	font-family: sans-serif;
-	font-size: 1.25em;
-	margin: 0;
-	min-height: 100vh;
-	padding: 2vh 2vw;
-	width: 100%;
-}
-a {
-	background: #303030;
-	color: #00cc00;
-	padding: 0 0.25rem;
-}
-h1, h2, p, pre {
-	margin: 0 0 1rem 0;
-	padding: 0;
-}
-pre {
-	background: #f0f0f0;
-	color: #101010;
-	padding: 0.50rem;
-	white-space: break-spaces;
-}
-</style>
-<title>System Error</title>
-</head>
-<body>
+	$body = <<<HTML
 <h1>System Error</h1>
 <p>The system encountered a very unexpected error.</p>
 <p>Details from the request have been logged and some humans have been notified.</p>
 $hint
 <pre>{$err['text']}</pre>
-<pre>Request Log: {$_SERVER['UNIQUE_ID']}</pre>
-</body>
-</html>
 HTML;
 
-	echo $html;
+	_exit_500($body, 500);
 
 	exit(0);
 }

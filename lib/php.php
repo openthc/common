@@ -180,6 +180,59 @@ function _exit_text($text, $code=200)
 }
 
 
+function _exit_400($body, $code=400)
+{
+	$html = <<<HTML
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1, user-scalable=yes">
+<style>
+* {
+	box-sizing: border-box;
+}
+body {
+	background: #202020;
+	border-left: 2vw solid orange;
+	border-right: 2vw solid orange;
+	color: #fdfdfd;
+	font-family: sans-serif;
+	font-size: 1.25em;
+	margin: 0;
+	min-height: 100vh;
+	padding: 2vh 2vw;
+	width: 100%;
+}
+a {
+	background: #303030;
+	color: inherit;
+	padding: 0 0.25rem;
+}
+h1, h2, p, pre {
+	margin: 0 0 1rem 0;
+	padding: 0;
+}
+pre {
+	background: #f0f0f0;
+	color: #101010;
+	padding: 0.50rem;
+	white-space: break-spaces;
+}
+</style>
+<title>System Error</title>
+</head>
+<body>
+$body
+<pre>Request Log: {$_SERVER['UNIQUE_ID']}</pre>
+</body>
+</html>
+HTML;
+
+	_exit_html($html, $code);
+
+}
+
 /**
 	Exit with a 403
 */
@@ -195,6 +248,60 @@ function _exit_403($text='Not Authorized')
 function _exit_404($text='Not Found')
 {
 	_exit_text($text, 404);
+}
+
+
+function _exit_500($body, $code=500)
+{
+	$html = <<<HTML
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1, user-scalable=yes">
+<style>
+* {
+	box-sizing: border-box;
+}
+body {
+	background: #202020;
+	border-left: 2vw solid red;
+	border-right: 2vw solid red;
+	color: #fdfdfd;
+	font-family: sans-serif;
+	font-size: 1.25em;
+	margin: 0;
+	min-height: 100vh;
+	padding: 2vh 2vw;
+	width: 100%;
+}
+a {
+	background: #303030;
+	color: inherit;
+	padding: 0 0.25rem;
+}
+h1, h2, p, pre {
+	margin: 0 0 1rem 0;
+	padding: 0;
+}
+pre {
+	background: #f0f0f0;
+	color: #101010;
+	padding: 0.50rem;
+	white-space: break-spaces;
+}
+</style>
+<title>System Error</title>
+</head>
+<body>
+$body
+<pre>Request Log: {$_SERVER['UNIQUE_ID']}</pre>
+</body>
+</html>
+HTML;
+
+	_exit_html($html, $code);
+
 }
 
 
@@ -274,6 +381,26 @@ function _array_diff_keyval_r($a0, $a1)
 	return $ret;
 }
 
+function _content_read($f)
+{
+	$data = [
+		'head' => [],
+		'body' => null,
+	];
+
+	// _exit_text("file_get_contents($f);");
+	$text = file_get_contents($f);
+	if (preg_match('/^---(.+)\n---(.+)/ms', $text, $m)) {
+		$data['head'] = yaml_parse($m[1]);
+		$data['body'] = trim($m[2]);
+	} else {
+		$data['body'] = trim($text);
+	}
+
+	return $data;
+
+}
+
 
 /**
 	Sort a Keyed Array, Recursively
@@ -291,6 +418,9 @@ function _ksort_r(&$array)
 }
 
 
+/**
+ * @deprecated use _markdown_ex
+ */
 function _markdown($x)
 {
 	static $PD;
@@ -300,6 +430,20 @@ function _markdown($x)
 	}
 
 	return $PD->text($x);
+
+}
+
+/**
+ *
+ */
+function _markdown_ex($t)
+{
+	static $p;
+	if (empty($p)) {
+		$p = new ParsedownExtra();
+	}
+
+	return $p->text($t);
 
 }
 
