@@ -10,7 +10,10 @@
 		],
 		"psr-4": {
 			"OpenTHC\\": "./lib"
-		}
+		},
+		"exclude-from-classmap": [
+                        "/vendor/erusev/parsedown-extra/test"
+                ]
 	},
 	"require": {
 		"php": ">=7.3.0",
