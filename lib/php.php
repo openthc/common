@@ -381,6 +381,9 @@ function _array_diff_keyval_r($a0, $a1)
 	return $ret;
 }
 
+/**
+ * Read a File, Parse YAML Header
+ */
 function _content_read($f)
 {
 	$data = [
@@ -434,7 +437,7 @@ function _markdown($x)
 }
 
 /**
- *
+ * Turns Markdown Text into HTML
  */
 function _markdown_ex($t)
 {
