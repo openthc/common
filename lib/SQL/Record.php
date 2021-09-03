@@ -188,8 +188,15 @@ class Record implements \ArrayAccess, \JsonSerializable
 	/**
 		Flag Handling
 	*/
-	function delFlag($f) { $this->_data['flag'] = (intval($this->_data['flag']) & ~$f); }
-	function hasFlag($f) { return (intval($this->_data['flag']) & $f); }
+	function delFlag($f)
+	{
+		$this->offsetSet('flag', intval($this->_data['flag']) & ~$f);
+	}
+	function hasFlag($f)
+	{
+		return (intval($this->_data['flag']) & $f);
+	}
+
 	function getFlag($fmt='d')
 	{
 		switch($fmt) {
@@ -211,7 +218,10 @@ class Record implements \ArrayAccess, \JsonSerializable
 			return sprintf('0x%08x',$this->_data['flag']);
 		}
 	}
-	function setFlag($f) { $this->_data['flag'] = (intval($this->_data['flag']) | $f); }
+	function setFlag($f)
+	{
+		$this->offsetSet('flag', intval($this->_data['flag']) | $f);
+	}
 
 	/*
 		Array Accessors
