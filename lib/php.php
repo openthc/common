@@ -128,7 +128,7 @@ function _exit_html($html, $code=200)
 
 	_http_code($code);
 
-	header('cache-control: no-cache');
+	header('cache-control: no-store, max-age=0');
 	header('content-type: text/html; charset=utf-8');
 
 	echo $html;
@@ -137,6 +137,102 @@ function _exit_html($html, $code=200)
 
 }
 
+function _exit_html_fail($body, $code=500, $opt0=null)
+{
+	if (empty($opt0)) {
+		$opt0 = [];
+	}
+
+	$opt1 = [
+		'title' => 'System Failure',
+		'border' => '2vw solid red',
+	];
+
+	$opt2 = array_merge($opt0, $opt1);
+
+	_exit_html(_exit_html_wrap($body, $code, $opt2));
+
+}
+
+function _exit_html_warn($body, $code=400, $opt0=null)
+{
+	if (empty($opt0)) {
+		$opt0 = [];
+	}
+
+	$opt1 = [
+		'title' => 'System Warning',
+		'border' => '2vw solid orange',
+	];
+
+	$opt2 = array_merge($opt0, $opt1);
+
+	_exit_html(_exit_html_wrap($body, $code, $opt2));
+
+}
+
+function _exit_html_wrap($body, $code=400, $opts=null)
+{
+	if (empty($opts)) {
+		$opts = [];
+	}
+
+	if (empty($opts['title'])) {
+		$opts['title'] = 'OpenTHC';
+	}
+
+	if (empty($opts['border'])) {
+		$opts['border'] = '2vw solid red';
+	}
+
+	$html = <<<HTML
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1, user-scalable=yes">
+<style>
+* {
+	box-sizing: border-box;
+}
+body {
+	background: #202020;
+	border-left: {$opts['border']};
+	border-right: {$opts['border']};
+	color: #fdfdfd;
+	font-family: sans-serif;
+	font-size: 1.25em;
+	margin: 0;
+	min-height: 100vh;
+	padding: 2vh 2vw;
+	width: 100%;
+}
+a {
+	background: #303030;
+	color: inherit;
+	padding: 0 0.25rem;
+}
+h1, h2, p, pre {
+	margin: 0 0 1rem 0;
+	padding: 0;
+}
+pre {
+	background: #f0f0f0;
+	color: #101010;
+	padding: 0.50rem;
+	white-space: break-spaces;
+}
+</style>
+<title>{$opts['title']}</title>
+</head>
+<body>
+$body
+<pre>Request Log: {$_SERVER['UNIQUE_ID']}</pre>
+</body>
+</html>
+HTML;
+	return $html;
+}
 
 /**
 */
@@ -150,7 +246,7 @@ function _exit_json($data, $code=200)
 		$data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 	}
 
-	header('cache-control: no-cache');
+	header('cache-control: no-store, max-age=0');
 	header('content-type: application/json; charset=utf-8');
 
 	echo $data;
@@ -167,7 +263,7 @@ function _exit_text($text, $code=200)
 
 	_http_code($code);
 
-	header('cache-control: no-cache');
+	header('cache-control: no-store, max-age=0');
 	header('content-type: text/plain; charset=utf-8');
 
 	if (!is_string($text)) {
@@ -178,132 +274,6 @@ function _exit_text($text, $code=200)
 
 	exit(0);
 }
-
-
-function _exit_400($body, $code=400)
-{
-	$html = <<<HTML
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="initial-scale=1, user-scalable=yes">
-<style>
-* {
-	box-sizing: border-box;
-}
-body {
-	background: #202020;
-	border-left: 2vw solid orange;
-	border-right: 2vw solid orange;
-	color: #fdfdfd;
-	font-family: sans-serif;
-	font-size: 1.25em;
-	margin: 0;
-	min-height: 100vh;
-	padding: 2vh 2vw;
-	width: 100%;
-}
-a {
-	background: #303030;
-	color: inherit;
-	padding: 0 0.25rem;
-}
-h1, h2, p, pre {
-	margin: 0 0 1rem 0;
-	padding: 0;
-}
-pre {
-	background: #f0f0f0;
-	color: #101010;
-	padding: 0.50rem;
-	white-space: break-spaces;
-}
-</style>
-<title>System Error</title>
-</head>
-<body>
-$body
-<pre>Request Log: {$_SERVER['UNIQUE_ID']}</pre>
-</body>
-</html>
-HTML;
-
-	_exit_html($html, $code);
-
-}
-
-/**
-	Exit with a 403
-*/
-function _exit_403($text='Not Authorized')
-{
-	_exit_text($text, 403);
-}
-
-
-/**
-	Exit with a 404
-*/
-function _exit_404($text='Not Found')
-{
-	_exit_text($text, 404);
-}
-
-
-function _exit_500($body, $code=500)
-{
-	$html = <<<HTML
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="initial-scale=1, user-scalable=yes">
-<style>
-* {
-	box-sizing: border-box;
-}
-body {
-	background: #202020;
-	border-left: 2vw solid red;
-	border-right: 2vw solid red;
-	color: #fdfdfd;
-	font-family: sans-serif;
-	font-size: 1.25em;
-	margin: 0;
-	min-height: 100vh;
-	padding: 2vh 2vw;
-	width: 100%;
-}
-a {
-	background: #303030;
-	color: inherit;
-	padding: 0 0.25rem;
-}
-h1, h2, p, pre {
-	margin: 0 0 1rem 0;
-	padding: 0;
-}
-pre {
-	background: #f0f0f0;
-	color: #101010;
-	padding: 0.50rem;
-	white-space: break-spaces;
-}
-</style>
-<title>System Error</title>
-</head>
-<body>
-$body
-<pre>Request Log: {$_SERVER['UNIQUE_ID']}</pre>
-</body>
-</html>
-HTML;
-
-	_exit_html($html, $code);
-
-}
-
 
 /**
 	Sets the HTTP Header Code

@@ -34,7 +34,7 @@ $hint
 <pre>{$err['text']}</pre>
 HTML;
 
-	_exit_500($body, 500);
+	_exit_html_fail($body, 500);
 
 	exit(0);
 }
