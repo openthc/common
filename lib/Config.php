@@ -10,6 +10,7 @@ class Config
 {
 	private static $conf = [];
 	private static $data = [];
+	private static $file;
 	private static $path;
 
 	function dump()
@@ -24,21 +25,14 @@ class Config
 	/**
 	 *
 	 */
-	static function init($p=null)
+	static function init($p)
 	{
 		self::$conf = [];
 		self::$data = [];
-
-		if (empty($p)) {
-			if (defined('APP_ROOT')) {
-				$p = APP_ROOT;
-			} elseif (!empty($_SERVER['DOCUMENT_ROOT'])) {
-				// assumes our context is in a webroot
-				$p = dirname($_SERVER['DOCUMENT_ROOT']);
-			}
-		}
-
 		self::$path = rtrim($p, '/');
+		self::$file = sprintf('%s/etc/config.php', self::$path);
+
+		return is_file(self::$file);
 
 	}
 
@@ -55,29 +49,27 @@ class Config
 		$k0 = trim($k0, '/');
 
 		// Per Request Caching
-		if (!empty(self::$conf[$k0])) {
+		if ( ! empty(self::$conf[$k0])) {
 			return self::$conf[$k0];
 		}
 
 		$key_list = explode('/', $k0);
 
 		if (empty(self::$data)) {
-			$cfg_file = sprintf('%s/etc/config.php', self::$path);
-			if (is_file($cfg_file)) {
-				$x = include($cfg_file);
+			if (is_file(self::$file)) {
+				$x = include(self::$file);
 				if (is_array($x)) {
 					self::$data = $x;
 				}
 			}
 		}
-		if (!empty(self::$data)) {
+		if ( ! empty(self::$data)) {
 			$ret = self::$data;
 			while ($key = array_shift($key_list)) {
 				$ret = $ret[$key];
 			}
 			return $ret;
 		}
-
 
 	}
 
