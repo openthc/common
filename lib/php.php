@@ -150,7 +150,7 @@ function _exit_html_fail($body, $code=500, $opt0=null)
 
 	$opt2 = array_merge($opt0, $opt1);
 
-	_exit_html(_exit_html_wrap($body, $code, $opt2));
+	_exit_html(_exit_html_wrap($body, $code, $opt2), $code);
 
 }
 
@@ -167,7 +167,7 @@ function _exit_html_warn($body, $code=400, $opt0=null)
 
 	$opt2 = array_merge($opt0, $opt1);
 
-	_exit_html(_exit_html_wrap($body, $code, $opt2));
+	_exit_html(_exit_html_wrap($body, $code, $opt2), $code);
 
 }
 
@@ -204,8 +204,8 @@ function _exit_html_wrap($body, $code=400, $opts=null)
 }
 body {
 	background: #202020;
-	border-left: 2vw solid {$opts['border-color']};
-	border-right: 2vw solid {$opts['border-color']};
+	border-left: 4vw solid {$opts['border-color']};
+	border-right: 4vw solid {$opts['border-color']};
 	color: var(--wt);
 	font-family: sans-serif;
 	font-size: 1.25em;
