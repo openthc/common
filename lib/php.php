@@ -145,7 +145,7 @@ function _exit_html_fail($body, $code=500, $opt0=null)
 
 	$opt1 = [
 		'title' => 'System Failure',
-		'border' => '2vw solid red',
+		'border-color' => 'red',
 	];
 
 	$opt2 = array_merge($opt0, $opt1);
@@ -162,7 +162,7 @@ function _exit_html_warn($body, $code=400, $opt0=null)
 
 	$opt1 = [
 		'title' => 'System Warning',
-		'border' => '2vw solid orange',
+		'border-color' => 'orange',
 	];
 
 	$opt2 = array_merge($opt0, $opt1);
@@ -181,8 +181,8 @@ function _exit_html_wrap($body, $code=400, $opts=null)
 		$opts['title'] = 'OpenTHC';
 	}
 
-	if (empty($opts['border'])) {
-		$opts['border'] = '2vw solid red';
+	if (empty($opts['border-color'])) {
+		$opts['border-color'] = 'red';
 	}
 
 	$html = <<<HTML
@@ -194,6 +194,7 @@ function _exit_html_wrap($body, $code=400, $opts=null)
 <meta name="theme-color" content="#069420">
 <style>
 :root {
+	--rd: red;
 	--gn: #069420;
 	--og: #ff9900;
 	--wt: #fdfdfd;
@@ -203,8 +204,8 @@ function _exit_html_wrap($body, $code=400, $opts=null)
 }
 body {
 	background: #202020;
-	border-left: {$opts['border']};
-	border-right: {$opts['border']};
+	border-left: 2vw solid {$opts['border-color']};
+	border-right: 2vw solid {$opts['border-color']};
 	color: var(--wt);
 	font-family: sans-serif;
 	font-size: 1.25em;
@@ -234,9 +235,9 @@ a:hover {
 	color: var(--wt);
 }
 footer {
-	border-top: 1vh solid var(--gn);
+	border-top: 0.125vh solid {$opts['border-color']};
 	font-family: monospace;
-	margin-top: 10vh 2vw 0 2vw;
+	margin: 10vh 2vw 0 2vw;
 	padding: 0.25em;
 }
 h1, h2, p, pre {
