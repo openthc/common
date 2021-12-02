@@ -191,7 +191,13 @@ function _exit_html_wrap($body, $code=400, $opts=null)
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1, user-scalable=yes">
+<meta name="theme-color" content="#069420">
 <style>
+:root {
+	--gn: #069420;
+	--og: #ff9900;
+	--wt: #fdfdfd;
+}
 * {
 	box-sizing: border-box;
 }
@@ -199,7 +205,7 @@ body {
 	background: #202020;
 	border-left: {$opts['border']};
 	border-right: {$opts['border']};
-	color: #fdfdfd;
+	color: var(--wt);
 	font-family: sans-serif;
 	font-size: 1.25em;
 	margin: 0;
@@ -208,9 +214,30 @@ body {
 	width: 100%;
 }
 a {
-	background: #303030;
-	color: inherit;
+	/* background: #303030; */
+	/* border: 1px solid ; */
+	color: var(--gn);
+	cursor: pointer;
+	line-height: 1.5;
 	padding: 0 0.25rem;
+	text-decoration: none;
+	/* border-radius: 0.25rem;
+	cursor: pointer;
+	padding: 0.125rem 0.25rem;
+	text-align: center;
+	user-select: none;
+	vertical-align: middle;
+	min-width: 10rem; */
+}
+a:hover {
+	background: var(--gn);
+	color: var(--wt);
+}
+footer {
+	border-top: 1vh solid var(--gn);
+	font-family: monospace;
+	margin-top: 10vh 2vw 0 2vw;
+	padding: 0.25em;
 }
 h1, h2, p, pre {
 	margin: 0 0 1rem 0;
@@ -222,12 +249,30 @@ pre {
 	padding: 0.50rem;
 	white-space: break-spaces;
 }
+svg {
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
+	vertical-align: middle;
+}
+.svg-icon {
+	max-width: 1rem;
+}
+div.link-list {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	margin-top: 4rem;
+}
 </style>
 <title>{$opts['title']}</title>
 </head>
 <body>
+<main>
 $body
-<pre>Request Log: {$_SERVER['UNIQUE_ID']}</pre>
+</main>
+<footer>Request Log: {$_SERVER['UNIQUE_ID']}</footer>
 </body>
 </html>
 HTML;
