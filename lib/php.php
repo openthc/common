@@ -215,19 +215,17 @@ body {
 	width: 100%;
 }
 a {
-	/* background: #303030; */
 	/* border: 1px solid ; */
+	border-radius: 0.25rem;
 	color: var(--gn);
 	cursor: pointer;
 	line-height: 1.5;
 	padding: 0 0.25rem;
 	text-decoration: none;
-	/* border-radius: 0.25rem;
-	cursor: pointer;
-	padding: 0.125rem 0.25rem;
+	vertical-align: middle;
+	/*
 	text-align: center;
 	user-select: none;
-	vertical-align: middle;
 	min-width: 10rem; */
 }
 a:hover {
@@ -288,12 +286,12 @@ function _exit_json($data, $code=200)
 
 	_http_code($code);
 
-	if (!is_string($data)) {
+	if ( ! is_string($data)) {
 		$data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 	}
 
 	header('cache-control: no-store, max-age=0');
-	header('content-type: application/json; charset=utf-8');
+	header('content-type: application/json');
 
 	echo $data;
 
