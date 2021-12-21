@@ -165,6 +165,9 @@ class Record implements \ArrayAccess, \JsonSerializable
 		return true;
 	}
 
+	/**
+	 *
+	 */
 	function getDiff()
 	{
 		if (empty($this->_diff)) return null;
@@ -177,12 +180,28 @@ class Record implements \ArrayAccess, \JsonSerializable
 		return $diff;
 	}
 
+	/**
+	 *
+	 */
 	function getHash()
 	{
 		$data = $this->_data;
 		 _ksort_r($data);
 		$hash = md5(json_encode($data));
 		return $hash;
+	}
+
+	/**
+	 *
+	 */
+	function getMeta()
+	{
+		$x = $this->_data['meta'];
+		if (!is_array($x)) {
+			return json_decode($x, true);
+		}
+		return $x;
+
 	}
 
 	/**
