@@ -26,12 +26,16 @@ function _error_handler_exit($err=null)
 		unset($err['hint']);
 	}
 
+	// @todo want to get the last directory and then filename
+	$err['file'] = basename($err['file']);
+
 	$body = <<<HTML
 <h1>System Error</h1>
 <p>The system encountered a very unexpected error.</p>
 <p>Details from the request have been logged and some humans have been notified.</p>
 $hint
 <pre>{$err['text']}</pre>
+<pre>{$err['file']}#{$err['line']}</pre>
 HTML;
 
 	_exit_html_fail($body, 500);
@@ -90,7 +94,7 @@ function _error_handler_trap($ex, $etext=null, $efile=null, $eline=null, $edata=
 
 	// Log HTTP
 	$err_json = json_encode($err);
-	$req = _curl_init('https://cic.openthc.com/api/v2018/bug');
+	$req = _curl_init('https://bug.openthc.com/api/v2018/create');
 	curl_setopt($req, CURLOPT_POST, true);
 	curl_setopt($req, CURLOPT_POSTFIELDS, $err_json);
 	curl_setopt($req, CURLOPT_HTTPHEADER, [
