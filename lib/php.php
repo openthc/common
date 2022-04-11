@@ -242,6 +242,9 @@ h1, h2, p, pre {
 	margin: 0 0 1rem 0;
 	padding: 0;
 }
+main {
+	min-height: 70vh;
+}
 pre {
 	background: #f0f0f0;
 	color: #101010;
