@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 #
 # OpenTHC Test Runner
 #
@@ -6,51 +6,54 @@
 set -o errexit
 set -o nounset
 
+x=${OPENTHC_TEST_BASE:-}
+if [ -z "$x" ]
+then
+	echo "You have to define the environment first"
+	exit 1
+fi
+
 f=$(readlink -f "$0")
 d=$(dirname "$f")
 
 cd "$d"
 
-output_base="../webroot/test-output"
+output_base="webroot/test-output"
 output_main="$output_base/index.html"
 mkdir -p "$output_base"
+
+code_list=(
+	lib/
+	test/
+)
 
 
 #
 # Lint
 if [ ! -f "$output_base/phplint.txt" ]
 then
+
 	echo '<h1>Linting...</h1>' > "$output_main"
-	search_list=(
-		../lib/
-		../test/
-	)
-	find "${search_list[@]}" -type f -name '*.php' -exec php -l {} \; \
-		| grep -v 'No syntax' || true \
-		>"$output_base/phplint.txt" 2>&1
+
+	find "${code_list[@]}" -type f -name '*.php' -exec php -l {} \; \
+		| grep -v 'No syntax' \
+		>"$output_base/phplint.txt" \
+		2>&1 \
+		|| true
+
 	[ -s "$output_base/phplint.txt" ] || echo "Linting OK" >"$output_base/phplint.txt"
+
 fi
 
 
 #
 # PHPStan
-if [ ! -f "$output_base/phpstan.html" ]
-then
-	echo '<h1>PHPStan...</h1>' > "$output_main"
-	../vendor/bin/phpstan analyze --error-format=junit --no-progress > "$output_base/phpstan.xml" || true
-	[ -f "phpstan.xsl" ] || wget -q 'https://openthc.com/pub/phpstan.xsl'
-	xsltproc \
-		--nomkdir \
-		--output "$output_base/phpstan.html" \
-		phpstan.xsl \
-		"$output_base/phpstan.xml"
-fi
-
+test/phpstan.sh
 
 #
 # PHPUnit
 echo '<h1>PHPUnit...</h1>' > "$output_main"
-../vendor/bin/phpunit \
+vendor/bin/phpunit \
 	--verbose \
 	--log-junit "$output_base/phpunit.xml" \
 	--testdox-html "$output_base/testdox.html" \
