@@ -1,15 +1,27 @@
 #
-# OpenTHC Common .gitignore
+# OpenTHC .gitignore
 #
 
-#
-# Directories
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+.build/
+.config/
+.env
+.gradle/
+.idea/
+.local/
+.netlify/
+.vscode/
+bower_components/
+build/
+composer.lock
+Custom/
 etc/
+lib/RBE/
 node_modules/
+public/
+release/
+test/report.xsl
 var/
 vendor/
-webroot/
-
-#
-# Files
-composer.lock
+webroot/test-output/
