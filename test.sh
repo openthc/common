@@ -28,6 +28,13 @@ code_list=(
 )
 
 
+OUTPUT_BASE="${output_base}"
+OUTPUT_MAIN="${output_main}"
+SOURCE_LIST="${code_list}"
+
+export OUTPUT_BASE OUTPUT_MAIN SOURCE_LIST
+
+
 #
 # Lint
 if [ ! -f "$output_base/phplint.txt" ]
@@ -44,6 +51,11 @@ then
 	[ -s "$output_base/phplint.txt" ] || echo "Linting OK" >"$output_base/phplint.txt"
 
 fi
+
+
+#
+# PHP-CPD
+vendor/openthc/common/test/phpcpd.sh
 
 
 #

@@ -1,19 +1,25 @@
 #!/bin/bash
 #
-# expects $output_base and $output_main to exist
+# expects $OUTPUT_BASE, $OUTPUT_MAIN, $SOURCE_LIST to exist
 #
 
 set -o errexit
 set -o nounset
 
+declare OUTPUT_BASE
+declare OUTPUT_MAIN
+declare SOURCE_LIST
+
 #
 # PHPStan
-if [ ! -f "$output_base/phpstan.html" ]
+if [ ! -f "$OUTPUT_BASE/phpstan.html" ]
 then
 
 	xsl_file="test/phpstan.xsl"
+	out_file="$OUTPUT_BASE/phpstan.xml"
+	out_html="$OUTPUT_BASE/phpstan.html"
 
-	echo '<h1>PHPStan...</h1>' > "$output_main"
+	echo '<h1>PHPStan...</h1>' > "$OUTPUT_MAIN"
 
 	vendor/bin/phpstan \
 		analyze \
@@ -22,17 +28,16 @@ then
 		--level=2 \
 		--no-ansi \
 		--no-progress \
-		"${code_list[@]}" \
-		> "$output_base/phpstan.xml" \
+		"${SOURCE_LIST[@]}" \
+		> "${out_file}" \
 		|| true
 
 	[ -f "${xsl_file}" ] || curl -qs 'https://openthc.com/pub/phpstan.xsl' > "${xsl_file}"
 
 	xsltproc \
 		--nomkdir \
-		--output "$output_base/phpstan.html" \
-		"$xsl_file" \
-		"$output_base/phpstan.xml"
+		--output "${out_html}" \
+		"${xsl_file}" \
+		"${out_file}"
 
 fi
-
