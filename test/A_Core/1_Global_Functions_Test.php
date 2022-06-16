@@ -18,10 +18,10 @@ class Global_Functions_Test extends \PHPUnit\Framework\TestCase
 			'_decrypt',
 			'_encrypt',
 			'_exit_html',
+			'_exit_html_fail',
+			'_exit_html_warn',
 			'_exit_json',
 			'_exit_text',
-			'_exit_403', // @deprecated?
-			'_exit_404', // @deprecated?
 			'_http_code', // Should be _exit_code
 			'_ksort_r',
 			'_markdown',

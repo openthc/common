@@ -15,7 +15,7 @@ then
 
 	echo '<h1>Linting...</h1>' > "$OUTPUT_MAIN"
 
-	find "${code_list[@]}" -type f -name '*.php' -exec php -l {} \; \
+	find "${SOURCE_LIST[@]}" -type f -name '*.php' -exec php -l {} \; \
 		| grep -v 'No syntax' \
 		>"$OUTPUT_BASE/phplint.txt" \
 		2>&1 \
