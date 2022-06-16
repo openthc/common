@@ -18,6 +18,7 @@ then
 	xsl_file="test/phpstan.xsl"
 	out_file="$OUTPUT_BASE/phpstan.xml"
 	out_html="$OUTPUT_BASE/phpstan.html"
+	src_list=($SOURCE_LIST)
 
 	echo '<h1>PHPStan...</h1>' > "$OUTPUT_MAIN"
 
@@ -28,7 +29,7 @@ then
 		--level=2 \
 		--no-ansi \
 		--no-progress \
-		"${SOURCE_LIST[@]}" \
+		"${src_list[@]}" \
 		> "${out_file}" \
 		|| true
 
