@@ -10,15 +10,17 @@ declare OUTPUT_BASE
 declare OUTPUT_MAIN
 declare SOURCE_LIST
 
+out_file="$OUTPUT_BASE/phpstan.xml"
+out_html="$OUTPUT_BASE/phpstan.html"
+xsl_file="test/phpstan.xsl"
+
+IFS=" "
+read -r -a src_list <<< "${SOURCE_LIST}"
+
 #
 # PHPStan
 if [ ! -f "$OUTPUT_BASE/phpstan.html" ]
 then
-
-	xsl_file="test/phpstan.xsl"
-	out_file="$OUTPUT_BASE/phpstan.xml"
-	out_html="$OUTPUT_BASE/phpstan.html"
-	src_list=($SOURCE_LIST)
 
 	echo '<h1>PHPStan...</h1>' > "$OUTPUT_MAIN"
 

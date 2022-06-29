@@ -8,7 +8,7 @@ set -o nounset
 
 declare OUTPUT_BASE
 declare OUTPUT_MAIN
-declare SOURCE_LIST
+# declare SOURCE_LIST
 
 #
 # PHPUnit

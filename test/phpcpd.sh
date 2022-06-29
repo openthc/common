@@ -10,13 +10,14 @@ declare OUTPUT_BASE
 declare OUTPUT_MAIN
 declare SOURCE_LIST
 
+# upscale to array
+IFS=" "
+read -r -a src_list <<< "${SOURCE_LIST}"
+
 #
 # PHPCPD
 if [ ! -f "$OUTPUT_BASE/phpcpd.txt" ]
 then
-
-	# upscale to array
-	src_list=($SOURCE_LIST)
 
 	echo '<h1>CPD Check</h1>' > "$OUTPUT_MAIN"
 
@@ -26,8 +27,5 @@ then
 		> "$OUTPUT_BASE/phpcpd.txt" \
 		2>&1 \
 		|| true
-
-		# --log-pmd="$output_base/phpcpd.xml" \
-		# --no-ansi \
 
 fi

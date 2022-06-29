@@ -10,17 +10,23 @@ declare OUTPUT_BASE
 declare OUTPUT_MAIN
 declare SOURCE_LIST
 
-if [ ! -f "$OUTPUT_BASE/phplint.txt" ]
+out_file="${OUTPUT_BASE}/phplint.txt"
+
+IFS=" "
+read -r -a src_list <<< "${SOURCE_LIST}"
+
+
+if [ ! -f "${out_file}" ]
 then
 
 	echo '<h1>Linting...</h1>' > "$OUTPUT_MAIN"
 
-	find "${SOURCE_LIST[@]}" -type f -name '*.php' -exec php -l {} \; \
+	find "${src_list[@]}" -type f -name '*.php' -exec php -l {} \; \
 		| grep -v 'No syntax' \
-		>"$OUTPUT_BASE/phplint.txt" \
+		>"${out_file}" \
 		2>&1 \
 		|| true
 
-	[ -s "$OUTPUT_BASE/phplint.txt" ] || echo "Linting OK" >"$OUTPUT_BASE/phplint.txt"
+	[ -s "${out_file}" ] || echo "Linting OK" >"${out_file}"
 
 fi
