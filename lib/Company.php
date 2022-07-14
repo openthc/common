@@ -36,6 +36,21 @@ class Company extends \OpenTHC\SQL\Record
 		}
 	}
 
+	/**
+	 * Get a Path, for the Company
+	 */
+	function getPath($p0)
+	{
+		$p0 = trim($p0, './');
+
+		$p2 = sprintf('%s/var/%s/%s', APP_ROOT, $this->_data['id'], $p0);
+		if ( ! is_dir($p2)) {
+			$x = mkdir($p2, 0755, true);
+		}
+
+		return $p2;
+
+	}
 
 	/**
 	 * Get or Set Options with Caching
@@ -117,7 +132,6 @@ class Company extends \OpenTHC\SQL\Record
 		$this->_dbc->query('COMMIT');
 
 	}
-
 
 	/**
 	*/
