@@ -123,8 +123,8 @@ class Connect extends \OpenTHC\Controller\Base
 
 		// Lookup Main Company
 		$sql = 'SELECT * FROM company WHERE id = :c0';
-		$Company = $dbc_main->fetchRow($sql, [ ':c0' => $this->_Company_Auth['id'] ]);
-		if (empty($Company['id'])) {
+		$this->_Company_Base = $dbc_main->fetchRow($sql, [ ':c0' => $this->_Company_Auth['id'] ]);
+		if (empty($this->_Company_Base['id'])) {
 			return $RES->withJSON([
 				'data' => null,
 				'meta' => [ 'detail' => sprintf('Invalid Company "%s" [CAC-067]', $this->_Company_Auth['id']) ],
@@ -133,7 +133,7 @@ class Connect extends \OpenTHC\Controller\Base
 
 		// Lookup License
 		$sql = 'SELECT * FROM license WHERE company_id = ? AND id = ?';
-		$arg = array($Company['id'], $tmp_auth['license']['id']);
+		$arg = array($this->_Company_Auth['id'], $tmp_auth['license']['id']);
 		$License = $dbc_main->fetchRow($sql, $arg);
 		if (empty($License['id'])) {
 			return $RES->withJSON([
@@ -156,15 +156,16 @@ class Connect extends \OpenTHC\Controller\Base
 
 		// Primary Objects
 		$_SESSION['Contact'] = array_merge($this->_Contact_Base, $this->_Contact_Auth);
-		$_SESSION['Company'] = $Company;
+		$_SESSION['Company'] = array_merge($this->_Company_Base, $this->_Company_Auth);
 		$_SESSION['License'] = $License;
 
-		// Canon
+		// Suggested CRE?
 		if (!empty($tmp_auth['cre'])) {
 			$_SESSION['cre'] = $tmp_auth['cre'];
 		}
 
 		$_SESSION['sql-hash'] = sha1(json_encode($tmp_auth['cre']));
+		$_SESSION['tz'] = $_SESSION['Company']['tz'];
 
 		$this->_connect_info = $tmp_auth;
 
