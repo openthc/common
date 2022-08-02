@@ -1,6 +1,8 @@
 <?php
 /**
  * Top Level PHP Functions, utility wrappers
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 function h($x)
@@ -408,13 +410,27 @@ function _content_read($f)
 		'body' => null,
 	];
 
-	// _exit_text("file_get_contents($f);");
+	if ( ! is_file($f)) {
+		return $data;
+	}
+
 	$text = file_get_contents($f);
 	if (preg_match('/^---(.+)\n---(.+)/ms', $text, $m)) {
 		$data['head'] = yaml_parse($m[1]);
 		$data['body'] = trim($m[2]);
 	} else {
 		$data['body'] = trim($text);
+	}
+
+	if (empty($data['head']['updated_at'])) {
+		if ( ! empty($data['head']['date'])) {
+			$data['head']['updated_at'] = $data['head']['date'];
+		}
+	}
+
+	if (empty($data['head']['updated_at'])) {
+		$t0 = filemtime($f);
+		$data['head']['updated_at'] = date(\DateTimeInterface::RFC3339, $t0);
 	}
 
 	return $data;
