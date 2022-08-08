@@ -25,7 +25,6 @@ then
 		--testdox-html "$OUTPUT_BASE/testdox.html" \
 		--testdox-text "$OUTPUT_BASE/testdox.txt" \
 		--testdox-xml "$OUTPUT_BASE/testdox.xml" \
-		test/ \
 		"$@" 2>&1 | tee "$OUTPUT_BASE/phpunit.txt"
 
 
