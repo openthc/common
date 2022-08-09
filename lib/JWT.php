@@ -28,7 +28,7 @@ class JWT
 
 	static function base_claims(): array
 	{
-		$tz = new DateTimeZone($_SESSION['tz']);
+		$tz = new \DateTimeZone($_SESSION['tz']);
 		$expire = new \DateTime(date(\DateTime::RFC3339, $_SERVER['REQUEST_TIME']), $tz);
 		$expire->add(new \DateInterval('PT24H'));
 		$expire = $expire->getTimestamp();
