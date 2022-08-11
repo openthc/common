@@ -77,12 +77,35 @@ class Record implements \ArrayAccess, \JsonSerializable
 	/**
 	 * Load from Database to this Object Instance
 	 */
-	function loadBy($key, $val)
+	function loadBy($key, $val=null) : bool
 	{
-		$sql = sprintf('SELECT * FROM "%s" where "%s" = :v0', $this->_table, $key);
-		$rec = $this->_dbc->fetchRow($sql, [ ':v0' => $val ]);
-		if (!empty($rec[$key])) {
-			$this->setData($rec);
+		$arg = [];
+		$sql = '';
+
+		if (is_array($key)) {
+
+			$col_list = $key;
+
+			$sql = sprintf('SELECT * FROM "%s" WHERE {WHERE}', $this->_table);
+			$tmp = [];
+			$idx = __LINE__;
+			foreach ($col_list as $col => $val) {
+				$idx++;
+				$key = sprintf(':v%d', $idx);
+				$tmp[] = sprintf('"%s" = %s', $col, $key);
+				$arg[$key] = $val;
+			}
+			$tmp = implode(' AND ', $tmp);
+			$sql = str_replace('{WHERE}', $tmp, $sql);
+
+		} else {
+			$sql = sprintf('SELECT * FROM "%s" where "%s" = :v0', $this->_table, $key);
+			$arg = [ ':v0' => $val ];
+		}
+
+		$rec = $this->_dbc->fetchRow($sql, $arg);
+		$this->setData($rec);
+		if ( ! empty($this->_data['id'])) {
 			return true;
 		}
 
@@ -205,6 +228,29 @@ class Record implements \ArrayAccess, \JsonSerializable
 	}
 
 	/**
+	 * Set Data on this Object
+	 */
+	protected function setData($rec)
+	{
+		$this->_data = [];
+		$this->_diff = [];
+
+		if (is_object($rec)) {
+			$p = get_object_vars($rec);
+			foreach ($p as $k=>$v) {
+				$this->_data[$k] = $rec->$k;
+			}
+		} elseif (is_array($rec)) {
+			$this->_data = $rec;
+		}
+
+		if (!empty($this->_data['id'])) {
+			$this->_pk = $this->_data['id'];
+		}
+
+	}
+
+	/**
 		Flag Handling
 	*/
 	function delFlag($f)
@@ -287,29 +333,6 @@ class Record implements \ArrayAccess, \JsonSerializable
 		@return void
 	*/
 	public function offsetUnset($k) { unset($this->_data[$k]); }
-
-	/**
-	 * Set Data on this Object
-	 */
-	protected function setData($rec)
-	{
-		$this->_data = [];
-		$this->_diff = [];
-
-		if (is_object($rec)) {
-			$p = get_object_vars($rec);
-			foreach ($p as $k=>$v) {
-				$this->_data[$k] = $rec->$k;
-			}
-		} elseif (is_array($rec)) {
-			$this->_data = $rec;
-		}
-
-		if (!empty($this->_data['id'])) {
-			$this->_pk = $this->_data['id'];
-		}
-
-	}
 
 	function jsonSerialize()
 	{
