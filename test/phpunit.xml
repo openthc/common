@@ -31,7 +31,7 @@
 
 	<testsuites>
 		<testsuite name="All">
-			<directory>0_Core</directory>
+			<directory>.</directory>
 		</testsuite>
 	</testsuites>
 

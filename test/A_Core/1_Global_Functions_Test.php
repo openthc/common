@@ -1,8 +1,9 @@
 <?php
 /**
+ *
  */
 
-namespace Test\Core;
+namespace OpenTHC\Test\Core;
 
 class Global_Functions_Test extends \PHPUnit\Framework\TestCase
 {
