@@ -2,7 +2,7 @@
 /**
  * Top Level PHP Functions, utility wrappers
  *
- * SPDX-License-Identifier: GPL-3.0-only
+ * SPDX-License-Identifier: MIT
  */
 
 function h($x)
