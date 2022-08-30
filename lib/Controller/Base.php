@@ -30,12 +30,20 @@ class Base
 	 */
 	function parseJSON()
 	{
-		if ('POST' != $_SERVER['REQUEST_METHOD']) {
+		// Method Check
+		switch ($_SERVER['REQUEST_METHOD']) {
+		case 'POST':
+		case 'PUT':
+			// OK
+			break;
+		default:
 			_exit_json(array(
 				'data' => null,
 				'meta' => [ 'detail' => 'Invalid Verb [OCB-036]' ]
 			), 405);
 		}
+
+		// Content Type
 		$x = strtok($_SERVER['CONTENT_TYPE'], ';');
 		if ('application/json' != $x) {
 			_exit_json(array(
