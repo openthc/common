@@ -23,7 +23,6 @@
 		"ext-session": "*",
 		"ext-sockets": "*",
 		"ext-PDO": "*",
-		"edoceo/radix": "dev-master",
 		"erusev/parsedown-extra": "0.8.1",
 		"firebase/php-jwt": "6.3",
 		"giggsey/libphonenumber-for-php": "8.12.49",
