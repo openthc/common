@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Configure OpenTHC via Sqlite
+ */
+
+$dir = __DIR__;
+
+echo "I'm in: $dir\n";
+
+$app_root = dirname(dirname($dir));
+
+echo "APP_ROOT: $app_root\n";
+
+
