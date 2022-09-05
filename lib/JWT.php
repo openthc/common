@@ -10,6 +10,49 @@ class JWT
 {
 	const ALGO = 'HS256';
 
+	private $_request
+
+	private $_service_id = null;
+	private $_service_sk = null;
+
+	/**
+	 * Construct a new JWT from parameters
+	 */
+	function __construct($cfg)
+	{
+		$this->_service_id = \OpenTHC\Config::get(sprintf('openthc/%s/id', $cfg['service']));
+		$this->_service_sk = \OpenTHC\Config::get(sprintf('openthc/%s/secret', $cfg['service']));
+
+		unset($cfg['service']);
+
+		$this->_request = $cfg;
+
+	}
+
+	/**
+	 * Create a Return a String Token
+	 */
+	function __toString()
+	{
+		// $arg = self::base_claims();
+		$arg = $this->_request;
+
+		// We require this one
+		if (empty($arg['iat'])) {
+			$arg['iat'] = time();
+		}
+
+		// And this too
+		if (empty($arg['iss'])) {
+			$arg['iss'] = \OpenTHC\Config::get('application/id');
+		}
+
+		return \Firebase\JWT\JWT::encode($arg, $this->_service_sk, self::ALGO);
+	}
+
+	/**
+	 *
+	 */
 	static function encode($service, $payload)
 	{
 		$cfg = sprintf('openthc/%s/secret', $service);
@@ -18,6 +61,9 @@ class JWT
 		return $jwt;
 	}
 
+	/**
+	 *
+	 */
 	static function decode($jwt)
 	{
 		$key = \OpenTHC\Config::get('application/secret');
@@ -26,6 +72,9 @@ class JWT
 		return $decode;
 	}
 
+	/**
+	 *
+	 */
 	static function base_claims(): array
 	{
 		$tz = new \DateTimeZone($_SESSION['tz']);
