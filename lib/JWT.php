@@ -10,7 +10,7 @@ class JWT
 {
 	const ALGO = 'HS256';
 
-	private $_request
+	private $_request = null;
 
 	private $_service_id = null;
 	private $_service_sk = null;
