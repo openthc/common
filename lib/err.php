@@ -57,7 +57,10 @@ function _error_handler_init($cfg=null)
 	// }
 
 	// Install Error Handler
-	set_error_handler('_error_handler_trap');
+	// this one might be too silent
+	// set_error_handler('_error_handler_trap', E_ALL & ~E_NOTICE & ~E_WARNING);
+	// notices are mostly ignorable
+	set_error_handler('_error_handler_trap', E_ALL & ~E_NOTICE);
 	set_exception_handler('_error_handler_trap');
 
 	// Maybe this is dumb?
