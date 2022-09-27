@@ -53,7 +53,7 @@ class JWT
 	/**
 	 *
 	 */
-	static function encode($service, $payload)
+	static function encode($service, $payload) : string
 	{
 		$cfg = sprintf('openthc/%s/secret', $service);
 		$key = \OpenTHC\Config::get($cfg);
@@ -64,12 +64,12 @@ class JWT
 	/**
 	 *
 	 */
-	static function decode($jwt)
+	static function decode($jwt) : array
 	{
 		$key = \OpenTHC\Config::get('application/secret');
 		$key = new \Firebase\JWT\Key($key, self::ALGO);
 		$decode = \Firebase\JWT\JWT::decode($jwt, $key);
-		return $decode;
+		return (array)$decode;
 	}
 
 	/**
