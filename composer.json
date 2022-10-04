@@ -32,7 +32,7 @@
 		"guzzlehttp/guzzle": "6.5.8",
 		"slim/slim": "3.12.3",
 		"slim/twig-view": "2.5.1",
-		"twig/twig": "2.15.1",
+		"twig/twig": "2.15.3",
 		"edoceo/radix": "^2021.0"
 	},
 	"require-dev": {
