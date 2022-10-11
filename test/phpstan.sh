@@ -28,7 +28,6 @@ then
 		analyze \
 		--configuration=test/phpstan.neon \
 		--error-format=junit \
-		--level=2 \
 		--no-ansi \
 		--no-progress \
 		"${src_list[@]}" \
