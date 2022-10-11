@@ -14,13 +14,13 @@ class Response extends \Slim\Http\Response
 	/**
 	 * Constructor
 	 */
-	// function __construct($c=200, $h=null)
-	// {
-	// 	$h = new \Slim\Http\Headers([
-	// 		'content-type' => 'text/html; charset=utf-8'
-	// 	]);
-	// 	parent::__construct($c, $h);
-	// }
+	function __construct($c=200, $h=null)
+	{
+		$h = new \Slim\Http\Headers([
+			'content-type' => 'text/html; charset=utf-8'
+		]);
+		parent::__construct($c, $h);
+	}
 
 	/**
 	 *
