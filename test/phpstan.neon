@@ -1,0 +1,20 @@
+#
+# PHP Static Analysis Configuration
+#
+
+parameters:
+	bootstrapFiles:
+		- %currentWorkingDirectory%/lib/php.php
+		- %currentWorkingDirectory%/vendor/autoload.php
+
+	level: 5
+
+	paths:
+		- %currentWorkingDirectory%/bin
+		- %currentWorkingDirectory%/lib
+		- %currentWorkingDirectory%/test
+
+	scanDirectories:
+		- %currentWorkingDirectory%/vendor
+
+	tipsOfTheDay: false
