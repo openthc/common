@@ -415,7 +415,7 @@ function _content_read($f)
 	}
 
 	$text = file_get_contents($f);
-	if (preg_match('/^---(.+)\n---(.+)/ms', $text, $m)) {
+	if (preg_match('/^---\n(.+)\n---\n(.+)/ms', $text, $m)) {
 		$data['head'] = yaml_parse($m[1]);
 		$data['body'] = trim($m[2]);
 	} else {
