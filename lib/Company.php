@@ -78,7 +78,6 @@ class Company extends \OpenTHC\SQL\Record
 	 */
 	function delOption($key)
 	{
-		$key = strtolower(trim($key));
 		$sql = 'DELETE FROM base_option WHERE key = ?';
 		$arg = array($key);
 		$res = $this->_dbc->query($sql, $arg);
@@ -91,11 +90,10 @@ class Company extends \OpenTHC\SQL\Record
 	 */
 	function getOption($key)
 	{
-		$key = strtolower(trim($key));
 		$sql = 'SELECT val FROM base_option WHERE key = ?';
 		$arg = array($key);
 		$res = $this->_dbc->fetchOne($sql, $arg);
-		if (!empty($res)) {
+		if ( ! empty($res)) {
 			$res = json_decode($res, true);
 		}
 		return $res;
@@ -107,32 +105,17 @@ class Company extends \OpenTHC\SQL\Record
 	 */
 	function setOption($key, $val=null)
 	{
-		$key = strtolower(trim($key));
-
 		if (empty($key)) {
-			throw new \Exception('Invalid Key [OLC#104]');
+			throw new \Exception('Invalid Key [OLC-104]');
 		}
 
-		$this->_dbc->query('BEGIN');
+		$sql = 'INSERT INTO base_option (key, val) VALUES (:k, :v) ON CONFLICT (key) DO UPDATE SET val = EXCLUDED.val';
 
-		$sql = 'SELECT key FROM base_option WHERE key = ? FOR UPDATE';
-		$arg = array($key);
-		$chk = $this->_dbc->fetchOne($sql, $arg);
-
-		if (empty($chk)) {
-			$sql = 'INSERT INTO base_option (key, val) VALUES (:k, :v)';
-		} else {
-			$sql = 'UPDATE base_option SET val = :v WHERE key = :k';
-		}
-
-		$arg = array(
-			':k' => $key,
-			':v' => json_encode($val)
-		);
+		$arg = [];
+		$arg[':k'] = $key;
+		$arg[':v'] = json_encode($val);
 
 		$this->_dbc->query($sql, $arg);
-
-		$this->_dbc->query('COMMIT');
 
 	}
 
