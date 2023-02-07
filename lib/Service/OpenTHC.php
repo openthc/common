@@ -1,6 +1,8 @@
 <?php
 /**
  * OpenTHC Service Adapter
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 namespace OpenTHC\Service;
@@ -12,6 +14,9 @@ class OpenTHC
 	private $_ghc;
 	private $_raw;
 
+	/**
+	 *
+	 */
 	function __construct($svc)
 	{
 		$cfg = \OpenTHC\Config::get(sprintf('openthc/%s', $svc));
@@ -28,25 +33,57 @@ class OpenTHC
 		]);
 	}
 
+	/**
+	 *
+	 */
 	function get($url)
 	{
 		$res = $this->_ghc->get($url);
-		$this->_raw = $res->getBody()->getContents();
-		$ret = json_decode($this->_raw, true);
-		if (empty($ret['code'])) {
-			$ret['code'] = $res->getStatusCode();
-		}
-		return $ret;
+		return $this->_res_to_ret($res);
 	}
 
+	/**
+	 *
+	 */
 	function post($url, $arg)
 	{
 		$res = $this->_ghc->post($url, $arg);
+		return $this->_res_to_ret($res);
+	}
+
+	/**
+	 *
+	 */
+	function _res_to_ret($res)
+	{
 		$this->_raw = $res->getBody()->getContents();
-		$ret = json_decode($this->_raw, true);
+
+		$ret = [
+			'code' => null,
+			'data' => null,
+			'meta' => [],
+		];
+
+		$mime_type = $res->getHeaderLine('content-type');
+		$mime_type = strtok($mime_type, ';');
+		$mime_type = strtolower($mime_type);
+
+		switch ($mime_type) {
+			case 'application/json':
+				$ret = json_decode($this->_raw, true);
+				break;
+			case 'applicaiton/pdf':
+			default:
+				$ret['data'] = $this->_raw;
+				$ret['meta']['mime_type'] = $mime_type;
+				break;
+		}
+
 		if (empty($ret['code'])) {
 			$ret['code'] = $res->getStatusCode();
 		}
+
 		return $ret;
+
 	}
 }
