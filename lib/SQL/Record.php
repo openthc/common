@@ -339,12 +339,18 @@ class Record implements \ArrayAccess, \JsonSerializable
 		$this->offsetSet('flag', intval($this->_data['flag']) | $f);
 	}
 
-	/*
-		Array Accessors
-	*/
+	/**
+	 * Array Accessors
+	 */
 	public function toArray()
 	{
-		return $this->_data;
+		$ret = $this->_data;
+
+		if ( ! empty($ret['meta'])) {
+			$ret['meta'] = json_decode($ret['meta'], true);
+		}
+
+		return $ret;
 	}
 
 	/**
