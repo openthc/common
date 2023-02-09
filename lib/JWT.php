@@ -1,6 +1,9 @@
 <?php
 /**
  * OpenTHC Common JWT library
+ *
+ * SPDX-License-Identifier: MIT
+ *
  * @todo specify supported algorithms for application https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40
  */
 
@@ -44,6 +47,10 @@ class JWT
 
 		// And this too
 		if (empty($arg['iss'])) {
+			$arg['iss'] = $this->_service_id;
+		}
+		if (empty($arg['iss'])) {
+			// From Config is deprecated
 			$arg['iss'] = \OpenTHC\Config::get('application/id');
 		}
 
@@ -62,13 +69,20 @@ class JWT
 	}
 
 	/**
-	 *
+	 * Allow to pass a Key
 	 */
-	static function decode($jwt) : array
+	static function decode($jwt, $key=null) : array
 	{
-		$key = \OpenTHC\Config::get('application/secret');
-		$key = new \Firebase\JWT\Key($key, self::ALGO);
+		if (empty($key)) {
+			// application/secret is deprecated
+			$key = \OpenTHC\Config::get('application/secret');
+		}
+		if (is_string($key)) {
+			$key = new \Firebase\JWT\Key($key, self::ALGO);
+		}
+
 		$decode = \Firebase\JWT\JWT::decode($jwt, $key);
+
 		return (array)$decode;
 	}
 
