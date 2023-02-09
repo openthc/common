@@ -1,6 +1,8 @@
 <?php
 /**
  * Contact Model
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 namespace OpenTHC;

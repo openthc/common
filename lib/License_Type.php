@@ -1,6 +1,8 @@
 <?php
 /**
  * License Type Model
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 namespace OpenTHC;
@@ -11,6 +13,7 @@ class License_Type
 	const FLAG_PROCESSOR  = 0x00000020;
 	const FLAG_LABORATORY = 0x00000040;
 	const FLAG_RETAIL     = 0x00000080;
+	const FLAG_CARRIER    = 0x00000100;
 
 	/**
 	 * Takes CRE Names and Maps to OpenTHC Types
@@ -58,4 +61,5 @@ class License_Type
 
 		return $x;
 	}
+
 }

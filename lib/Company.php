@@ -1,6 +1,8 @@
 <?php
 /**
  * An OpenTHC Company
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 namespace OpenTHC;
