@@ -17,9 +17,6 @@ class Company extends \OpenTHC\SQL\Record
 	const FLAG_PHONE_GOOD = 0x00004000;
 	const FLAG_PHONE_SHOW = 0x00008000;
 
-	const FLAG_CRE_WANT   = 0x00010000;
-	const FLAG_CRE_HAVE   = 0x00020000;
-
 	const FLAG_DEAD       = 0x08000000;
 	const FLAG_DELETED    = 0x08000000;
 
