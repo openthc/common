@@ -1,13 +1,31 @@
 <?php
 /**
  * Application Data Model
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 namespace OpenTHC\SQL;
 
 class Record implements \ArrayAccess, \JsonSerializable
 {
-    const FLAG_HAS_NOTE  = 0x00100000;
+	const FLAG_HAS_NOTE  = 0x00100000;
+
+	const FLAG_CRE_SYNC_WANT = 0x00200000; // Want to Sync w/CRE
+	const FLAG_CRE_SYNC_GOOD = 0x00400000; // In SYNC
+	const FLAG_CRE_SYNC_LOST = 0x00800000; //
+
+	const STAT_INIT = 100;
+	const STAT_PROC = 102;
+
+	const STAT_LIVE = 200;
+	// const STAT_XXXX = 202; // Accepted
+	const STAT_DUPE = 208;
+
+	const STAT_VOID = 410;
+
+	const STAT_DEAD = 666;
+
 
 	protected $_dbc; // An Edoceo\Radix\DB\SQL object
 
