@@ -552,7 +552,7 @@ function _phone_nice($p, $l='US')
  */
 function _random_hash()
 {
-	return base64_encode_url(hash('sha256', openssl_random_pseudo_bytes(256), true));
+	return base64_encode_url(hash('sha256', random_bytes(256), true));
 }
 
 
