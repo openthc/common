@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-namespace OpenTHC\Common\Traits;
+namespace OpenTHC\Traits;
 
 // use Opis\JsonSchema\Validator;
 use Swaggest\JsonSchema\Schema;
