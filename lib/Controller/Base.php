@@ -1,6 +1,8 @@
 <?php
 /**
  * OpenTHC Base Controller
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 namespace OpenTHC\Controller;
@@ -11,14 +13,19 @@ class Base
 
 	/**
 	 * Save the Container from Slim
+	 * @param \Slim\Container $c
 	 */
-	function __construct($c)
+	function __construct(\Slim\Container $c)
 	{
 		$this->_container = $c;
 	}
 
 	/**
 	 * Extenders should implement this
+	 * @todo low-risk interface
+	 * @param \Slim\Http\Request $REQ
+	 * @param \Slim\Http\Response $RES
+	 * @param array $ARG
 	 */
 	function __invoke($REQ, $RES, $ARG)
 	{

@@ -2,12 +2,20 @@
 /**
  * Common Session
  * Configure via PHP Settings (or apache2.conf)
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 namespace OpenTHC\Middleware;
 
 class Session extends \OpenTHC\Middleware\Base
 {
+	/**
+	 * @todo low-risk interface
+	 * @param \Slim\Http\Request $REQ
+	 * @param \Slim\Http\Response $RES
+	 * @param array $ARG
+	*/
 	public function __invoke($REQ, $RES, $NMW)
 	{
 		$this->open();

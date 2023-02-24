@@ -1,7 +1,9 @@
 <?php
 /**
-	Base Module Handler
-	For Slim Groups
+ * Base Module Handler
+ * For Slim Groups
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
 */
 
 namespace OpenTHC\Module;
@@ -11,14 +13,17 @@ class Base
 	protected $_container;
 
 	/**
-		@param $c Slim Container
+	 * @param \Slim\Container $c Slim Container
 	*/
-	function __construct($c)
+	function __construct(\Slim\Container $c)
 	{
 		$this->_container = $c;
 	}
 
-	function __invoke($a)
+	/**
+	 * @param \OpenTHC\App $a
+	 */
+	function __invoke(\OpenTHC\App $a)
 	{
 	}
 

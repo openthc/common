@@ -1,6 +1,8 @@
 <?php
 /**
  * Inbound Connection from Registered Application
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 namespace OpenTHC\Controller\Auth;
@@ -21,6 +23,12 @@ class Connect extends \OpenTHC\Controller\Base
 
 	protected $_Service;
 
+	/**
+	 * @todo low-risk interface
+	 * @param \Slim\Http\Request $REQ
+	 * @param \Slim\Http\Response $RES
+	 * @param array $ARG
+	*/
 	function __invoke($REQ, $RES, $ARG)
 	{
 		// Reset Session

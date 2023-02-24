@@ -1,12 +1,20 @@
 <?php
 /**
  * Close the Session
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 namespace OpenTHC\Controller\Auth;
 
 class Shut extends \OpenTHC\Controller\Base
 {
+	/**
+	 * @todo low-risk interface
+	 * @param \Slim\Http\Request $REQ
+	 * @param \Slim\Http\Response $RES
+	 * @param array $ARG
+	*/
 	function __invoke($REQ, $RES, $ARG)
 	{
 		$sid = session_id();

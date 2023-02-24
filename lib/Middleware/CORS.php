@@ -10,7 +10,10 @@ namespace OpenTHC\Middleware;
 class CORS extends \OpenTHC\Middleware\Base
 {
 	/**
-	 *
+	 * @todo low-risk interface
+	 * @param \Slim\Http\Request $REQ
+	 * @param \Slim\Http\Response $RES
+	 * @param array $ARG
 	 */
 	public function __invoke($REQ, $RES, $NMW)
 	{

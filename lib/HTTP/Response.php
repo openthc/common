@@ -13,6 +13,10 @@ class Response extends \Slim\Http\Response
 
 	/**
 	 * Constructor
+	 * @todo low-risk interface
+	 * @todo how are we using this class? Found only once it in CRE
+	 * @param \Psr\Http\Message\ResponseInterface $c
+	 * @param \Psr\Http\Message\StreamFactoryInterface $h
 	 */
 	function __construct($c=200, $h=null)
 	{

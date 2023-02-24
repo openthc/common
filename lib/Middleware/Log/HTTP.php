@@ -2,12 +2,20 @@
 /**
  * Log Request and Response
  * @todo can we use GuzzleHttp\Psr7\str($req) ? 
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 namespace OpenTHC\Middleware\Log;
 
 class HTTP extends \OpenTHC\Middleware\Base
 {
+	/**
+	 * @todo low-risk interface
+	 * @param \Slim\Http\Request $REQ
+	 * @param \Slim\Http\Response $RES
+	 * @param array $ARG
+	*/
 	public function __invoke($REQ, $RES, $NMW)
 	{
 		// Log the Full Body

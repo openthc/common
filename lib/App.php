@@ -1,6 +1,8 @@
 <?php
 /**
  * A Big Wrapper for Slim to make Apps "our" way
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 namespace OpenTHC;
@@ -9,6 +11,10 @@ class App extends \Slim\App
 {
 	private $__cfg;
 
+	/**
+	 * @todo low-risk interface
+	 * @param array (optional) $opt
+	*/
 	function __construct($opt=null)
 	{
 
