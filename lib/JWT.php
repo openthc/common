@@ -24,7 +24,14 @@ class JWT
 	function __construct($cfg)
 	{
 		$this->_service_id = \OpenTHC\Config::get(sprintf('openthc/%s/id', $cfg['service']));
+		if (empty($this->_service_id)) {
+			throw new \Exception('Invalid Service ID [OCJ-028]');
+		}
+
 		$this->_service_sk = \OpenTHC\Config::get(sprintf('openthc/%s/secret', $cfg['service']));
+		if (empty($this->_service_sk)) {
+			throw new \Exception('Invalid Service Secret [OCJ-033]');
+		}
 
 		unset($cfg['service']);
 
