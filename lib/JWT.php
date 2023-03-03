@@ -15,7 +15,7 @@ class JWT
 
 	private $_request = null;
 
-	private $_service_id = null;
+	// private $_service_id = null;
 	private $_service_sk = null;
 
 	/**
@@ -23,14 +23,24 @@ class JWT
 	 */
 	function __construct($cfg)
 	{
-		$this->_service_id = \OpenTHC\Config::get(sprintf('openthc/%s/id', $cfg['service']));
-		if (empty($this->_service_id)) {
-			throw new \Exception('Invalid Service ID [OCJ-028]');
+		// Not Really used
+		// And this too
+		// if (empty($cfg['iss'])) {
+		// 	$arg['iss'] = $this->_service_id;
+		// }
+		if (empty($arg['iss'])) {
+			throw new \Exception('Invalid Issuer [CLJ-032]');
 		}
 
+		// $this->_service_id = \OpenTHC\Config::get(sprintf('openthc/%s/id', $cfg['service']));
+		// if (empty($this->_service_id)) {
+		// 	throw new \Exception('Invalid Service ID [OCJ-028]');
+		// }
+
+		// this sucks
 		$this->_service_sk = \OpenTHC\Config::get(sprintf('openthc/%s/secret', $cfg['service']));
 		if (empty($this->_service_sk)) {
-			throw new \Exception('Invalid Service Secret [OCJ-033]');
+			throw new \Exception('Invalid Service Secret [CLJ-042]');
 		}
 
 		unset($cfg['service']);
@@ -42,7 +52,7 @@ class JWT
 	/**
 	 * Create a Return a String Token
 	 */
-	function __toString()
+	function __toString() : string
 	{
 		// $arg = self::base_claims();
 		$arg = $this->_request;
@@ -52,16 +62,8 @@ class JWT
 			$arg['iat'] = time();
 		}
 
-		// And this too
-		if (empty($arg['iss'])) {
-			$arg['iss'] = $this->_service_id;
-		}
-		if (empty($arg['iss'])) {
-			// From Config is deprecated
-			$arg['iss'] = \OpenTHC\Config::get('application/id');
-		}
-
 		return \Firebase\JWT\JWT::encode($arg, $this->_service_sk, self::ALGO);
+
 	}
 
 	/**
