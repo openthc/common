@@ -23,12 +23,8 @@ class JWT
 	 */
 	function __construct($cfg)
 	{
-		// Not Really used
-		// And this too
-		// if (empty($cfg['iss'])) {
-		// 	$arg['iss'] = $this->_service_id;
-		// }
-		if (empty($arg['iss'])) {
+		// Little Error Check
+		if (empty($cfg['iss'])) {
 			throw new \Exception('Invalid Issuer [CLJ-032]');
 		}
 
