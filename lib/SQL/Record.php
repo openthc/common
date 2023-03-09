@@ -13,7 +13,8 @@ class Record implements \ArrayAccess, \JsonSerializable
 
 	const FLAG_CRE_SYNC_WANT = 0x00200000; // Want to Sync w/CRE
 	const FLAG_CRE_SYNC_GOOD = 0x00400000; // In SYNC
-	const FLAG_CRE_SYNC_LOST = 0x00800000; //
+	const FLAG_CRE_SYNC_FAIL = 0x00800000; // v1
+	const FLAG_CRE_SYNC_LOST = 0x00800000; // v0 alias
 
 	const STAT_INIT = 100;
 	const STAT_PROC = 102;
