@@ -23,6 +23,10 @@ class Company extends \OpenTHC\SQL\Record
 	const FLAG_TEST       = 0x10000000;
 	const FLAG_MUTE       = 0x20000000;
 
+	const STAT_PROC = 102;
+	const STAT_LIVE = 200;
+	const STAT_DEAD = 666;
+
 	protected $_table = 'company';
 
 	static function findByGUID($x)
