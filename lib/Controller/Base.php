@@ -26,6 +26,7 @@ class Base
 	 * @param \Slim\Http\Request $REQ
 	 * @param \Slim\Http\Response $RES
 	 * @param array $ARG
+	 * @return \Slim\Http\Response
 	 */
 	function __invoke($REQ, $RES, $ARG)
 	{
