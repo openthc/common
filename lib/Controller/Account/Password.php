@@ -18,8 +18,9 @@ class Password extends \OpenTHC\Controller\Base
 	 * @param \Slim\Http\Request $REQ
 	 * @param \Slim\Http\Response $RES
 	 * @param array $ARG
+	 * @return \Slim\Http\Response
 	 */
-	function __invoke(\Slim\Http\Request $REQ, \Slim\Http\Response $RES, array $ARG)
+	function __invoke($REQ, $RES, $ARG)
 	{
 		$ARG = $this->parseArg();
 
@@ -54,6 +55,7 @@ class Password extends \OpenTHC\Controller\Base
 	 * @param \Slim\Http\Request $REQ
 	 * @param \Slim\Http\Response $RES
 	 * @param array $ARG
+	 * @return \Slim\Http\Response
 	 */
 	function post(\Slim\Http\Request $REQ, \Slim\Http\Response $RES, array $ARG)
 	{
