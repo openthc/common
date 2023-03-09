@@ -113,7 +113,7 @@ class Password extends \OpenTHC\Controller\Base
 				'meta' => json_encode($_SESSION),
 			]);
 
-			$RES = $RES->withAttribute('Contact', [
+			$REQ = $REQ->withAttribute('Contact', [
 				'id' => $ARG['contact']['id'],
 				'username' => $ARG['contact']['username'],
 				'password' => $arg[':pw'],
