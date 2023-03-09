@@ -15,31 +15,35 @@ class JWT
 
 	private $_request = null;
 
-	// private $_service_id = null;
 	private $_service_sk = null;
 
 	/**
 	 * Construct a new JWT from parameters
 	 */
-	function __construct($cfg)
+	function __construct(array $cfg)
 	{
 		// Little Error Check
 		if (empty($cfg['iss'])) {
-			throw new \Exception('Invalid Issuer [CLJ-032]');
+			throw new \Exception('Invalid Issuer [CLJ-028]');
 		}
 
-		// $this->_service_id = \OpenTHC\Config::get(sprintf('openthc/%s/id', $cfg['service']));
-		// if (empty($this->_service_id)) {
-		// 	throw new \Exception('Invalid Service ID [OCJ-028]');
-		// }
-
-		// this sucks
-		$this->_service_sk = \OpenTHC\Config::get(sprintf('openthc/%s/secret', $cfg['service']));
+		// Service Secret Key
+		$this->_service_sk = $cfg['service-sk'];
 		if (empty($this->_service_sk)) {
-			throw new \Exception('Invalid Service Secret [CLJ-042]');
+			if (empty($cfg['service'])) {
+				throw new \Exception('Invalid Service [CLJ-035]');
+			}
+			$this->_service_sk = \OpenTHC\Config::get(sprintf('openthc/%s/secret', $cfg['service']));
+		}
+		if (empty($this->_service_sk)) {
+			throw new \Exception('Invalid Service Secret [CLJ-040]');
+		}
+		if ( ! is_string($this->_service_sk)) {
+			throw new \Exception('Invalid Service Secret [CLJ-043]');
 		}
 
 		unset($cfg['service']);
+		unset($cfg['service-sk']);
 
 		$this->_request = $cfg;
 
