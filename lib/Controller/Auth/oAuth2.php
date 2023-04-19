@@ -54,25 +54,4 @@ class oAuth2 extends \OpenTHC\Controller\Base
 
 	}
 
-	/**
-	 * Return a Generic oAuth Provider
-	 */
-	protected function getProvider_Generic($r=null)
-	{
-		$cfg = \OpenTHC\Config::get('oauth');
-		if (empty($cfg)) {
-			throw new \Exception('OAuth2 must be configured [CAO-041]');
-		}
-
-		$u = sprintf('https://%s/auth/back?%s', $_SERVER['SERVER_NAME'], http_build_query(array('r' => $r)));
-		$u = trim($u, '?');
-
-		$cfg['redirectUri'] = $u;
-		$cfg['verify'] = true;
-
-		$p = new \League\OAuth2\Client\Provider\GenericProvider($cfg);
-
-		return $p;
-	}
-
 }
