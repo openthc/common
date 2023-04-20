@@ -37,6 +37,10 @@ class oAuth2 extends \OpenTHC\Controller\Base
 	protected function getProvider($r=null)
 	{
 		$cfg = \OpenTHC\Config::get('openthc/sso');
+		$sso_base = $cfg['base'];
+		if (empty($sso_base)) {
+			$sso_base = sprintf('https://%s', $cfg['hostname']);
+		}
 
 		$u = sprintf('https://%s/auth/back?%s', $_SERVER['SERVER_NAME'], http_build_query([ 'r' => $r ]));
 		$u = trim($u, '?');
@@ -44,9 +48,9 @@ class oAuth2 extends \OpenTHC\Controller\Base
 			'clientId' => ($cfg['public'] ?: $_SERVER['SERVER_NAME']),
 			'clientSecret' => $cfg['secret'],
 			'redirectUri' => $u,
-			'urlAuthorize' => sprintf('https://%s/oauth2/authorize', $cfg['hostname']),
-			'urlAccessToken' => sprintf('https://%s/oauth2/token', $cfg['hostname']),
-			'urlResourceOwnerDetails' => sprintf('https://%s/oauth2/profile', $cfg['hostname']),
+			'urlAuthorize' => sprintf('%s/oauth2/authorize', $$sso_base),
+			'urlAccessToken' => sprintf('%s/oauth2/token', $$sso_base),
+			'urlResourceOwnerDetails' => sprintf('%s/oauth2/profile', $$sso_base),
 			'verify' => true
 		]);
 
