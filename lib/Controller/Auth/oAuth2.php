@@ -41,6 +41,7 @@ class oAuth2 extends \OpenTHC\Controller\Base
 		if (empty($sso_base)) {
 			$sso_base = sprintf('https://%s', $cfg['hostname']);
 		}
+		$sso_base = rtrim($sso_base, '/');
 
 		$u = sprintf('https://%s/auth/back?%s', $_SERVER['SERVER_NAME'], http_build_query([ 'r' => $r ]));
 		$u = trim($u, '?');
