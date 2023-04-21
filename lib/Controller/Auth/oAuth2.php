@@ -48,9 +48,9 @@ class oAuth2 extends \OpenTHC\Controller\Base
 			'clientId' => ($cfg['public'] ?: $_SERVER['SERVER_NAME']),
 			'clientSecret' => $cfg['secret'],
 			'redirectUri' => $u,
-			'urlAuthorize' => sprintf('%s/oauth2/authorize', $$sso_base),
-			'urlAccessToken' => sprintf('%s/oauth2/token', $$sso_base),
-			'urlResourceOwnerDetails' => sprintf('%s/oauth2/profile', $$sso_base),
+			'urlAuthorize' => sprintf('%s/oauth2/authorize', $sso_base),
+			'urlAccessToken' => sprintf('%s/oauth2/token', $sso_base),
+			'urlResourceOwnerDetails' => sprintf('%s/oauth2/profile', $sso_base),
 			'verify' => true
 		]);
 
