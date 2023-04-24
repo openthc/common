@@ -11,6 +11,7 @@ namespace OpenTHC;
 
 class JWT
 {
+	// @todo figure out how to make this EC25519
 	const ALGO = 'HS256';
 
 	private $_request = null;
@@ -44,6 +45,13 @@ class JWT
 
 		unset($cfg['service']);
 		unset($cfg['service-sk']);
+
+		$default = [];
+		$default['iat'] = $_SERVER['REQUEST_TIME'];
+		$default['nbf'] = $_SERVER['REQUEST_TIME'];
+		$default['exp'] = $_SERVER['REQUEST_TIME'] + 60 * 15; // 15 minutes
+
+		$cfg = array_merge($default, $cfg);
 
 		$this->_request = $cfg;
 
@@ -82,8 +90,8 @@ class JWT
 	 */
 	static function decode($jwt, $key=null) : array
 	{
+		// @deprecated application/secret
 		if (empty($key)) {
-			// application/secret is deprecated
 			$key = \OpenTHC\Config::get('application/secret');
 		}
 		if (is_string($key)) {
@@ -98,17 +106,18 @@ class JWT
 	/**
 	 *
 	 */
-	static function base_claims(): array
-	{
-		$tz = new \DateTimeZone($_SESSION['tz']);
-		$expire = new \DateTime(date(\DateTime::RFC3339, $_SERVER['REQUEST_TIME']), $tz);
-		$expire->add(new \DateInterval('PT24H'));
-		$expire = $expire->getTimestamp();
-		return [
-			'iat'  => $_SERVER['REQUEST_TIME'],
-			'iss'  => \OpenTHC\Config::get('application/id'),
-			'nbf'  => $_SERVER['REQUEST_TIME'],
-			'exp'  => $expire,
-		];
-	}
+	// static function base_claims(): array
+	// {
+	// 	// $tz = new \DateTimeZone($_SESSION['tz']);
+	// 	// $expire = new \DateTime(date(\DateTime::RFC3339, $_SERVER['REQUEST_TIME']), $tz);
+	// 	// $expire->add(new \DateInterval('PT24H'));
+	// 	// $expire = $expire->getTimestamp();
+	// 	$expire = $_SERVER['REQUEST_TIME'] + 86400;
+	// 	return [
+	// 		'iss'  => \OpenTHC\Config::get('application/id'),
+	// 		'iat'  => $_SERVER['REQUEST_TIME'],
+	// 		'nbf'  => $_SERVER['REQUEST_TIME'],
+	// 		'exp'  => $expire,
+	// 	];
+	// }
 }
