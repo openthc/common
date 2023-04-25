@@ -62,7 +62,6 @@ class JWT
 	 */
 	function __toString() : string
 	{
-		// $arg = self::base_claims();
 		$arg = $this->_request;
 
 		// We require this one
@@ -103,21 +102,4 @@ class JWT
 		return (array)$decode;
 	}
 
-	/**
-	 *
-	 */
-	// static function base_claims(): array
-	// {
-	// 	// $tz = new \DateTimeZone($_SESSION['tz']);
-	// 	// $expire = new \DateTime(date(\DateTime::RFC3339, $_SERVER['REQUEST_TIME']), $tz);
-	// 	// $expire->add(new \DateInterval('PT24H'));
-	// 	// $expire = $expire->getTimestamp();
-	// 	$expire = $_SERVER['REQUEST_TIME'] + 86400;
-	// 	return [
-	// 		'iss'  => \OpenTHC\Config::get('application/id'),
-	// 		'iat'  => $_SERVER['REQUEST_TIME'],
-	// 		'nbf'  => $_SERVER['REQUEST_TIME'],
-	// 		'exp'  => $expire,
-	// 	];
-	// }
 }
