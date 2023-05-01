@@ -20,10 +20,17 @@ class OpenTHC
 	function __construct($svc)
 	{
 		$cfg = \OpenTHC\Config::get(sprintf('openthc/%s', $svc));
-		$this->_api_base = rtrim($cfg['base'], '/');
+		$this->_api_base = $cfg['origin'];
+		if (empty($this->_api_base)) {
+			$this->_api_base = rtrim($cfg['base'], '/');
+		}
 		if (empty($this->_api_base)) {
 			$this->_api_base = sprintf('https://%s/', $cfg['hostname']);
 		}
+		if (empty($this->_api_base)) {
+			throw new \Exception('Invalid Service Origin [LSO-031]');
+		}
+
 		$this->_api_auth = $cfg['secret'];
 
 		$this->_ghc = new \GuzzleHttp\Client([
