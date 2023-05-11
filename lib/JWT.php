@@ -102,4 +102,19 @@ class JWT
 		return (array)$decode;
 	}
 
+	/**
+	 * Only Decode, No Verification
+	 */
+	static function decode_only($jwt_source) : \stdClass
+	{
+		$jwt_source = explode('.', $jwt_source);
+
+		$jwt_output = new \stdClass();
+		$jwt_output->head = json_decode(base64_decode($jwt_source[0]));
+		$jwt_output->body = json_decode(base64_decode($jwt_source[1]));
+		$jwt_output->hash = $jwt_source[2];
+
+		return $jwt_output;
+	}
+
 }
