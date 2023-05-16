@@ -34,28 +34,41 @@ class oAuth2 extends \OpenTHC\Controller\Base
 	/**
 	 * Hard Coded Values for our SSO Service
 	 */
-	protected function getProvider($r=null)
+	protected function getProvider($ret=null)
 	{
 		$cfg = \OpenTHC\Config::get('openthc/sso');
-		$sso_base = $cfg['base'];
-		if (empty($sso_base)) {
-			$sso_base = sprintf('https://%s', $cfg['hostname']);
-		}
-		$sso_base = rtrim($sso_base, '/');
+		$cfg['client_id'] = $cfg['public'] ?: $cfg['id'];
+		$cfg['client_sk'] = $cfg['secret'];
 
-		$u = sprintf('https://%s/auth/back?%s', $_SERVER['SERVER_NAME'], http_build_query([ 'r' => $r ]));
-		$u = trim($u, '?');
-		$p = new \League\OAuth2\Client\Provider\GenericProvider([
-			'clientId' => ($cfg['public'] ?: $_SERVER['SERVER_NAME']),
-			'clientSecret' => $cfg['secret'],
-			'redirectUri' => $u,
-			'urlAuthorize' => sprintf('%s/oauth2/authorize', $sso_base),
-			'urlAccessToken' => sprintf('%s/oauth2/token', $sso_base),
-			'urlResourceOwnerDetails' => sprintf('%s/oauth2/profile', $sso_base),
+		if (empty($cfg['client_id'])) {
+			throw new \Exception('Invalid Client Configuration [CAO-040]');
+		}
+		if (empty($cfg['client_sk'])) {
+			throw new \Exception('Invalid Client Configuration [CAO-043]');
+		}
+
+		$sso_origin = $cfg['origin'];
+		if (empty($sso_origin)) {
+			$sso_origin = $cfg['base'];
+			if (empty($sso_origin)) {
+				$sso_origin = sprintf('https://%s', $cfg['hostname']);
+			}
+		}
+		$sso_origin = rtrim($sso_origin, '/');
+
+		$url = sprintf('%s/auth/back?%s', OPENTHC_SERVICE_ORIGIN, http_build_query([ 'r' => $ret ]));
+		$url = trim($url, '?');
+		$loc = new \League\OAuth2\Client\Provider\GenericProvider([
+			'clientId' => $cfg['client_id'],
+			'clientSecret' => $cfg['client_sk'],
+			'redirectUri' => $url,
+			'urlAuthorize' => sprintf('%s/oauth2/authorize', $sso_origin),
+			'urlAccessToken' => sprintf('%s/oauth2/token', $sso_origin),
+			'urlResourceOwnerDetails' => sprintf('%s/oauth2/profile', $sso_origin),
 			'verify' => true
 		]);
 
-		return $p;
+		return $loc;
 
 	}
 
