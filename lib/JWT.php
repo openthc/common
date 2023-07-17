@@ -12,7 +12,7 @@ namespace OpenTHC;
 class JWT
 {
 	// @todo figure out how to make this EC25519
-	const ALGO = 'HS256';
+	const ALGO = 'HS256'; // EdDSA
 
 	private $_request = null;
 
@@ -46,13 +46,6 @@ class JWT
 		unset($cfg['service']);
 		unset($cfg['service-sk']);
 
-		$default = [];
-		$default['iat'] = $_SERVER['REQUEST_TIME'];
-		$default['nbf'] = $_SERVER['REQUEST_TIME'];
-		$default['exp'] = $_SERVER['REQUEST_TIME'] + 60 * 15; // 15 minutes
-
-		$cfg = array_merge($default, $cfg);
-
 		$this->_request = $cfg;
 
 	}
@@ -64,24 +57,12 @@ class JWT
 	{
 		$arg = $this->_request;
 
-		// We require this one
-		if (empty($arg['iat'])) {
-			$arg['iat'] = time();
-		}
+		$arg['iat'] = time();
+		$arg['nbf'] = $arg['iat'];
+		$arg['exp'] = $arg['iat'] + 60 * 15; // 15 minutes
 
 		return \Firebase\JWT\JWT::encode($arg, $this->_service_sk, self::ALGO);
 
-	}
-
-	/**
-	 *
-	 */
-	static function encode($service, $payload) : string
-	{
-		$cfg = sprintf('openthc/%s/secret', $service);
-		$key = \OpenTHC\Config::get($cfg);
-		$jwt = \Firebase\JWT\JWT::encode($payload, $key, self::ALGO);
-		return $jwt;
 	}
 
 	/**
@@ -110,9 +91,9 @@ class JWT
 		$jwt_source = explode('.', $jwt_source);
 
 		$jwt_output = new \stdClass();
-		$jwt_output->head = json_decode(base64_decode($jwt_source[0]));
-		$jwt_output->body = json_decode(base64_decode($jwt_source[1]));
-		$jwt_output->hash = $jwt_source[2];
+		$jwt_output->head = json_decode(sodium_base642bin($jwt_source[0], SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING));
+		$jwt_output->body = json_decode(sodium_base642bin($jwt_source[1], SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING));
+		$jwt_output->hash = sodium_base642bin($jwt_source[2], SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
 
 		return $jwt_output;
 	}
