@@ -55,14 +55,7 @@ class JWT
 	 */
 	function __toString() : string
 	{
-		$arg = $this->_request;
-
-		$arg['iat'] = time();
-		$arg['nbf'] = $arg['iat'];
-		$arg['exp'] = $arg['iat'] + 60 * 15; // 15 minutes
-
-		return \Firebase\JWT\JWT::encode($arg, $this->_service_sk, self::ALGO);
-
+		return $this->encode();
 	}
 
 	/**
@@ -96,6 +89,35 @@ class JWT
 		$jwt_output->hash = sodium_base642bin($jwt_source[2], SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
 
 		return $jwt_output;
+	}
+
+	/**
+	 * Create a Return a String Token
+	 */
+	function encode() : string
+	{
+		$arg = $this->_request;
+
+		$arg['iat'] = time();
+		$arg['nbf'] = $arg['iat'];
+		$arg['exp'] = $arg['iat'] + 60 * 15; // 15 minutes
+
+		return \Firebase\JWT\JWT::encode($arg, $this->_service_sk, self::ALGO);
+
+	}
+
+	/**
+	 * Verify the JWT, Requires Key
+	 */
+	static function verify($jwt, $key) : \stdClass
+	{
+		if (is_string($key)) {
+			$key = new \Firebase\JWT\Key($key, self::ALGO);
+		}
+
+		$decode = \Firebase\JWT\JWT::decode($jwt, $key);
+
+		return $decode;
 	}
 
 }
