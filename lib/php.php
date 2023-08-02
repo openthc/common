@@ -11,12 +11,12 @@ function h($x)
 	// return htmlentities($x, ENT_QUOTES, 'UTF-8', true);
 }
 
-
+// @deprecated use lib-sodium or some helper
 function base64_encode_url($x) {
 	return str_replace(['+','/','='], ['-','_',''], base64_encode($x));
 }
 
-
+// @deprecated use lib-sodium or some helper
 function base64_decode_url($x) {
 	return base64_decode(str_replace(['-','_'], ['+','/'], $x));
 }
@@ -355,6 +355,16 @@ function _http_code($code)
 	// header($_SERVER['SERVER_PROTOCOL'] . ' 403 Not Authorized', true, 403);
 }
 
+/**
+ * @return true if in CLI mode
+ */
+function is_cli()
+{
+	return defined('STDIN')
+		|| php_sapi_name() === 'cli'
+		|| (stristr(PHP_SAPI, 'cgi') && getenv('TERM'))
+		|| (empty($_SERVER['REMOTE_ADDR']) && !isset($_SERVER['HTTP_USER_AGENT']) && count($_SERVER['argv']) > 0);
+}
 
 /**
 	Array Diff by Key and Value - Recursive
