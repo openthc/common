@@ -12,7 +12,8 @@
 			"lib/stat.php"
 		],
 		"psr-4": {
-			"OpenTHC\\": "./lib"
+			"OpenTHC\\": "./lib",
+			"OpenTHC\\Test\\": "./test"
 		}
 	},
 	"bin": [
