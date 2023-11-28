@@ -45,6 +45,8 @@ class License extends \OpenTHC\SQL\Record
 
 	const STAT_GONE = 410;
 
+	const STAT_SUSPENDED = 451;
+
 	protected $_table = 'license';
 
 	static function findByGUID($x)
