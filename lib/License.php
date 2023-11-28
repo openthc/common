@@ -101,4 +101,35 @@ class License extends \OpenTHC\SQL\Record
 		return true;
 	}
 
+	/**
+	 * Return Icon(s) based on status
+	 */
+	function getIcon() : string
+	{
+		$icon = [];
+
+		switch ($this->_data['stat'])
+		{
+			case 100:
+				$icon[] = '<i class="text-secondary fa-regular fa-square-plus"></i>';
+				break;
+			case 102:
+				$icon[] = '<i class="text-secondary fa-regular fa-circle-question"></i>';
+				break;
+			case 200:
+				$icon[] = '<i class="text-success fa-regular fa-square-check"></i>';
+				break;
+			case 308:
+				$icon[] = '<i class="text-warning fa-solid fa-arrows-left-right"></i>';
+				break;
+			case 410:
+				$icon[] = '<i class="text-danger fa-solid fa-ban"></i>';
+				break;
+			default:
+				$icon[] = sprintf('%d', $v['stat']);
+		}
+
+		return implode(' ', $icon);
+	}
+
 }
