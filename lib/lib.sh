@@ -13,7 +13,7 @@ function _have_app_root
 	if [ -z "$APP_ROOT" ]
 	then
 		echo "\$APP_ROOT must be defined"
-	        return 1
+		return 1
 	fi
 
 	return 0
@@ -71,6 +71,11 @@ function copy_jquery()
 	cp node_modules/jquery/dist/jquery.min.js \
 		webroot/vendor/jquery/
 
+	if [ -f node_modules/jquery-ui/dist/jquery-ui.min.js ]
+	then
+		cp node_modules/jquery-ui/dist/jquery-ui.min.js \
+			./webroot/vendor/jquery/
+	fi
+
 	cd -
 }
-
