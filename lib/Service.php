@@ -56,7 +56,12 @@ class Service
 	 */
 	function get($url)
 	{
-		$opt = [];
+		$opt = [
+			'headers' => [
+				'authorization' => sprintf('Bearer Token %s', $this->_client_pk),
+			]
+		];
+		$opt = $this->signRequest('GET', $url, $opt);
 		$res = $this->_ghc->get($url, $opt);
 		return $this->_res_to_ret($res);
 	}
@@ -66,8 +71,14 @@ class Service
 	 */
 	function post($url, $arg)
 	{
-		$opt = [];
-		$res = $this->_ghc->post($url, [ 'form_params' => $arg ], $opt);
+		$opt = [
+			'form_params' => $arg,
+			'headers' => [
+				'authorization' => sprintf('Bearer Token %s', $this->_client_pk),
+			]
+		];
+		$opt = $this->signRequest('POST', $url, $opt);
+		$res = $this->_ghc->post($url, $opt);
 		return $this->_res_to_ret($res);
 	}
 
@@ -76,9 +87,25 @@ class Service
 	 */
 	function postJSON($url, $arg)
 	{
-		$opt = [];
-		$res = $this->_ghc->post($url, [ 'json' => $arg ], $opt);
+		$opt = [
+			'json' => $arg,
+			'headers' => [
+				'authorization' => sprintf('Bearer Token %s', $this->_client_pk),
+			]
+		];
+		$opt = $this->signRequest('POST', $url, $opt);
+		$res = $this->_ghc->post($url, $opt);
 		return $this->_res_to_ret($res);
+
+		// $head = [
+		// 	'authorization' => sprintf('Bearer %s', $ck),
+		// 	'date' => $dt->format(\DateTime::RFC3339),
+		// 	'signature' => $sig_hash,
+		// ];
+
+		// $req = new \GuzzleHttp\Psr7\Request($verb, $path, $head, $body);
+		// $res = $this->ghc->send($req);
+
 	}
 
 	/**
@@ -115,5 +142,29 @@ class Service
 
 		return $ret;
 
+	}
+
+	/**
+	 * Put the Signature on the Request
+	 */
+	protected function signRequest(string $verb, string $path, $opt) : array // $body_hash, $head_hash)
+	{
+		$dt = new \DateTime();
+
+		$sig_data = [];
+		$sig_data[] = strtoupper($verb);
+		$sig_data[] = $path;
+		$sig_data[] = $dt->format(\DateTime::RFC3339);
+		// Body Hash? from $opt['json'] or $opt['form_params']?
+		// $sig_data[] = $pk; // Why have my Public Key in the Signature?
+		$sig_data = implode("\n", $sig_data);
+		$sig_hash = hash_hmac('sha256', $sig_data, $sk);
+
+		$opt['headers']['date'] = $dt->format(\DateTime::RFC3339);
+
+		// $ret = hash_hmac('sha256', "$verb\n$payload_hash\n$headers_hash", $Company['secret']);
+		$opt['headers']['signature'] = hash_hmac('sha256', $sig_data, $this->sk);
+
+		return $opt;
 	}
 }
