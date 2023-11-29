@@ -24,19 +24,6 @@ install)
 
 	npm install --quiet
 
-	. vendor/openthc/common/lib/lib.sh
-
-	copy_bootstrap
-	copy_fontawesome
-	copy_jquery
-
-	;;
-
-# Update the Search Thing
-update-search)
-
-	./bin/search-update.php
-
 	;;
 
 # Help, the default target
