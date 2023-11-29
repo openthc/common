@@ -77,5 +77,11 @@ function copy_jquery()
 			./webroot/vendor/jquery/
 	fi
 
+	if [ -f node_modules/jquery-ui/dist/themes/base/jquery-ui.min.css ]
+	then
+		cp node_modules/jquery-ui/dist/themes/base/jquery-ui.min.css \
+			./webroot/vendor/jquery/
+	fi
+
 	cd -
 }
