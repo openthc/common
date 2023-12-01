@@ -11,6 +11,8 @@ use Edoceo\Radix\DB\SQL;
 
 class License extends \OpenTHC\SQL\Record
 {
+	use OpenTHC\Traits\StatIcon;
+
 	const FLAG_LIVE    = 0x00000001;
 	const FLAG_GROWER  = 0x00000002;
 	const FLAG_PROCESS = 0x00000004;
@@ -106,33 +108,8 @@ class License extends \OpenTHC\SQL\Record
 	 */
 	function getIcon() : string
 	{
-		$icon = [];
-
-		switch ($this->_data['stat'])
-		{
-			case 100:
-				$icon[] = '<i class="text-secondary fa-regular fa-square-plus" title="New / Pending"></i>';
-				break;
-			case 102:
-				$icon[] = '<i class="text-secondary fa-regular fa-circle-question" title="Processing"></i>';
-				break;
-			case 200:
-				$icon[] = '<i class="text-success fa-regular fa-square-check" title="Active"></i>';
-				break;
-			case 308:
-				$icon[] = '<i class="text-warning fa-solid fa-arrows-left-right" title="Moved"></i>';
-				break;
-			case 404:
-			case 410:
-				$icon[] = '<i class="text-danger fa-solid fa-ban" title="Closed"></i>';
-				break;
-			case 451:
-				$icon[] = '<i class="fa-solid fa-building-lock" title="Blocked / Locked"></i>';
-				break;
-			default:
-				$icon[] = sprintf('%d', $v['stat']);
-		}
-
+		$icon = $this->getStatIcon([]);
+		// More icons here?
 		return implode(' ', $icon);
 	}
 

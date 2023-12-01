@@ -9,6 +9,8 @@ namespace OpenTHC;
 
 class Company extends \OpenTHC\SQL\Record
 {
+	use OpenTHC\Traits\StatIcon;
+
 	const FLAG_LIVE       = 0x00000001;
 	const FLAG_PARENT     = 0x00000002;
 
@@ -40,6 +42,18 @@ class Company extends \OpenTHC\SQL\Record
 			$x = new Company($res);
 			return $x;
 		}
+	}
+
+	/**
+	 * Return Icon(s) based on status
+	 */
+	function getIcon() : string
+	{
+		$icon = [];
+		$icon = $this->getStatIcon($icon);
+		// More icons here?
+		return $icon;
+
 	}
 
 	/**
