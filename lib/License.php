@@ -11,7 +11,7 @@ use Edoceo\Radix\DB\SQL;
 
 class License extends \OpenTHC\SQL\Record
 {
-	use OpenTHC\Traits\StatIcon;
+	use \OpenTHC\Traits\StatIcon;
 
 	const FLAG_LIVE    = 0x00000001;
 	const FLAG_GROWER  = 0x00000002;
