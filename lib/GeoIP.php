@@ -1,6 +1,6 @@
 <?php
 /**
- * Simple Redis Based Cache
+ * GeoIP Helper
  *
  * SPDX-License-Identifier: MIT
  */

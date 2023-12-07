@@ -22,6 +22,9 @@ class Sodium
 		if ( ! empty($sk)) {
 			$this->setSecretKey($sk);
 		}
+
+		// Determine Things by strlen?
+
 	}
 
 	// function createEncryptPair($seed);
@@ -40,6 +43,7 @@ class Sodium
 	/**
 	 * @param string $crypt the data to decrypt
 	 * @param string $nonce the Random Bytes
+	 * @param string $spkey senders public key
 	 */
 	function decrypt(string $crypt, string $nonce, string $spkey) : string
 	{
@@ -57,6 +61,8 @@ class Sodium
 	}
 
 	/**
+	 * @param string $plain the Plain Text
+	 * @param $rpk The Recipient Public Key
 	 * @return string
 	 */
 	function encrypt($plain, ?string $rpk) : string
@@ -77,7 +83,7 @@ class Sodium
 		}
 
 		$key = sodium_crypto_box_keypair_from_secretkey_and_publickey($ssk, $rpk);
-		$nonce = random_bytes(24);
+		$nonce = random_bytes(SODIUM_CRYPTO_BOX_NONCEBYTES);
 		$crypt = sodium_crypto_box($plain, $nonce, $key);
 
 		$b64_nonce = $this->b64encode($nonce);
@@ -86,6 +92,15 @@ class Sodium
 		$ret = sprintf('%s.%s', $b64_nonce, $b64_crypt);
 
 		return $ret;
+	}
+
+	/**
+	 *
+	 */
+	function sign($plain)
+	{
+		// Make sure the keys are the correct type
+		// $signed = sodium_crypto_sign($this->sk);
 	}
 
 	/**
