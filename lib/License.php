@@ -13,12 +13,12 @@ class License extends \OpenTHC\SQL\Record
 {
 	use \OpenTHC\Traits\StatIcon;
 
-	const FLAG_LIVE    = 0x00000001;
-	const FLAG_GROWER  = 0x00000002;
-	const FLAG_PROCESS = 0x00000004;
-	const FLAG_RETAIL  = 0x00000008;
-
-	const FLAG_MEDICAL = 0x00000010;
+	const FLAG_LIVE       = 0x00000001;
+	const FLAG_VERIFIED   = 0x00000002;
+	// const FLAG_GROWER     = 0x00000002;
+	// const FLAG_PROCESS    = 0x00000004;
+	// const FLAG_RETAIL     = 0x00000008;
+	// const FLAG_MEDICAL    = 0x00000010;
 
 	const FLAG_SNAIL_GOOD = 0x00000400;
 	const FLAG_SNAIL_SHOW = 0x00000800;
@@ -27,14 +27,13 @@ class License extends \OpenTHC\SQL\Record
 	const FLAG_PHONE_GOOD = 0x00004000;
 	const FLAG_PHONE_SHOW = 0x00008000;
 
-	const FLAG_MINE    = 0x01000000;
+	const FLAG_MINE       = 0x01000000;
 
-	const FLAG_SYNC    = 0x01000000;
+	const FLAG_DEAD       = 0x08000000;
+	const FLAG_DELETED    = 0x08000000; // @deprecated
 
-	const FLAG_DEAD    = 0x08000000;
-	const FLAG_DELETED = 0x08000000; // @deprecated
-
-	const FLAG_TEST    = 0x10000000;
+	const FLAG_TEST       = 0x10000000;
+	const FLAG_MUTE       = 0x20000000;
 
 	const STAT_PROC = 102;
 

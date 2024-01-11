@@ -12,7 +12,7 @@ class Company extends \OpenTHC\SQL\Record
 	use \OpenTHC\Traits\StatIcon;
 
 	const FLAG_LIVE       = 0x00000001;
-	const FLAG_PARENT     = 0x00000002;
+	const FLAG_VERIFIED   = 0x00000002;
 
 	const FLAG_EMAIL_GOOD = 0x00001000;
 	const FLAG_EMAIL_SHOW = 0x00002000;
