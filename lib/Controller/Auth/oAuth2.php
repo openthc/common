@@ -86,4 +86,62 @@ class oAuth2 extends \OpenTHC\Controller\Base
 
 	}
 
+	/**
+	 * @param $p oAuth Provider
+	 */
+	protected function getProfileFromToken($p)
+	{
+		if (empty($_GET['code'])) {
+			_exit_html_fail('<h1>Invalid Request [CAO-095]</h1>', 400);
+		}
+
+		$this->checkState();
+
+		// Try to get an access token using the authorization code grant.
+		$tok = null;
+		try {
+			$tok = $p->getAccessToken('authorization_code', [
+					'code' => $_GET['code']
+			]);
+		} catch (\Exception $e) {
+			_exit_html_fail('<h1>Invalid Access Token [CAO-107]</h1>', 400);
+		}
+
+		if (empty($tok)) {
+			_exit_html_fail('<h1>Invalid Access Token [CAO-111]</h1>', 400);
+		}
+
+		// Token Data Verify
+		$x = json_decode(json_encode($tok), true);
+		if (empty($x['access_token'])) {
+			_exit_html_fail('<h1>Invalid Access Token [CAO-117]</h1>', 400);
+		}
+		if (empty($x['token_type'])) {
+			_exit_html_fail('<h1>Invalid Access Token [CAO-120],/h1>', 400);
+		}
+
+		try {
+			$x = $p->getResourceOwner($tok);
+			$Profile = $x->toArray();
+
+			if (empty($Profile['Contact']['id'])) {
+				_exit_html_fail('<h1>Invalid [CAO-128]</h1>', 403);
+			}
+
+			if (empty($Profile['Company']['id'])) {
+				_exit_html_fail('<h1>Invalid [CAO-132]</h1>', 403);
+			}
+
+			if (is_string($Profile['scope'])) {
+				$Profile['scope'] = explode(' ', $Profile['scope']);
+			}
+
+			return $Profile;
+
+		} catch (\Exception $e) {
+			_exit_html_fail(sprintf('<h1>%s [CAO-136]</h1>', __h($e->getMessage())), 500);
+		}
+
+	}
+
 }
