@@ -43,7 +43,8 @@ class App extends \Slim\App
 		$con['notFoundHandler'] = function($c) {
 			return function ($REQ, $RES) {
 				return $RES->withJSON([
-					'meta' => [ 'detail' => 'Not Found [CLA-037]' ]
+					'data' => null,
+					'meta' => [ 'note' => 'Not Found [CLA-037]' ]
 				], 404);
 			};
 		};
