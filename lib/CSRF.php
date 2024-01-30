@@ -67,7 +67,7 @@ class CSRF
 	 * @param string $key -- the key to lookup
 	 * @param bool $and_clear -- set to true to expire the key
 	 */
-	static function verify(string $key, bool $and_clear=false) : bool
+	static function verify(?string $key, bool $and_clear=false) : bool
 	{
 		self::init();
 
