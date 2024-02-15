@@ -99,6 +99,14 @@ class OPA
 		]);
 		$res = curl_exec($req);
 		$res = json_decode($res);
+		if (empty($res)) {
+			return new \stdClass();
+		}
+
+		if (empty($res->result)) {
+			return new \stdClass();
+		}
+
 		return $res->result;
 
 	}

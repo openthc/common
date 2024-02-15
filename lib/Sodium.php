@@ -14,6 +14,57 @@ class Sodium
 	private $sk;
 
 	/**
+	 * Decrypt Data with Secret-Key from Public-Key
+	 * @param string $ncbox Binary String Data of NONCE . CRYPT Thing
+	 * @param string $sk Secret Key of Recipient
+	 * @param string $pk Public Key of Sender
+	 * @return string the decrypted data from the box (NONCE . CRYPT)
+	 */
+	static function decrypt(string $ncbox, string $sk, string $pk)
+	{
+		if (strlen($sk) == 43) {
+			$sk = self::b64decode($sk);
+		}
+
+		if (strlen($pk) == 43) {
+			$pk = self::b64decode($sk);
+		}
+
+		$kp    = sodium_crypto_box_keypair_from_secretkey_and_publickey($sk, $pk);
+		$nonce = substr($ncbox, 0, SODIUM_CRYPTO_BOX_NONCEBYTES);
+		$crypt = substr($ncbox, SODIUM_CRYPTO_BOX_NONCEBYTES);
+		$plain = sodium_crypto_box_open($crypt, $nonce, $kp);
+
+		return $plain;
+
+	}
+
+	/**
+	 * Encrypt Plain from Public-Key to Secret-Key
+	 * @param string $sk Secret Key for Sender
+	 * @param string $pk Public Key of Recipient
+	 * @return string (binary) NONCE . CRYPT
+	 */
+	static function encrypt(string $plain, string $sk, string $pk)
+	{
+		if (strlen($sk) == 43) {
+			$sk = self::b64decode($sk);
+		}
+
+		if (strlen($pk) == 43) {
+			$pk = self::b64decode($pk);
+		}
+
+		$kp    = sodium_crypto_box_keypair_from_secretkey_and_publickey($sk, $pk);
+		$nonce = random_bytes(SODIUM_CRYPTO_BOX_NONCEBYTES);
+		$crypt = sodium_crypto_box($plain, $nonce, $kp);
+		$box   = $nonce . $crypt;
+
+		return $box;
+
+	}
+
+	/**
 	 *
 	 */
 	function __construct(string $pk, ?string $sk=null)
@@ -32,12 +83,12 @@ class Sodium
 
 	protected function setPublicKey(string $pk)
 	{
-		$this->pk = $this->b64decode($pk);
+		$this->pk = self::b64decode($pk);
 	}
 
 	protected function setSecretKey(string $sk)
 	{
-		$this->sk = $this->b64decode($sk);
+		$this->sk = self::b64decode($sk);
 	}
 
 	/**
@@ -45,15 +96,15 @@ class Sodium
 	 * @param string $nonce the Random Bytes
 	 * @param string $spkey senders public key
 	 */
-	function decrypt(string $crypt, string $nonce, string $spkey) : string
+	function decrypt_x(string $crypt, string $nonce, string $spkey) : string
 	{
-		$crypt = $this->b64decode($crypt);
+		$crypt = self::b64decode($crypt);
 
 		// Get the Client Somethign?
 		$rsk = $this->sk;
-		$spk = $this->b64decode($spkey);
+		$spk = self::b64decode($spkey);
 		$rskey = sodium_crypto_box_keypair_from_secretkey_and_publickey($rsk, $spk);
-		$nonce = $this->b64decode($nonce);
+		$nonce = self::b64decode($nonce);
 		$plain = sodium_crypto_box_open($crypt, $nonce, $rskey);
 
 		return $plain;
@@ -65,7 +116,7 @@ class Sodium
 	 * @param $rpk The Recipient Public Key
 	 * @return string
 	 */
-	function encrypt($plain, ?string $rpk) : string
+	function encrypt_x($plain, ?string $rpk) : string
 	{
 		if (is_array($plain)) {
 			$plain = json_encode($plain);
@@ -77,7 +128,7 @@ class Sodium
 		$ssk = $this->sk;
 
 		// Recipient Public Key
-		$rpk = $this->b64decode($rpk);
+		$rpk = self::b64decode($rpk);
 		if (empty($rpk)) {
 			$rpk = $this->pk;
 		}
@@ -86,8 +137,8 @@ class Sodium
 		$nonce = random_bytes(SODIUM_CRYPTO_BOX_NONCEBYTES);
 		$crypt = sodium_crypto_box($plain, $nonce, $key);
 
-		$b64_nonce = $this->b64encode($nonce);
-		$b64_crypt = $this->b64encode($crypt);
+		$b64_nonce = self::b64encode($nonce);
+		$b64_crypt = self::b64encode($crypt);
 
 		$ret = sprintf('%s.%s', $b64_nonce, $b64_crypt);
 
@@ -106,7 +157,7 @@ class Sodium
 	/**
 	 * base64 decode helper
 	 */
-	protected function b64decode($x)
+	static function b64decode($x)
 	{
 		if (preg_match('/[\w\-\+\=]+/', $x)) {
 			return sodium_base642bin($x, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
@@ -117,7 +168,7 @@ class Sodium
 	/**
 	 * base64 encode helper
 	 */
-	protected function b64encode($x)
+	static function b64encode($x)
 	{
 		return sodium_bin2base64($x, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
 	}
