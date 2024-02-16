@@ -30,7 +30,7 @@ class License_Type
 			break;
 		case 'J':
 		case 'CULTIVATOR_PRODUCTION':
-			$x = 'Grower,Processor';
+			$x = 'Grower+Processor';
 			break;
 		case 'DISPENSARY': // Retailer in MJF/LD
 		case 'MARIJUANA RETAILER':
