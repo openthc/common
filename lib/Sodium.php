@@ -27,7 +27,7 @@ class Sodium
 		}
 
 		if (strlen($pk) == 43) {
-			$pk = self::b64decode($sk);
+			$pk = self::b64decode($pk);
 		}
 
 		$kp    = sodium_crypto_box_keypair_from_secretkey_and_publickey($sk, $pk);
