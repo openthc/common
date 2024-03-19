@@ -19,9 +19,6 @@ read -r -a src_list <<< "${SOURCE_LIST}"
 
 #
 # PHPStan
-if [ ! -f "$OUTPUT_BASE/phpstan.html" ]
-then
-
 	echo '<h1>PHPStan...</h1>' > "$OUTPUT_MAIN"
 
 	vendor/bin/phpstan \
@@ -41,5 +38,3 @@ then
 		--output "${out_html}" \
 		"${xsl_file}" \
 		"${out_file}"
-
-fi
