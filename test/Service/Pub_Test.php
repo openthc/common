@@ -16,10 +16,12 @@ class Pub_Test extends \OpenTHC\Test\Base_Case
 		$this->assertNotEmpty( \OpenTHC\Config::get('openthc/pub/public') );
 
 		$cfg = [
-			'service' => _ulid(), // OPENTHC_SERVICE_ID,
-			'contact' => _ulid(), // $_SESSION['Contact']['id'],
-			'company' => _ulid(), // $_SESSION['Company']['id'],
-			'license' => _ulid(), // $_SESSION['License']['id'],
+			'service' => _ulid(),
+			'contact' => _ulid(),
+			'company' => _ulid(),
+			'license' => _ulid(),
+			'client-pk' => \OpenTHC\Config::get('openthc/lab/public'),
+			'client-sk' => \OpenTHC\Config::get('openthc/lab/secret'),
 		];
 
 		$pub = new \OpenTHC\Service\Pub($cfg);
@@ -51,10 +53,12 @@ class Pub_Test extends \OpenTHC\Test\Base_Case
 		$this->assertNotEmpty( \OpenTHC\Config::get('openthc/pub/public') );
 
 		$cfg = [
-			'service' => _ulid(), // OPENTHC_SERVICE_ID,
-			'contact' => _ulid(), // $_SESSION['Contact']['id'],
-			'company' => _ulid(), // $_SESSION['Company']['id'],
-			'license' => _ulid(), // $_SESSION['License']['id'],
+			'service' => _ulid(),
+			'contact' => _ulid(),
+			'company' => _ulid(),
+			'license' => _ulid(),
+			'client-pk' => \OpenTHC\Config::get('openthc/lab/public'),
+			'client-sk' => \OpenTHC\Config::get('openthc/lab/secret'),
 		];
 
 		$pub = new \OpenTHC\Service\Pub($cfg);

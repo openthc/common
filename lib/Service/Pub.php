@@ -26,7 +26,15 @@ class Pub
 	 */
 	function __construct(array $cfg) {
 
+		$this->client_pk = $cfg['client-pk'];
+		$this->client_sk = $cfg['client-sk'];
+		unset($cfg['client-pk']);
+		unset($cfg['client-sk']);
+
 		$this->cfg = $cfg;
+
+		$this->server_origin = \OpenTHC\Config::get('openthc/pub/origin');
+		$this->server_pk = \OpenTHC\Config::get('openthc/pub/public');
 
 	}
 
@@ -37,12 +45,6 @@ class Pub
 	}
 
 	function setPath(string $path) {
-
-		$this->client_pk = \OpenTHC\Config::get('openthc/lab/public');
-		$this->client_sk = \OpenTHC\Config::get('openthc/lab/secret');
-
-		$this->server_origin = \OpenTHC\Config::get('openthc/pub/origin');
-		$this->server_pk = \OpenTHC\Config::get('openthc/pub/public');
 
 		// Construct Message
 		$this->msg = [];
