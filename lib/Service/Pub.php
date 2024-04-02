@@ -30,6 +30,12 @@ class Pub
 
 	}
 
+	function setName(string $name) {
+
+		$this->msg['name'] = $name;
+
+	}
+
 	function setPath(string $path) {
 
 		$this->client_pk = \OpenTHC\Config::get('openthc/lab/public');
@@ -40,8 +46,8 @@ class Pub
 
 		// Construct Message
 		$this->msg = [];
-		$this->msg['name'] = basename($path);
-		$this->msg['path'] = dirname($path);
+		// $this->msg['name'] = basename($path);
+		$this->msg['path'] = $path;
 
 		// Create Predictable Location
 		$hkey = sodium_crypto_generichash($this->client_sk, '', SODIUM_CRYPTO_GENERICHASH_KEYBYTES);
@@ -50,7 +56,7 @@ class Pub
 		$this->pk = sodium_crypto_box_publickey($kp0);
 		$this->sk = sodium_crypto_box_secretkey($kp0);
 
-		$this->msg['id'] = sprintf('%s/%s', Sodium::b64encode($this->pk), $this->msg['name']);
+		$this->req_path_base = Sodium::b64encode($this->pk);
 
 	}
 
@@ -59,9 +65,10 @@ class Pub
 	 */
 	function getUrl() : string {
 
-		$url = sprintf('%s/%s', $this->server_origin, $this->msg['id']);
+		$req_path = sprintf('%s/%s', $this->req_path_base, $this->msg['name']);
+		$url_full = sprintf('%s/%s', $this->server_origin, $req_path);
 
-		return $url;
+		return $url_full;
 
 	}
 

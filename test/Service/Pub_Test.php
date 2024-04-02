@@ -24,9 +24,9 @@ class Pub_Test extends \OpenTHC\Test\Base_Case
 
 		$pub = new \OpenTHC\Service\Pub($cfg);
 
-		$ref_path = '/b2b/01HTEFE2MQCTW1QRF78DQACNBZ/wcia.json';
-
+		$ref_path = '/b2b/01HTEFE2MQCTW1QRF78DQACNBZ';
 		$pub->setPath($ref_path);
+		$pub->setName('test.txt');
 
 		$url = $pub->getUrl();
 		$this->assertNotEmpty($url);
@@ -59,9 +59,10 @@ class Pub_Test extends \OpenTHC\Test\Base_Case
 
 		$pub = new \OpenTHC\Service\Pub($cfg);
 
-		$ref_path = '/b2b/01HTEFE2MQCTW1QRF78DQACNBZ/wcia.json';
+		$ref_path = '/b2b/01HTEFE2MQCTW1QRF78DQACNBZ';
 
 		$pub->setPath($ref_path);
+		$pub->setName('test.txt');
 
 		$url = $pub->getUrl();
 		$this->assertNotEmpty($url);
