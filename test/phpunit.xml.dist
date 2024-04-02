@@ -33,9 +33,9 @@
 
 	<testsuites>
 		<testsuite name="All">
-			<file>A_Core/0_System_Test.php</file>
-			<file>A_Core/1_Global_Functions_Test.php</file>
-			<file>A_Core/2_Config_Test.php</file>
+			<file>Core/System_Test.php</file>
+			<file>Core/Global_Functions_Test.php</file>
+			<file>Core/Config_Test.php</file>
 			<file>Service/Pub_Test.php</file>
 		</testsuite>
 	</testsuites>

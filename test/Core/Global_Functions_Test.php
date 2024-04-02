@@ -5,7 +5,7 @@
 
 namespace OpenTHC\Test\Core;
 
-class Global_Functions_Test extends \OpenTHC\Test\Base_Case
+class Global_Functions_Test extends \OpenTHC\Test\Base
 {
 	function test_functions()
 	{
