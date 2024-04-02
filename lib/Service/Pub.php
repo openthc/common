@@ -65,6 +65,37 @@ class Pub
 
 	}
 
+	/**
+	 *
+	 */
+	function get($path) : array {
+
+		$url = $path;
+		if ( ! preg_match('/^http.+/', $url)) {
+			$path = ltrim($path, '/');
+			$url = sprintf('%s/%s', $this->server_origin, $path);
+		}
+
+		// GET
+		$req = _curl_init($url);
+
+		$res = curl_exec($req);
+		// echo "<<<\n$res\n###\n";
+		// $res = json_decode($res, true);
+		$inf = curl_getinfo($req);
+
+		$ret = [];
+		$ret['code'] = $inf['http_code'];
+		$ret['data'] = $res;
+		$ret['meta'] = [
+			'name' => '',
+			'type' => $inf['content_type']
+		];
+
+		return $ret;
+
+	}
+
 	function put($body, $type) : array {
 
 		$msg = $this->msg;
