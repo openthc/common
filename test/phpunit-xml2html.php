@@ -14,7 +14,7 @@
 $source_file = $argv[1]; // sprintf('%s/webroot/test-output/phpunit.xml', APP_ROOT);
 $output_file = $argv[2]; // sprintf('%s/webroot/test-output/phpunit.html', APP_ROOT);
 
-$source_data = file_get_contents($source_data);
+$source_data = file_get_contents($source_file);
 
 $xml = new \SimpleXMLElement($source_data, LIBXML_NONET);
 
@@ -182,6 +182,10 @@ function __draw_zero_success_or_else($v, $c)
 {
 	$v = floatval($v);
 	return sprintf('<strong class="%s">%s</strong>', ($v == 0 ? 'text-success' : $c), $v);
+}
+
+function __h($x) {
+	return htmlspecialchars($x, ENT_COMPAT|ENT_HTML5, 'UTF-8', true);
 }
 
 function __time_style($t)
