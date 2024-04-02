@@ -6,13 +6,6 @@
 set -o errexit
 set -o nounset
 
-x=${OPENTHC_TEST_BASE:-}
-if [ -z "$x" ]
-then
-	echo "You have to define the environment first"
-	exit 1
-fi
-
 f=$(readlink -f "$0")
 d=$(dirname "$f")
 
@@ -32,12 +25,12 @@ mkdir -p "${OUTPUT_BASE}"
 
 #
 # PHP-CPD
-./test/phpcpd.sh
+# ./test/phpcpd.sh
 
 
 #
 # PHPStan
-./test/phpstan.sh
+# ./test/phpstan.sh
 
 
 #

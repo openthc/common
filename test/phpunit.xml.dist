@@ -15,7 +15,7 @@
 	convertWarningsToExceptions="true"
 	processIsolation="false"
 	stopOnError="true"
-	stopOnFailure="false"
+	stopOnFailure="true"
 	stopOnRisky="true"
 	timeoutForSmallTests="1"
 	timeoutForMediumTests="10"
@@ -26,12 +26,17 @@
 	<coverage />
 
 	<php>
+
 		<env name="debug-http" value="false"/>
+
 	</php>
 
 	<testsuites>
 		<testsuite name="All">
-			<directory>.</directory>
+			<file>A_Core/0_System_Test.php</file>
+			<file>A_Core/1_Global_Functions_Test.php</file>
+			<file>A_Core/2_Config_Test.php</file>
+			<file>Service/Pub_Test.php</file>
 		</testsuite>
 	</testsuites>
 

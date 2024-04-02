@@ -5,7 +5,7 @@
 
 namespace OpenTHC\Test\Core;
 
-class Global_Functions_Test extends \PHPUnit\Framework\TestCase
+class Global_Functions_Test extends \OpenTHC\Test\Base_Case
 {
 	function test_functions()
 	{

@@ -40,7 +40,7 @@ class Base_Case extends \PHPUnit\Framework\TestCase
 	function getGuzzleClient(string $origin)
 	{
 		$c = new \GuzzleHttp\Client(array(
-			'base_uri' => $origin, // sprintf('https://%s', getenv('OPENTHC_TEST_HOST')),
+			'base_uri' => $origin,
 			'allow_redirects' => false,
 			'debug' => $_ENV['debug-http'],
 			'request.options' => array(
