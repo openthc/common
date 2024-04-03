@@ -21,6 +21,8 @@ class Pub
 
 	private $sk;
 
+	public $msg;
+
 	/**
 	 *
 	 */
@@ -36,29 +38,39 @@ class Pub
 		$this->server_origin = \OpenTHC\Config::get('openthc/pub/origin');
 		$this->server_pk = \OpenTHC\Config::get('openthc/pub/public');
 
+		$this->msg = [
+			'path' => '',
+			'name' => '',
+		];
+
 	}
 
-	function setName(string $name) {
+	/**
+	 * Set the Paths to Write to for the PUT operation
+	 */
+	function setPath(string $path) : string {
 
-		$this->msg['name'] = $name;
+		$tmp_name = basename($path);
+		$tmp_path = dirname($path);
+		// Check Them ('./a nd stuff')
 
-	}
+		if ($this->msg['path'] != $tmp_path) {
 
-	function setPath(string $path) {
+			$this->msg['path'] = $tmp_path;
 
-		// Construct Message
-		$this->msg = [];
-		// $this->msg['name'] = basename($path);
-		$this->msg['path'] = $path;
+			// Create Predictable Location
+			$hkey = sodium_crypto_generichash($this->client_sk, '', SODIUM_CRYPTO_GENERICHASH_KEYBYTES);
+			$seed = sodium_crypto_generichash($this->msg['path'], $hkey, SODIUM_CRYPTO_GENERICHASH_KEYBYTES);
+			$kp0 = sodium_crypto_box_seed_keypair($seed);
+			$this->pk = sodium_crypto_box_publickey($kp0);
+			$this->sk = sodium_crypto_box_secretkey($kp0);
 
-		// Create Predictable Location
-		$hkey = sodium_crypto_generichash($this->client_sk, '', SODIUM_CRYPTO_GENERICHASH_KEYBYTES);
-		$seed = sodium_crypto_generichash($this->msg['path'], $hkey, SODIUM_CRYPTO_GENERICHASH_KEYBYTES);
-		$kp0 = sodium_crypto_box_seed_keypair($seed);
-		$this->pk = sodium_crypto_box_publickey($kp0);
-		$this->sk = sodium_crypto_box_secretkey($kp0);
+			$this->req_path_base = Sodium::b64encode($this->pk);
+		}
 
-		$this->req_path_base = Sodium::b64encode($this->pk);
+		$this->msg['name'] = $tmp_name;
+
+		return $this->getURL();
 
 	}
 
