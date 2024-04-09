@@ -34,18 +34,14 @@ class Pub_Test extends \OpenTHC\Test\Base
 		// '/b2b/01HTEFE2MQCTW1QRF78DQACNBZ/test.txt';
 		$ref_path = '/b2b/01HTEFE2MQCTW1QRF78DQACNBZ/file.txt';
 		// $ref_path = '/b2b/01HTEFE2MQCTW1QRF78DQACNBZ/file.pdf';
-		$url0 = $pub->setPath($ref_path);
+		$url0 = $pub->getURL($ref_path);
 		$this->assertNotEmpty($url0);
 		// $pub->setName('test.txt');
-
-		$url1 = $pub->getUrl();
-		$this->assertNotEmpty($url1);
-		$this->assertEquals($url0, $url1);
 
 		$msg_body = 'TEST MESSAGE';
 		$msg_type = 'text/plain';
 
-		$res = $pub->put($msg_body, $msg_type);
+		$res = $pub->put($ref_path, $msg_body, $msg_type);
 
 		$this->assertIsArray($res);
 		$this->assertArrayHasKey('data', $res);
@@ -74,15 +70,13 @@ class Pub_Test extends \OpenTHC\Test\Base
 
 		$ref_path = '/b2b/01HTEFE2MQCTW1QRF78DQACNBZ/test.txt';
 
-		$pub->setPath($ref_path);
-
-		$url = $pub->getUrl();
+		$url = $pub->getUrl($ref_path);
 		$this->assertNotEmpty($url);
 
 		$msg_body = 'TEST MESSAGE ' . _ulid();
 		$msg_type = 'text/plain';
 
-		$res = $pub->put($msg_body, $msg_type);
+		$res = $pub->put($ref_path, $msg_body, $msg_type);
 
 		$this->assertIsArray($res);
 		$this->assertArrayHasKey('data', $res);
@@ -97,7 +91,7 @@ class Pub_Test extends \OpenTHC\Test\Base
 
 	}
 
-	function test_path_recalc() {
+	function test_path_same_for_unique_file() {
 
 		\OpenTHC\Config::init(APP_ROOT);
 		$this->assertNotEmpty( \OpenTHC\Config::get('openthc/lab/public') );
@@ -117,13 +111,13 @@ class Pub_Test extends \OpenTHC\Test\Base
 		$pub = new \OpenTHC\Service\Pub($cfg);
 
 		$req_path = '/test/01HTJNXWTMCK6HTR1XVDTR4M51/file0.txt';
-		$url0 = $pub->setPath($req_path);
+		$url0 = $pub->getURL($req_path);
 		$url0 = str_replace('file0.txt', '', $url0);
 		// var_dump($url0);
 		// https://pub.openthc.dev/DKw9EDihrZGEQ64g4kF78VwAAeySpNXIcFN8ddjVvhU/file0.txt
 
 		$req_path = '/test/01HTJNXWTMCK6HTR1XVDTR4M51/file1.txt';
-		$url1 = $pub->setPath($req_path);
+		$url1 = $pub->getURL($req_path);
 		$url1 = str_replace('file1.txt', '', $url1);
 		// var_dump($url1);
 		// https://pub.openthc.dev/DKw9EDihrZGEQ64g4kF78VwAAeySpNXIcFN8ddjVvhU/file0.txt

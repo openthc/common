@@ -8,9 +8,10 @@ set -o errtrace
 set -o nounset
 set -o pipefail
 
+SCRIPT_PATH=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 declare OUTPUT_BASE
 declare OUTPUT_MAIN
-# declare SOURCE_LIST
 
 #
 # PHPUnit
@@ -25,11 +26,6 @@ vendor/bin/phpunit \
 	--testdox-xml "$OUTPUT_BASE/testdox.xml" \
 	"$@" 2>&1 | tee "$OUTPUT_BASE/phpunit.txt"
 
-
-[ -f "$xsl_file" ] || curl -qs 'https://openthc.com/pub/phpunit/report.xsl' > "$xsl_file"
-
-xsltproc \
-	--nomkdir \
-	--output "$OUTPUT_BASE/phpunit.html" \
-	"$xsl_file" \
-	"$OUTPUT_BASE/phpunit.xml"
+# Transform
+"$SCRIPT_PATH/phpunit-xml2html.php" \
+	"$OUTPUT_BASE/phpunit.xml" "$OUTPUT_BASE/phpunit.html"

@@ -1,10 +1,12 @@
-#!/bin/bash -x
+#!/bin/bash
 #
 # OpenTHC Test Runner
 #
 
 set -o errexit
+set -o errtrace
 set -o nounset
+set -o pipefail
 
 f=$(readlink -f "$0")
 d=$(dirname "$f")
@@ -30,7 +32,7 @@ mkdir -p "${OUTPUT_BASE}"
 
 #
 # PHPStan
-# ./test/phpstan.sh
+./test/phpstan.sh
 
 
 #
