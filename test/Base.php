@@ -39,18 +39,28 @@ class Base extends \PHPUnit\Framework\TestCase
 	/**
 	 *
 	 */
-	function getGuzzleClient(string $origin)
+	function getGuzzleClient(array $cfg1=[])
 	{
-		$c = new \GuzzleHttp\Client(array(
+		$cfg0 = [
 			'base_uri' => $origin,
 			'allow_redirects' => false,
-			'debug' => $_ENV['debug-http'],
-			'request.options' => array(
-				'exceptions' => false,
-			),
-			'http_errors' => false,
 			'cookies' => true,
-		));
+			'debug' => defined('OPENTHC_TEST_HTTP_DEBUG'), // $_ENV['debug-http'],
+			'headers' => [
+				'openthc-service-id' => '',
+				'openthc-contact-id' => '',
+				'openthc-company-id' => '',
+				'openthc-license-id' => '',
+			],
+			'http_errors' => false,
+			'request.options' => [
+				'exceptions' => false,
+			],
+		];
+
+		$cfg2 = array_merge($cfg0, $cfg1);
+
+		$c = new \GuzzleHttp\Client($cfg2);
 
 		return $c;
 	}
