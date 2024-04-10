@@ -18,10 +18,6 @@ class Redis
 
 	protected static function _init()
 	{
-		$url = getenv('OPENTHC_REDIS_URL');
-		if (!empty($url)) {
-			$url = parse_url($url);
-		}
 		if (empty($url['host'])) {
 			$url['host'] = Config::get('redis/hostname');
 		}

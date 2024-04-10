@@ -13,7 +13,7 @@ function _stat_send($d)
 
 	if (empty($s)) {
 
-		$url = getenv('OPENTHC_STATSD_URL');
+		$url = \OpenTHC\Config::get('statsd/url');
 		if (empty($url)) {
 			$url = [
 				'host' => '127.0.0.1',
