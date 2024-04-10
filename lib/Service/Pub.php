@@ -17,14 +17,15 @@ class Pub
 
 	private $server_pk;
 
-	private $pk;
-
-	private $sk;
+	private $key_pair_cache = [];
 
 	/**
 	 *
 	 */
 	function __construct(array $cfg) {
+
+		$this->server_origin = \OpenTHC\Config::get('openthc/pub/origin');
+		$this->server_pk = \OpenTHC\Config::get('openthc/pub/public');
 
 		$this->client_pk = $cfg['client-pk'];
 		$this->client_sk = $cfg['client-sk'];
@@ -32,9 +33,6 @@ class Pub
 		unset($cfg['client-sk']);
 
 		$this->cfg = $cfg;
-
-		$this->server_origin = \OpenTHC\Config::get('openthc/pub/origin');
-		$this->server_pk = \OpenTHC\Config::get('openthc/pub/public');
 
 	}
 
@@ -46,16 +44,37 @@ class Pub
 		$tmp_name = basename($path);
 		$tmp_path = dirname($path);
 
-		// Create Predictable Location
-		$hkey = sodium_crypto_generichash($this->client_sk, '', SODIUM_CRYPTO_GENERICHASH_KEYBYTES);
-		$seed = sodium_crypto_generichash($tmp_path, $hkey, SODIUM_CRYPTO_GENERICHASH_KEYBYTES);
-		$kp0 = sodium_crypto_box_seed_keypair($seed);
-		$this->pk = sodium_crypto_box_publickey($kp0);
-		$this->sk = sodium_crypto_box_secretkey($kp0);
-
-		$new_path = Sodium::b64encode($this->pk);
+		$key_pair = $this->getPathKeys($tmp_path);
+		$new_path = Sodium::b64encode($key_pair['pk']);
 
 		return sprintf('/%s/%s', $new_path, $tmp_name);
+
+	}
+
+	/**
+	 * Generate the Path based KeyPairs
+	 * Caches result
+	 */
+	private function getPathKeys($path) : array {
+
+		if (empty($this->key_pair_cache[$path])) {
+
+			// Create Predictable Location
+			$hkey = sodium_crypto_generichash($this->client_sk, '', SODIUM_CRYPTO_GENERICHASH_KEYBYTES);
+			$seed = sodium_crypto_generichash($path, $hkey, SODIUM_CRYPTO_GENERICHASH_KEYBYTES);
+			$kp0 = sodium_crypto_box_seed_keypair($seed);
+
+			$pk = sodium_crypto_box_publickey($kp0);
+			$sk = sodium_crypto_box_secretkey($kp0);
+
+			$this->key_pair_cache[$path] = [
+				'pk' => $pk,
+				'sk' => $sk,
+			];
+
+		}
+
+		return $this->key_pair_cache[$path];
 
 	}
 
@@ -104,12 +123,16 @@ class Pub
 
 	function put(string $path, $body, string $type) : array {
 
-		$msg = [];
+		$tmp_name = basename($path);
+		$tmp_path = dirname($path);
 
+		$key_pair = $this->getPathKeys($tmp_path);
+
+		$msg = [];
 		$msg['type'] = $type;
 
-		$msg['auth'] = Sodium::b64encode($this->pk);
-		$msg['auth'] = Sodium::encrypt($msg['auth'], $this->sk, $this->server_pk);
+		$msg['auth'] = Sodium::b64encode($key_pair['pk']);
+		$msg['auth'] = Sodium::encrypt($msg['auth'], $key_pair['sk'], $this->server_pk);
 		$msg['auth'] = Sodium::b64encode($msg['auth']);
 
 		$req_auth = $this->cfg;
