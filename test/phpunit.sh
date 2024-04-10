@@ -24,7 +24,10 @@ vendor/bin/phpunit \
 	--testdox-html "$OUTPUT_BASE/testdox.html" \
 	--testdox-text "$OUTPUT_BASE/testdox.txt" \
 	--testdox-xml "$OUTPUT_BASE/testdox.xml" \
-	"$@" 2>&1 | tee "$OUTPUT_BASE/phpunit.txt"
+	"$@" \
+	2>&1 \
+	| tee "$OUTPUT_BASE/phpunit.txt" \
+	|| true
 
 # Transform
 "$SCRIPT_PATH/phpunit-xml2html.php" \

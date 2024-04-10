@@ -25,11 +25,6 @@ class Pub_Test extends \OpenTHC\Test\Base
 		];
 
 		$pub = new \OpenTHC\Service\Pub($cfg);
-		// $put->put($body, $type); // v0
-		// $res = $pub->setPath('/b2b/ID/file.txt'); // v1
-		// $url = $pub->getURL(); // v1
-		// $res = $pub->put($body, $type); // v1
-		// $url == $res['data']; // v1
 
 		// '/b2b/01HTEFE2MQCTW1QRF78DQACNBZ/test.txt';
 		$ref_path = '/b2b/01HTEFE2MQCTW1QRF78DQACNBZ/file.txt';
