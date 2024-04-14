@@ -73,52 +73,23 @@ class Base extends \PHPUnit\Framework\TestCase
 	 * @return string body
 	 */
 	function assertValidResponse($res, $code_expect=200, $type_expect=null, $dump=null) : mixed {
-		// var_dump($this->testHandler->getRecords());
-		// $this->assertNotEmpty($res);
 
+		// var_dump($this->testHandler->getRecords());
 		if (empty($type_expect)) {
 			$type_expect = $this->type_expect;
 		}
 
-		// $res could be Response Object
-		// $res could be an already cleaned array?
-		// This was from BONG
-		// if (is_object($res)) {
-		// 	// $this->assertTrue($res instanceof \)
-		// 	$ret_code = $res->getStatusCode();
-		// 	$this->assertEquals($want_code, $ret_code);
+		$this->assertNotEmpty($res);
+		$this->assertIsObject($res);
 
-		// 	$res = json_decode($res->getBody()->getContents(), true);
 
-		// } else {
+		$this->raw = $res->getBody()->getContents();
 
-		// 		$this->assertIsArray($res);
-		// 		$this->assertArrayHasKey('code', $res);
-		// 		$this->assertArrayHasKey('data', $res);
-		// 		$this->assertArrayHasKey('meta', $res);
+		$code_actual = $res->getStatusCode();
 
-		// 		$this->assertEquals($want_code, $res['code']);
-		// }
-
-		$this->raw = null;
-
-		$code_actual = 0;
-		$type_actual = '';
-
-		if (is_array($res)) {
-			$code_actual = $res['code'];
-			$type_actual = 'application/json';
-		} elseif (is_object($res)) {
-
-			$this->raw = $res->getBody()->getContents();
-
-			$code_actual = $res->getStatusCode();
-
-			$type_actual = $res->getHeaderLine('content-type');
-			$type_actual = strtok($type_actual, ';');
-			$type_actual = strtolower($type_actual);
-
-		}
+		$type_actual = $res->getHeaderLine('content-type');
+		$type_actual = strtok($type_actual, ';');
+		$type_actual = strtolower($type_actual);
 
 		if ($code_expect != $code_actual) {
 			$dump = "HTTP $code_expect != $code_actual";
@@ -134,10 +105,6 @@ class Base extends \PHPUnit\Framework\TestCase
 		$this->assertEquals($code_expect, $code_actual);
 		$this->assertEquals($type_expect, $type_actual);
 
-		if (is_array($res)) {
-			return $res;
-		}
-
 		switch ($type_expect) {
 		case 'application/json':
 			$ret = \json_decode($this->raw, true);
@@ -152,6 +119,21 @@ class Base extends \PHPUnit\Framework\TestCase
 
 		return $ret;
 
+	}
+
+	function assertValidAPIResponse($res, $code_expect=null) : array {
+
+		$this->assertIsArray($res);
+
+		if ( ! empty($code_expect)) {
+			$this->assertArrayHasKey('code', $res);
+			$this->assertEquals($code_expect, $res['code']);
+		}
+
+		$this->assertArrayHasKey('data', $res);
+		$this->assertArrayHasKey('meta', $res);
+
+		return $res;
 	}
 
 	/**
