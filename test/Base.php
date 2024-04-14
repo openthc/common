@@ -72,7 +72,7 @@ class Base extends \PHPUnit\Framework\TestCase
 	 * @param $type_expect=application/json the mime type desired
 	 * @return string body
 	 */
-	function assertValidResponse($res, $code_expect=200, $type_expect=null, $dump=null) : mixed {
+	function assertValidResponse($res, $code_expect=200, $type_expect=null, $dump=null) {
 
 		// var_dump($this->testHandler->getRecords());
 		if (empty($type_expect)) {
