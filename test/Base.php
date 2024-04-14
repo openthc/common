@@ -42,7 +42,7 @@ class Base extends \PHPUnit\Framework\TestCase
 	function getGuzzleClient(array $cfg1=[])
 	{
 		$cfg0 = [
-			'base_uri' => $origin,
+			'base_uri' => '',
 			'allow_redirects' => false,
 			'cookies' => true,
 			'debug' => defined('OPENTHC_TEST_HTTP_DEBUG'), // $_ENV['debug-http'],
@@ -72,8 +72,7 @@ class Base extends \PHPUnit\Framework\TestCase
 	 * @param $type_expect=application/json the mime type desired
 	 * @return string body
 	 */
-	function assertValidResponse($res, $code_expect=200, $type_expect=null, $dump=null)
-	{
+	function assertValidResponse($res, $code_expect=200, $type_expect=null, $dump=null) : mixed {
 		// var_dump($this->testHandler->getRecords());
 		// $this->assertNotEmpty($res);
 
@@ -101,13 +100,25 @@ class Base extends \PHPUnit\Framework\TestCase
 		// 		$this->assertEquals($want_code, $res['code']);
 		// }
 
-		$this->raw = $res->getBody()->getContents();
+		$this->raw = null;
 
-		$code_actual = $res->getStatusCode();
+		$code_actual = 0;
+		$type_actual = '';
 
-		$type_actual = $res->getHeaderLine('content-type');
-		$type_actual = strtok($type_actual, ';');
-		$type_actual = strtolower($type_actual);
+		if (is_array($res)) {
+			$code_actual = $res['code'];
+			$type_actual = 'application/json';
+		} elseif (is_object($res)) {
+
+			$this->raw = $res->getBody()->getContents();
+
+			$code_actual = $res->getStatusCode();
+
+			$type_actual = $res->getHeaderLine('content-type');
+			$type_actual = strtok($type_actual, ';');
+			$type_actual = strtolower($type_actual);
+
+		}
 
 		if ($code_expect != $code_actual) {
 			$dump = "HTTP $code_expect != $code_actual";
@@ -120,8 +131,12 @@ class Base extends \PHPUnit\Framework\TestCase
 			echo "\n<<< $dump <<< $code_actual <<<\n{$this->raw}\n###\n";
 		}
 
-		$this->assertEquals($code_expect, $res->getStatusCode());
+		$this->assertEquals($code_expect, $code_actual);
 		$this->assertEquals($type_expect, $type_actual);
+
+		if (is_array($res)) {
+			return $res;
+		}
 
 		switch ($type_expect) {
 		case 'application/json':
