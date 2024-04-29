@@ -138,14 +138,28 @@ function _process_test_suite_xml($node0)
 			$css_list = implode(' ', $css_list);
 			echo '<tr><td colspan="8">';
 			printf('<div class="%s">%s</div>', $css_list, __h($node0['type']));
-			echo '<pre class="p-2 bg-secondary-subtle" style="white-space: pre-wrap;">';
-			echo "\n";
-			echo __h($node0->__toString());
-			echo '</pre>';
+
+			$out = [];
+			if ( ! empty($node0_attr['message'])) {
+				$out[] = sprintf('Message: %s', $node0_attr['message']);
+				$out[] = "\n";
+			}
+			$x = $node0->__toString();
+			if ( ! empty($x)) {
+				$out[] = $x;
+			}
+			$out = implode('', $out);
+			echo __html_pre($out);
+			echo '</td>';
 			echo "</tr>";
 			break;
 		case 'skipped':
-			// echo '<tr><td>SKIPPED</td></tr>';
+			$x = trim($node0->__toString());
+			if ( ! empty($x)) {
+				echo '<tr><td colspan="8">';
+				echo __html_pre($x);
+				echo '</td></tr>';
+			}
 			break;
 		default:
 			var_dump($node0_name);
@@ -178,14 +192,27 @@ function __draw_card($body)
 
 }
 
-function __draw_zero_success_or_else($v, $c)
-{
+function __draw_zero_success_or_else($v, $c) : string {
 	$v = floatval($v);
 	return sprintf('<strong class="%s">%s</strong>', ($v == 0 ? 'text-success' : $c), $v);
 }
 
-function __h($x) {
+function __h($x) : string {
 	return htmlspecialchars($x, ENT_COMPAT|ENT_HTML5, 'UTF-8', true);
+}
+
+function __html_pre($x) : string {
+	$x = trim($x);
+	if (empty($x)) {
+		return '';
+	}
+
+	$ret[] = '';
+	$ret[] = '<pre class="p-2 bg-secondary-subtle" style="white-space: pre-wrap;">';
+	$ret[] = __h($x);
+	$ret[] = '</pre>';
+
+	return implode('', $ret);
 }
 
 function __time_style($t)
@@ -203,8 +230,7 @@ function __time_style($t)
 /**
  *
  */
-function __emit_html_page($body)
-{
+function __emit_html_page($body) : string {
 	return <<<HTML
 	<html>
 	<head>
