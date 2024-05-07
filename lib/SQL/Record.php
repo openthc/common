@@ -61,17 +61,17 @@ class Record implements \ArrayAccess, \JsonSerializable
 			$dbc = null;
 		}
 
-// Detect Object Properties from Table if not Specified
-//		if (!isset($this->_properties)) {
-//			$this->_properties = array();
-//			$d = $this->_db->describeTable($this->_table);
-//			foreach ($d as $k=>$v) {
-//				$this->_properties[] = $k;
-//				if (!isset($this->$k)) {
-//					$this->$k = null;
-//				}
-//			}
-//		}
+		// Detect Object Properties from Table if not Specified
+		//		if (!isset($this->_properties)) {
+		//			$this->_properties = array();
+		//			$d = $this->_db->describeTable($this->_table);
+		//			foreach ($d as $k=>$v) {
+		//				$this->_properties[] = $k;
+		//				if (!isset($this->$k)) {
+		//					$this->$k = null;
+		//				}
+		//			}
+		//		}
 
 		// Do Nothing
 		if (empty($obj)) {
@@ -81,9 +81,9 @@ class Record implements \ArrayAccess, \JsonSerializable
 		// Load Database Record
 		if (is_string($obj) || is_numeric($obj)) {
 
-			$sql = sprintf("SELECT * FROM \"%s\" where id = ?", $this->_table);
+			$sql = sprintf('SELECT * FROM %s where id = ?', $this->_table);
 			// Class or Static?
-			if (!empty($this->_dbc)) {
+			if ( ! empty($this->_dbc)) {
 				$obj = $this->_dbc->fetchRow($sql, array($obj));
 			} else {
 				$obj = \Edoceo\Radix\DB\SQL::fetch_row($sql, array($obj));
@@ -94,6 +94,30 @@ class Record implements \ArrayAccess, \JsonSerializable
 		$this->setData($obj);
 
 	}
+
+	/**
+	 *
+	 */
+	// function __get($k)
+	// {
+	// 	if (isset($this->_data[$k])) {
+	// 		return $this->_data[$k];
+	// 	}
+
+	// 	throw new \Exception('Oh Shit');
+	// }
+
+	/**
+	 *
+	 */
+	// function __set($k, $v)
+	// {
+	// 	if ( ! isset($this->_data[$k])) {
+	// 		throw new \Exceptin('Invoid Pproperty');
+	// 	}
+
+	// 	$this->offsetSet($k, $v);
+	// }
 
 	/**
 	 * Add a Note to this Object
@@ -156,7 +180,7 @@ class Record implements \ArrayAccess, \JsonSerializable
 
 			$col_list = $key;
 
-			$sql = sprintf('SELECT * FROM "%s" WHERE {WHERE}', $this->_table);
+			$sql = sprintf('SELECT * FROM %s WHERE {WHERE}', $this->_table);
 			$tmp = [];
 			$idx = __LINE__;
 			foreach ($col_list as $col => $val) {
@@ -169,7 +193,7 @@ class Record implements \ArrayAccess, \JsonSerializable
 			$sql = str_replace('{WHERE}', $tmp, $sql);
 
 		} else {
-			$sql = sprintf('SELECT * FROM "%s" where "%s" = :v0', $this->_table, $key);
+			$sql = sprintf('SELECT * FROM %s WHERE "%s" = :v0', $this->_table, $key);
 			$arg = [ ':v0' => $val ];
 		}
 
@@ -191,10 +215,10 @@ class Record implements \ArrayAccess, \JsonSerializable
 	{
 		$ret = null;
 
-		$sql = "DELETE FROM \"{$this->_table}\" WHERE id = ?";
-		$arg = [ $this->_data['id'] ];
+		$sql = sprintf('DELETE FROM %s WHERE id = :pk', $this->_table);
+		$arg = [ ':pk' => $this->_data['id'] ];
 
-		if (!empty($this->_dbc)) {
+		if ( ! empty($this->_dbc)) {
 			$ret = $this->_dbc->query($sql, $arg);
 		} else {
 			$ret = \Edoceo\Radix\DB\SQL::query($sql, $arg);
@@ -230,8 +254,8 @@ class Record implements \ArrayAccess, \JsonSerializable
 				$rec[$k] = $this->_data[$k];
 			}
 
-			if (!empty($rec)) {
-				if (!empty($this->_dbc)) {
+			if ( ! empty($rec)) {
+				if ( ! empty($this->_dbc)) {
 					$res = $this->_dbc->update($this->_table, $rec, array('id' => $this->_pk));
 				} else {
 					$res = \Edoceo\Radix\DB\SQL::update($this->_table, $rec, array('id' => $this->_pk));
@@ -245,7 +269,7 @@ class Record implements \ArrayAccess, \JsonSerializable
 				$rec[$k] = $v;
 			}
 
-			if (!empty($this->_dbc)) {
+			if ( ! empty($this->_dbc)) {
 				$this->_pk = $this->_dbc->insert($this->_table, $rec);
 			} else {
 				$this->_pk = \Edoceo\Radix\DB\SQL::insert($this->_table, $rec);
@@ -274,7 +298,7 @@ class Record implements \ArrayAccess, \JsonSerializable
 	}
 
 	/**
-	 *
+	 * @deprecated?
 	 */
 	function getHash()
 	{
