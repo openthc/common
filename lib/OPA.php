@@ -22,6 +22,7 @@ class OPA
 			$origin = \OpenTHC\Config::get('opa/origin');
 		}
 		if (empty($origin)) {
+			// $origin = 'http://127.0.0.1:6000';
 			throw new \Exception('Invalid Configuration for OPA [CLO-023]');
 		}
 
@@ -32,8 +33,8 @@ class OPA
 	/**
 	 * Easy OPA Query Helper
 	 */
-	static function easy(string $path, $ctx1=[]) : bool
-	{
+	static function permit(string $path, $ctx1=[]) : bool {
+
 		$opa = new self();
 
 		$ctx0 = [
@@ -44,8 +45,7 @@ class OPA
 		];
 
 		// Array Merge Recursive?
-		// $ctx2 = array_merge($ctx0, $ctx1);
-		$ctx2 = $ctx0;
+		$ctx2 = array_merge($ctx0, $ctx1);
 
 		$res = $opa->policy_get($path, $ctx2);
 
@@ -53,18 +53,15 @@ class OPA
 
 	}
 
-	/**
-	 *
-	 */
-	function data_set(string $path, $data)
-	{
+	function delData(string $path) {
+
 		$url = sprintf('%s/v1/data/%s', $this->_url, $path);
+		$url = rtrim($url, '/');
+		$req = _curl_init($url);
+		curl_setopt($req, CURLOPT_CUSTOMREQUEST, 'DELETE');
+		curl_setopt($req, CURLOPT_TIMEOUT, 4);
 
-		if (is_array($data) || is_object($data)) {
-			$data = json_encode($data);
-		}
-
-		$res = $this->_url_put($url, $data, 'application/json');
+		$res = curl_exec($req);
 		$res = json_decode($res);
 
 		return $res;
@@ -74,8 +71,27 @@ class OPA
 	/**
 	 *
 	 */
-	function policy_get(string $path, $ctx)
-	{
+	function setData(string $path, $data) {
+
+		$path = sprintf('/v1/data/%s', $path);
+		$path = rtrim($path, '/');
+
+		if (is_array($data) || is_object($data)) {
+			$data = json_encode($data);
+		}
+
+		$res = $this->_curl_put($path, $data, 'application/json');
+		$res = json_decode($res);
+
+		return $res;
+
+	}
+
+	/**
+	 * Maybe chkPolicy?  and getPolicy would return the /policiies/$path?
+	 */
+	function getPolicy(string $path, $ctx) {
+
 		$url = sprintf('%s/v1/data/%s', $this->_url, $path);
 		$req = _curl_init($url);
 		// POST JSON
@@ -107,15 +123,15 @@ class OPA
 	/**
 	 *
 	 */
-	function policy_set(string $rego)
-	{
+	function setPolicy(string $rego) {
+
 		if ( ! preg_match('/^package (.+)$/m', $rego, $m)) {
 			throw new \Exception('Invalid REGO [OLO-053]');
 		}
 		$path = str_replace('.', '/', $m[1]);
 
-		$url = sprintf('%s/v1/policies/%s', $this->_url, $path);
-		$res = $this->_curl_put($url, $rego, 'text/plain');
+		$path = sprintf('/v1/policies/%s', $path);
+		$res = $this->_curl_put($path, $rego, 'text/plain');
 		$res = json_decode($res);
 
 		return $res;
@@ -130,8 +146,11 @@ class OPA
 	/**
 	 * PUT Wrapper
 	 */
-	function _curl_put(string $url, string $data, string $type)
-	{
+	function _curl_put(string $path, string $data, string $type) {
+
+		$path = ltrim($path, '/');
+		$url = sprintf('%s/%s', $this->_url, $path);
+
 		$req = _curl_init($url);
 		// POST TEXT
 		curl_setopt($req, CURLOPT_CUSTOMREQUEST, 'PUT');
@@ -150,8 +169,9 @@ class OPA
 				// OK
 				break;
 			default:
-				var_dump($inf);
-				throw new \Exception('Invalid Response from OPA [OLO-149]');
+				// var_dump($inf);
+				// echo "raw:$res\n";
+				throw new \Exception(sprintf('Invalid Response "%d" from OPA [OLO-149]', $inf['http_code']));
 		}
 
 		return $res;
