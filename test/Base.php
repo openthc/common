@@ -82,7 +82,6 @@ class Base extends \PHPUnit\Framework\TestCase
 		$this->assertNotEmpty($res);
 		$this->assertIsObject($res);
 
-
 		$this->raw = $res->getBody()->getContents();
 
 		$code_actual = $res->getStatusCode();
@@ -123,6 +122,7 @@ class Base extends \PHPUnit\Framework\TestCase
 
 	function assertValidAPIResponse($res, $code_expect=null) : array {
 
+		$this->assertNotEmpty($res);
 		$this->assertIsArray($res);
 
 		if ( ! empty($code_expect)) {
