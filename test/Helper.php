@@ -53,6 +53,28 @@ class Helper {
 
 	}
 
+	static function output_path_init() : string {
+
+		$p = sprintf('%s/webroot/output/test-report', APP_ROOT);
+		if ( ! is_dir($p)) {
+			mkdir($p, 0755, true);
+		}
+
+		// Empty Directory?
+		// $rdi = new \RecursiveDirectoryIterator(OPENTHC_TEST_OUTPUT_BASE, \FilesystemIterator::KEY_AS_PATHNAME);
+		// $rii = new \RecursiveIteratorIterator($rdi, \RecursiveIteratorIterator::CHILD_FIRST);
+
+
+		$file_list = glob(sprintf('%s/*', $p));
+		foreach ($file_list as $f) {
+			unlink($f);
+		}
+
+		return $p;
+
+	}
+
+
 	static function xsl_transform(string $source, string $output) : void {
 
 		$cmd = [];
