@@ -33,7 +33,9 @@ class PHPLint {
 
 	}
 
-	function execute() {
+	function execute() : int {
+
+		$ret = 0;
 
 		foreach ($this->path_list as $path) {
 
@@ -52,17 +54,20 @@ class PHPLint {
 			}
 
 			if (is_file($path)) {
-				$this->_lint($path);
+				$res = $this->_lint($path);
+				$ret = max($ret, $res);
 			}
 
 		}
+
+		return $ret;
 
 	}
 
 	/**
 	 *
 	 */
-	protected function _lint($file) {
+	protected function _lint($file) : int {
 
 		if ('.php' != substr($file, -4)) {
 			return 0;
