@@ -22,6 +22,7 @@ class Helper {
 		<html>
 		<head>
 		<meta charset="utf-8">
+		<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
 		<meta name="viewport" content="initial-scale=1, user-scalable=yes">
 		<meta name="theme-color" content="#069420">
 		<style>
