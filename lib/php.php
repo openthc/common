@@ -58,6 +58,46 @@ function _curl_init($uri)
 
 
 /**
+ * POST JSON to URL
+ */
+function _curl_post_json(string $url, $body, array $head1=[])
+{
+	if ( ! is_string($body)) {
+		$body = json_encode($body);
+	}
+
+	$req = _curl_init($url);
+	// curl_setopt($req, CURLOPT_CONNECTTIMEOUT, 4); // Allowed Connect Time (s)
+	// curl_setopt($req, CURLOPT_CONNECTTIMEOUT_MS, 4000); // Allowed Connect Time (ms)
+	curl_setopt($req, CURLOPT_TIMEOUT, 4); // Allowed Total Time (s)
+	// curl_setopt($req, CURLOPT_TIMEOUT_MS, 8000); // Allowed Total Time (ms)
+
+	// POST JSON
+	curl_setopt($req, CURLOPT_CUSTOMREQUEST, 'POST');
+	curl_setopt($req, CURLOPT_POSTFIELDS, $body);
+
+	// Headers
+	$head0 = [
+		'accept' => 'application/json',
+		'content-type' => 'application/json'
+	];
+	$head1 = array_change_key_case($head1, CASE_LOWER);
+	$head2 = array_merge($head0, $head1);
+	$head3 = [];
+	foreach ($head2 as $k=>$v) {
+		$head3[] = sprintf('%s: %s', $k, $v);
+	}
+
+	curl_setopt($req, CURLOPT_HTTPHEADER, $head3);
+
+	$res = curl_exec($req);
+	$res = json_decode($res);
+
+	return $res;
+
+}
+
+/**
 	Date Format
 	@param $f Date Format
 	@param $d Date/Time
