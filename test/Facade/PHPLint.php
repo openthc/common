@@ -83,17 +83,21 @@ class PHPLint {
 		$cmd = implode(' ', $cmd);
 		// var_dump($cmd);
 
-		$out = null;
-		$res = null;
+		$out = '';
+		$res = 0;
 
 		$buf = exec($cmd, $out, $res);
-		if ('No syntax errors detected' == substr($buf, 0, 25)) {
+		if ((0 === $res) && ('No syntax errors detected' == substr($buf, 0, 25))) {
 			return 0;
 		}
 
-		var_dump($buf);
-		var_dump($out);
-		var_dump($res);
+		// var_dump($buf);
+		// var_dump($out);
+		// var_dump($res);
+
+		echo "Lint: $file\n";
+		echo implode("\n", $out);
+		echo "\n";
 
 		return 1;
 
