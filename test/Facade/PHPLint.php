@@ -18,6 +18,8 @@ class PHPLint {
 
 		$this->path_list = [
 			'boot.php',
+			'make.php',
+			'test.php',
 			'bin',
 			'block',
 			'content',
@@ -48,7 +50,8 @@ class PHPLint {
 				foreach ($rii as $k => $v) {
 					if (is_dir($k)) {
 					} elseif (is_file($k)) {
-						$this->_lint($k);
+						$res = $this->_lint($k);
+						$ret = max($ret, $res);
 					}
 				}
 			}
@@ -84,11 +87,11 @@ class PHPLint {
 		// var_dump($cmd);
 
 		$out = '';
-		$res = 0;
+		$ret = 0;
 
-		$buf = exec($cmd, $out, $res);
-		if ((0 === $res) && ('No syntax errors detected' == substr($buf, 0, 25))) {
-			return 0;
+		$buf = exec($cmd, $out, $ret);
+		if ((0 === $ret) && ('No syntax errors detected' == substr($buf, 0, 25))) {
+			return $ret;
 		}
 
 		// var_dump($buf);
@@ -99,7 +102,7 @@ class PHPLint {
 		echo implode("\n", $out);
 		echo "\n";
 
-		return 1;
+		return $ret;
 
 	}
 
