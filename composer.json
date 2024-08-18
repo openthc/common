@@ -17,7 +17,7 @@
 		}
 	},
 	"require": {
-		"php": ">=7.3.0",
+		"php": ">=8.2.20",
 		"ext-curl": "*",
 		"ext-date": "*",
 		"ext-json": "*",
@@ -30,10 +30,8 @@
 		"firebase/php-jwt": "6.4.0",
 		"giggsey/libphonenumber-for-php": "8.13.26",
 		"guzzlehttp/guzzle": "6.5.8",
-		"slim/slim": "3.12.5",
-		"slim/twig-view": "2.5.1",
-		"swaggest/json-schema": "0.12.42",
-		"twig/twig": "2.15.6"
+		"slim/slim": "4.14.0",
+		"swaggest/json-schema": "0.12.42"
 	},
 	"require-dev": {
 		"php-webdriver/webdriver": "1.15.1",
