@@ -20,11 +20,12 @@ class Make {
 		if (empty($fast)) {
 			$cmd[] = 'install';
 			$cmd[] = '--quiet';
+			// $cmd[] = '--no-dev';
 			$cmd[] = '--no-progress';
 			$cmd[] = '--classmap-authoritative';
 			$cmd[] = '2>&1';
 		} else {
-			$cmd[] = 'dump-autload';
+			$cmd[] = 'dump-autoload';
 			$cmd[] = '--classmap-authoritative';
 			$cmd[] = '2>&1';
 		}
@@ -111,15 +112,12 @@ class Make {
 		// If jQuery-UI is installed then copy to webroot
 		$source_file = "$source_path/jquery-ui/dist/jquery-ui.min.js";
 		if (is_file($source_file)) {
-
-			$output_path = sprintf('%s/webroot/vendor/jquery-ui', APP_ROOT);
 			copy($source_file, "$output_path/jquery-ui.min.js");
+		}
 
-			$source_file = "$source_path/jquery-ui/dist/themes/base/jquery-ui.min.css";
-			if (is_file($source_file)) {
-				copy($source_file, "$output_path/jquery-ui.min.css");
-			}
-
+		$source_file = "$source_path/jquery-ui/dist/themes/base/jquery-ui.min.css";
+		if (is_file($source_file)) {
+			copy($source_file, "$output_path/jquery-ui.min.css");
 		}
 
 	}
@@ -127,8 +125,20 @@ class Make {
 	/**
 	 *
 	 */
-	// static function install_jquery_ui() {
+	function create_homepage(string $svc)
+	{
+		$key = sprintf('openthc/%s/origin', $svc);
+		$cfg = \OpenTHC\Config::get($key);
+		$url = sprintf('%s/home', $cfg);
+		$req = _curl_init($url);
+		$res = curl_exec($req);
+		$inf = curl_getinfo($req);
+		if (200 == $inf['http_code']) {
+			$file = sprintf('%s/webroot/index.html', APP_ROOT);
+			$data = $res;
+			$ret = file_put_contents($file, $data);
+			return $ret;
+		}
 
-	// }
-
+	}
 }
