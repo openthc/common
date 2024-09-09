@@ -33,7 +33,7 @@
 		"slim/slim": "3.12.5",
 		"slim/twig-view": "2.5.1",
 		"swaggest/json-schema": "0.12.42",
-		"twig/twig": "2.15.6"
+		"twig/twig": "2.16.1"
 	},
 	"require-dev": {
 		"php-webdriver/webdriver": "1.15.1",
