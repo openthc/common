@@ -43,19 +43,19 @@ class Make {
 	 */
 	static function npm() {
 
-		$cmd = [];
-		$cmd[] = 'npm';
-		$cmd[] = 'install';
-		$cmd[] = '--quiet';
-		$cmd[] = '2>&1';
+		if (is_file(APP_ROOT . '/package.json')) {
+			$cmd = [];
+			$cmd[] = 'npm';
+			$cmd[] = 'install';
+			$cmd[] = '--quiet';
+			$cmd[] = '2>&1';
 
-		$ret = null;
+			$ret = null;
 
-		echo "NPM:\n";
-		passthru(implode(' ', $cmd), $ret);
-		var_dump($ret);
-
-
+			echo "NPM:\n";
+			passthru(implode(' ', $cmd), $ret);
+			var_dump($ret);
+		}
 	}
 
 	/**
@@ -125,7 +125,7 @@ class Make {
 	/**
 	 *
 	 */
-	function create_homepage(string $svc)
+	static function create_homepage(string $svc)
 	{
 		$key = sprintf('openthc/%s/origin', $svc);
 		$cfg = \OpenTHC\Config::get($key);
