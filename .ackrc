@@ -2,23 +2,6 @@
 # OpenTHC .ackrc
 #
 
-# @see
-# https://gist.github.com/bracke/6183737
-# https://gist.github.com/kevinold/4749656
-
-# --nominifiedjs
-# --pager="less --long-prompt --no-init --no-lessopen --quiet --quit-if-one-screen --RAW-CONTROL-CHARS --line-numbers"
-# --pager="less -R"
-# --type-set=minifiedjs=.min.js
-
---break
-
---heading
-
---smart-case
-
---sort-files
-
 --ignore-dir=.bundle/
 --ignore-dir=.cache/
 --ignore-dir=.composer/
