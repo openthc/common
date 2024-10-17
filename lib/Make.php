@@ -140,5 +140,8 @@ class Make {
 			return $ret;
 		}
 
+		return false;
+
 	}
+
 }
