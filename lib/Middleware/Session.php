@@ -16,7 +16,7 @@ class Session extends \OpenTHC\Middleware\Base
 	 * @param \Slim\Http\Response $RES
 	 * @param array $ARG
 	*/
-	public function __invoke($REQ, $RES, $NMW)
+	function __invoke(\Psr\Http\Message\ServerRequestInterface $REQ, \Psr\Http\Message\ResponseInterface $RES, ?array $NMW = null)
 	{
 		$this->open();
 

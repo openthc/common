@@ -11,14 +11,14 @@ class Base
 {
 	protected $_container;
 
-	/**
-	 * Save the container
-	 * @param \Slim\Container $c
-	*/
-	function __construct(\Slim\Container $c)
-	{
-		$this->_container = $c;
-	}
+	// /**
+	//  * Save the container
+	//  * @param \Slim\Container $c
+	// */
+	// function __construct(\Psr\Http\Message\ServerRequestInterface $REQ, \Psr\Http\Message\ResponseInterface $RES)
+	// {
+	// 	// $this->_container = $c;
+	// }
 
 	/**
 	 * Everyone should implement this
@@ -27,7 +27,7 @@ class Base
 	 * @param \Slim\Http\Response $RES
 	 * @param array $ARG
 	*/
-	function __invoke($REQ, $RES, $NMW)
+	function __invoke(\Psr\Http\Message\ServerRequestInterface $REQ, \Psr\Http\Message\ResponseInterface $RES, ?array $NMW = null)
 	{
 		return $NMW($REQ, $RES);
 	}
