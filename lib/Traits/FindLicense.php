@@ -15,7 +15,7 @@ trait FindLicense
 	function findLicense($dbc, string $c0)
 	{
 		$sql = <<<SQL
-		SELECT id, name, code, guid
+		SELECT id, name, code, guid, stat
 		FROM license
 		WHERE id = :c0
 		SQL;

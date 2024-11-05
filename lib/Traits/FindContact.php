@@ -12,7 +12,7 @@ trait FindContact
 	function findContact($dbc, string $c0)
 	{
 		$sql = <<<SQL
-		SELECT id, username
+		SELECT id, username, stat
 		FROM auth_contact
 		WHERE id = :c0
 		SQL;

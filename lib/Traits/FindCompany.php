@@ -12,7 +12,7 @@ trait FindCompany
 	function findCompany($dbc, string $c0)
 	{
 		$sql = <<<SQL
-		SELECT id, name, dsn
+		SELECT id, name, stat, cre, dsn, iso3166, iso3166 AS region, tz
 		FROM auth_company
 		WHERE id = :c0
 		SQL;
