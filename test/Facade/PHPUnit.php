@@ -16,10 +16,10 @@ class PHPUnit {
 	/**
 	 * Parameters
 	 */
-	function __construct(array $cfg1 = []) {
-
-		$this->output_path = $cfg1['output'];
-		unset($cfg1['output']);
+	function __construct(array $cfg = [])
+	{
+		$this->output_path = $cfg['output'];
+		unset($cfg['output']);
 
 		$this->config = [];
 		$this->config['--configuration'] = sprintf('%s/test/phpunit.xml', APP_ROOT);
@@ -28,14 +28,12 @@ class PHPUnit {
 		$this->config['--testdox-html']  = sprintf('%s/testdox.html', $this->output_path);
 		$this->config['--testdox-text']  = sprintf('%s/testdox.txt', $this->output_path);
 		$this->config['--testdox-xml']   = sprintf('%s/testdox.xml', $this->output_path);
-		foreach ($cfg1 as $k => $v) {
+		foreach ($cfg as $k => $v) {
 			if (preg_match('/^\-\-\w/', $k)) {
 				$this->config[$k] = $v;
-				unset($cfg1[$k]);
+				unset($cfg[$k]);
 			}
 		}
-		var_dump($cfg1);
-
 	}
 
 	/**
@@ -80,8 +78,8 @@ class PHPUnit {
 		file_put_contents($output_file, $output_text);
 
 		// PHPUnit Transform
-		$source = sprintf('%s/phpunit.xml', OPENTHC_TEST_OUTPUT_BASE);
-		$output = sprintf('%s/phpunit.html', OPENTHC_TEST_OUTPUT_BASE);
+		$source = sprintf('%s/phpunit.xml', $this->output_path);
+		$output = sprintf('%s/phpunit.html', $this->output_path);
 		\OpenTHC\Test\Helper::xsl_transform($source, $output);
 
 		return $res;
