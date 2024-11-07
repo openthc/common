@@ -4,6 +4,11 @@
  * https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/2766
  * https://www.browserstack.com/docs/automate/selenium/getting-started/php/phpunit
  * https://php-webdriver.github.io/php-webdriver/1.4.0/Facebook/WebDriver/Remote/RemoteWebDriver.html
+ *
+ * @see https://stackoverflow.com/questions/64478718/laravel-dusk-with-browserstack-to-run-tests-on-multiple-devices-and-browsers
+ * Fetch the list of Browsers and Devices you want to execute your tests on using the REST API and use the same.
+ * curl -u "username:password" https://api.browserstack.com/automate/browsers.json
+ * Read more on this here: https://www.browserstack.com/docs/automate/api-reference/selenium/browser#get-browser-list
  */
 
 namespace OpenTHC\Test;
@@ -46,15 +51,18 @@ class BaseBrowser extends Base {
 			// 'OS X    | Monterey | Safari  | 15.6',
 		];
 		$ob_combo_pick = $ob_combo_list[ array_rand($ob_combo_list) ];
-		// echo "\nOS/Browser: $ob_combo_pick\n";
 		$ob_combo_pick = preg_split('/\s+\|\s+/', $ob_combo_pick);
 
 		// The names here are confusing
 		// The documentation is conflicting it seems?
 		// Or maybe the tooling automatically knows if W3C vs JSONWP protocol?
 		$cfg = array(
+			// OS on BrowserStack
 			'os' => $ob_combo_pick[0], // 'Windows',
 			'os_version' => $ob_combo_pick[1],
+			// LambdaTest calls it "platform"
+			'platform' => $ob_combo_pick[0],
+			// Both call it this
 			'browser' => $ob_combo_pick[2],
 			// 'browserName' => $ob_combo_pick[2],
 			'browserVersion' => $ob_combo_pick[3],
@@ -68,13 +76,10 @@ class BaseBrowser extends Base {
 			// 'browserstack.debug' => true,
 		);
 		$cfg = array_merge($cfg, self::$cfg);
-		// var_dump($cfg);
 
 		self::$wd = RemoteWebDriver::create( OPENTHC_TEST_WEBDRIVER_URL, $cfg);
 		self::$wd->manage()->window()->maximize();
 
-		// $sid = self::$wd->getSessionId();
-		// echo "\nINIT SESSION ID: {$sid}\n";
 	}
 
 	/**

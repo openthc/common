@@ -48,7 +48,7 @@ class PHPUnit {
 			$arg[] = $k;
 			$arg[] = $v;
 		}
-		var_dump($arg);
+		printf("cmd: %s\n", implode(' ', $arg));
 
 		ob_start();
 		// ob_start(function($s) {
