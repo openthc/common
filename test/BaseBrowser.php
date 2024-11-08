@@ -2,13 +2,7 @@
 /**
  * https://gist.github.com/aczietlow/7c4834f79a7afd920d8f
  * https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/2766
- * https://www.browserstack.com/docs/automate/selenium/getting-started/php/phpunit
  * https://php-webdriver.github.io/php-webdriver/1.4.0/Facebook/WebDriver/Remote/RemoteWebDriver.html
- *
- * @see https://stackoverflow.com/questions/64478718/laravel-dusk-with-browserstack-to-run-tests-on-multiple-devices-and-browsers
- * Fetch the list of Browsers and Devices you want to execute your tests on using the REST API and use the same.
- * curl -u "username:password" https://api.browserstack.com/automate/browsers.json
- * Read more on this here: https://www.browserstack.com/docs/automate/api-reference/selenium/browser#get-browser-list
  */
 
 namespace OpenTHC\Test;
@@ -74,10 +68,19 @@ class BaseBrowser extends Base {
 			'idleTimeout' => 30,
 			// 'browserstack.console' => 'verbose',
 			// 'browserstack.debug' => true,
+			// 'LT:Options' => [],
 		);
 		$cfg = array_merge($cfg, self::$cfg);
 
-		self::$wd = RemoteWebDriver::create( OPENTHC_TEST_WEBDRIVER_URL, $cfg);
+		// Pick URL
+		$url = '';
+		if ( ! empty($_ENV['OPENTHC_TEST_WEBDRIVER_URL'])) {
+			$url = $_ENV['OPENTHC_TEST_WEBDRIVER_URL']; // v1
+		} elseif (defined('OPENTHC_TEST_WEBDRIVER_URL')) {
+			$url = OPENTHC_TEST_WEBDRIVER_URL; // v0
+		}
+		self::$wd = RemoteWebDriver::create( $url, $cfg);
+
 		self::$wd->manage()->window()->maximize();
 
 	}
