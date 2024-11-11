@@ -110,32 +110,131 @@ class BaseBrowser extends Base {
 
 		echo "\nDONE SESSION ID: {$sid}; stat={$sim}\n";
 
-		// Post to BrowserStack
-		// if ( ! empty(self::$stat_int)) {
-
-		// 	$cfg = parse_url(OPENTHC_TEST_WEBDRIVER_URL);
-		// 	$url = sprintf('https://api.browserstack.com/automate/sessions/%s.json', $sid);
-		// 	$req = _curl_init($url);
-		// 	curl_setopt($req, CURLOPT_USERPWD, sprintf('%s:%s', $cfg['user'], $cfg['pass']));
-		// 	curl_setopt($req, CURLOPT_CUSTOMREQUEST, 'PUT');
-		// 	curl_setopt($req, CURLOPT_POSTFIELDS, json_encode([
-		// 		'status' => 'failed',
-		// 		'reason' => $sim,
-		// 	]));
-		// 	curl_setopt($req, CURLOPT_HTTPHEADER, [
-		// 		'content-type: application/json'
-		// 	]);
-		// 	curl_exec($req);
-		// 	curl_close($req);
-
-		// }
+		$chk = $_ENV['OPENTHC_TEST_WEBDRIVER_URL'];
+		if (preg_match('/browserstack/', $chk)) {
+			self::tearDownAfterClass_BrowserStack();
+		} elseif (preg_match('/lambdatest/', $chk)) {
+			self::tearDownAfterClass_LambdaTest();
+		}
 
 		// file_put_contents(sprintf('%s/webroot/test-output/last-screenshot.png', APP_ROOT), self::$wd->takeScreenshot());
-		// file_put_contents(sprintf('%s/webroot/test-output/last-screenshot.png', APP_ROOT), self::$wd->takeScreenshot());
 
+		// Let Screen-Capture get a few frames of last state
 		sleep(4);
 
 		self::$wd->quit();
+
+	}
+
+	public static function tearDownAfterClass_LambdaTest() : void
+	{
+		// switch (self::$stat) {
+		// case 'FAILED':
+		// 	self::$wd->executeScript("lambda-status=failed");
+		// 	break;
+		// case 'PASSED':
+		// 	self::$wd->executeScript("lambda-status=passed");
+		// 	break;
+		// default:
+		// 	self::$wd->executeScript("lambda-status=unknown");
+		// 	break;
+		// }
+		// // "passed","failed","skipped", "ignored", "unknown", "error"
+
+		$sid = self::$wd->getSessionId();
+		$url = $_ENV['OPENTHC_TEST_WEBDRIVER_URL'];
+		$url = parse_url($url);
+		$cfg = [];
+		$cfg['username'] = $url['user'];
+		$cfg['password'] = $url['pass'];
+
+		$arg = [
+			// 'name' => ''
+			'status_ind' => (self::$stat == 'PASSED' ? 'passed' : 'failed'),
+			'reason' => self::$stat_msg,
+			// 'custom_data' => [ 'more' => 'data' ],
+			// 'tags' => [ 'tag1', 'tagN' ]
+		];
+
+		$url = sprintf('https://api.lambdatest.com/automation/api/v1/sessions/%s', $sid);
+		$req = __curl_init($url);
+		curl_setopt($req, CURLOPT_USERPWD, sprintf('%s:%s', $cfg['username'], $cfg['password']));
+		curl_setopt($req, CURLOPT_CUSTOMREQUEST, 'PATCH');
+		curl_setopt($req, CURLOPT_POSTFIELDS, json_encode($arg));
+		curl_setopt($req, CURLOPT_HTTPHEADER, [
+			'accept: application/json',
+			'content-type: application/json'
+		]);
+		$res = curl_exec($req);
+		$inf = curl_getinfo($req);
+		$res = json_decode($res, true);
+		// var_dump($res);
+
+		$url = sprintf('https://api.lambdatest.com/automation/api/v1/sessions/%s', $sid);
+		$req = __curl_init($url);
+		curl_setopt($req, CURLOPT_USERPWD, sprintf('%s:%s', $cfg['username'], $cfg['password']));
+		$res = curl_exec($req);
+		$inf = curl_getinfo($req);
+		$res = json_decode($res);
+		// var_dump($res);
+		if ( ! empty($res->data->video_url)) {
+
+		}
+	}
+
+	/**
+	 *
+	 */
+	public static function tearDownAfterClass_BrowserStack() : void
+	{
+		$sid = self::$wd->getSessionId();
+		$url = $_ENV['OPENTHC_TEST_WEBDRIVER_URL'];
+		$url = parse_url($url);
+		$cfg = [];
+		$cfg['username'] = $url['user'];
+		$cfg['password'] = $url['pass'];
+
+		$url = sprintf('https://api.browserstack.com/automate/sessions/%s.json', $sid);
+		$req = __curl_init($url);
+		curl_setopt($req, CURLOPT_USERPWD, sprintf('%s:%s', $cfg['username'], $cfg['password']));
+		curl_setopt($req, CURLOPT_CUSTOMREQUEST, 'PUT');
+		curl_setopt($req, CURLOPT_POSTFIELDS, json_encode([
+			'status' => (self::$stat == 'PASSED' ? 'passed' : 'failed'), // 'completed' is another option?
+			'reason' => self::$stat_msg
+		]));
+		curl_setopt($req, CURLOPT_HTTPHEADER, [
+			'content-type: application/json'
+		]);
+		$res = curl_exec($req);
+		$res = json_decode($res, true);
+		var_dump($res);
+
+		// Get session details
+		// https://www.browserstack.com/docs/automate/api-reference/selenium/session#get-session-logs
+		$url = sprintf('https://api.browserstack.com/automate/sessions/%s.json', $sid);
+		$req = __curl_init($url);
+		curl_setopt($req, CURLOPT_USERPWD, sprintf('%s:%s', $cfg['username'], $cfg['password']));
+		curl_setopt($req, CURLOPT_HTTPHEADER, [
+			'content-type: application/json'
+		]);
+		$res = curl_exec($req);
+		print_r($res);
+		$res = json_decode($res, true);
+
+		$video_url = $res['automation_session']['video_url'];
+		$req = __curl_init($video_url);
+		curl_setopt($req, CURLOPT_USERPWD, sprintf('%s:%s', $cfg['username'], $cfg['password']));
+		$buf = curl_exec($req);
+		$inf = curl_getinfo($req);
+
+		$fname = sprintf('browserstack_%s_%s.mp4', APP_BUILD, $sid);
+		$fname = sprintf('%s/webroot/test-output/%s', APP_ROOT, $fname);
+		// The video may not be available at this point
+		if (404 == $inf['http_code']) {
+			$buf = json_encode($res); // Promote the session details
+			$fname = $fname . '.json';
+		}
+		file_put_contents($fname, $buf);
 
 	}
 
