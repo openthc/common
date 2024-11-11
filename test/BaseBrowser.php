@@ -28,15 +28,17 @@ class BaseBrowser extends Base {
 		parent::setUpBeforeClass();
 
 		$ob_combo_list = [
-			'Windows | 11       | Chrome  | latest',
-			'Windows | 11       | Edge    | latest',
-			'Windows | 11       | Firefox | latest',
-			'Windows | 10       | Chrome  | latest',
-			'Windows | 10       | Edge    | latest',
-			'Windows | 10       | Firefox | latest',
-			'OS X    | Sonoma   | Chrome  | latest',
-			'OS X    | Sonoma   | Firefox | latest',
-			'OS X    | Sonoma   | Safari  | 17',
+			'Linux   | latest   | Chrome  | latest',
+			'Linux   | latest   | Firefox | latest',
+			// 'Windows | 11       | Chrome  | latest',
+			// 'Windows | 11       | Edge    | latest',
+			// 'Windows | 11       | Firefox | latest',
+			// 'Windows | 10       | Chrome  | latest',
+			// 'Windows | 10       | Edge    | latest',
+			// 'Windows | 10       | Firefox | latest',
+			// 'OS X    | Sonoma   | Chrome  | latest',
+			// 'OS X    | Sonoma   | Firefox | latest',
+			// 'OS X    | Sonoma   | Safari  | 17',
 			// 'OS X    | Ventura  | Chrome  | latest',  // SendKeys issue on Password ?
 			// 'OS X    | Ventura  | Firefox | latest',
 			// 'OS X    | Ventura  | Safari  | 16.5',
@@ -60,10 +62,10 @@ class BaseBrowser extends Base {
 			'browser' => $ob_combo_pick[2],
 			// 'browserName' => $ob_combo_pick[2],
 			'browserVersion' => $ob_combo_pick[3],
-			// 'project' => 'OpenTHC/B2B', // Valid, Preferred if both present
-			// 'projectName' => 'OpenTHC/B2B-C', // Valid
-			// 'build' => APP_BUILD . '-PW4',
-			// 'buildName' => APP_BUILD . '-PW4.A',
+			// 'project' => '', // Valid, Preferred if both present
+			// 'projectName' => '', // Valid
+			// 'build' => '',
+			// 'buildName' => '',
 			// 'sessionName' => sprintf('B2B %d', getmypid()),
 			'idleTimeout' => 30,
 			// 'browserstack.console' => 'verbose',
@@ -108,29 +110,31 @@ class BaseBrowser extends Base {
 
 		echo "\nDONE SESSION ID: {$sid}; stat={$sim}\n";
 
-		sleep(2);
-
 		// Post to BrowserStack
-		if ( ! empty(self::$stat_int)) {
+		// if ( ! empty(self::$stat_int)) {
 
-			$cfg = parse_url(OPENTHC_TEST_WEBDRIVER_URL);
-			$url = sprintf('https://api.browserstack.com/automate/sessions/%s.json', $sid);
-			$req = _curl_init($url);
-			curl_setopt($req, CURLOPT_USERPWD, sprintf('%s:%s', $cfg['user'], $cfg['pass']));
-			curl_setopt($req, CURLOPT_CUSTOMREQUEST, 'PUT');
-			curl_setopt($req, CURLOPT_POSTFIELDS, json_encode([
-				'status' => 'failed',
-				'reason' => $sim,
-			]));
-			curl_setopt($req, CURLOPT_HTTPHEADER, [
-				'content-type: application/json'
-			]);
-			curl_exec($req);
-			curl_close($req);
+		// 	$cfg = parse_url(OPENTHC_TEST_WEBDRIVER_URL);
+		// 	$url = sprintf('https://api.browserstack.com/automate/sessions/%s.json', $sid);
+		// 	$req = _curl_init($url);
+		// 	curl_setopt($req, CURLOPT_USERPWD, sprintf('%s:%s', $cfg['user'], $cfg['pass']));
+		// 	curl_setopt($req, CURLOPT_CUSTOMREQUEST, 'PUT');
+		// 	curl_setopt($req, CURLOPT_POSTFIELDS, json_encode([
+		// 		'status' => 'failed',
+		// 		'reason' => $sim,
+		// 	]));
+		// 	curl_setopt($req, CURLOPT_HTTPHEADER, [
+		// 		'content-type: application/json'
+		// 	]);
+		// 	curl_exec($req);
+		// 	curl_close($req);
 
-		}
+		// }
 
 		// file_put_contents(sprintf('%s/webroot/test-output/last-screenshot.png', APP_ROOT), self::$wd->takeScreenshot());
+		// file_put_contents(sprintf('%s/webroot/test-output/last-screenshot.png', APP_ROOT), self::$wd->takeScreenshot());
+
+		sleep(4);
+
 		self::$wd->quit();
 
 	}
@@ -180,7 +184,7 @@ class BaseBrowser extends Base {
 		// var_dump($pt);
 
 		// Scroll
-		self::$wd->executeScript('arguments[0].scrollIntoView({ block: "center", inline: "center" })', [ $e ]);
+		self::$wd->executeScript('arguments[0].scrollIntoView({ behavior: "instant", block: "center", inline: "center" })', [ $e ]);
 
 		return $e;
 	}
