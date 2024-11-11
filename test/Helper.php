@@ -37,7 +37,7 @@ class Helper {
 
 		<h1>Test Result ${date}</h1>
 
-		<p><del>Linting: <a href="phplint.txt">phplint.txt</a></del></p>
+		<p>Linting: <a href="phplint.txt">phplint.txt</a></p>
 		<p><del>PHPCPD: <a href="phpcpd.txt">phpcpd.txt</a></del></p>
 		<p>PHPStan: <a href="phpstan.xml">phpstan.xml</a> and <a href="phpstan.html">phpstan.html</a></p>
 		<p>PHPUnit: <a href="phpunit.txt">phpunit.txt</a>, <a href="phpunit.xml">phpunit.xml</a> and <a href="phpunit.html">phpunit.html</a></p>
@@ -75,20 +75,10 @@ class Helper {
 
 	}
 
-
-	static function xsl_transform(string $source, string $output) : void {
-
-		$cmd = [];
-		$cmd[] = sprintf('%s/vendor/openthc/common/test/phpunit-xml2html.php', APP_ROOT);
-		$cmd[] = escapeshellarg($source);
-		$cmd[] = escapeshellarg($output);
-		$cmd[] = '2>&1';
-		$cmd = implode(' ', $cmd);
-		echo "cmd:$cmd\n";
-		$res0 = null;
-		$res1 = passthru($cmd, $res0);
-		// var_dump($res0);
-		// var_dump($res1);
+	static function xsl_transform(string $source, string $output) : void
+	{
+		$x = new \OpenTHC\Test\Helper\XML2HTML($source);
+		$x->render($output);
 	}
 
 }
