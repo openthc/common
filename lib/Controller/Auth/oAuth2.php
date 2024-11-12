@@ -18,15 +18,15 @@ class oAuth2 extends \OpenTHC\Controller\Base
 		unset($_SESSION['oauth2-state']);
 
 		if (empty($a)) {
-			_exit_html('<h1>Invalid State [CAO-021]</h1><p>Please try to <a href="/auth/shut">sign in</a> again.</p>', 400);
+			throw new \Exception('Invalid State [CAO-021] Please try to sign in again.', 400);
 		}
 
 		if (empty($b)) {
-			_exit_html('<h1>Invalid State [CAO-025]</h1><p>Please try to <a href="/auth/shut">sign in</a> again.</p>', 400);
+			throw new \Exception('Invalid State [CAO-025] Please try to sign in again.', 400);
 		}
 
 		if ($a != $b) {
-			_exit_html('<h1>Invalid State [CAO-029]</h1><p>Please try to <a href="/auth/shut">sign in</a> again.</p>', 400);
+			throw new \Exception('Invalid State [CAO-029] Please try to sign in again.', 400);
 		}
 
 	}
@@ -92,7 +92,7 @@ class oAuth2 extends \OpenTHC\Controller\Base
 	protected function getProfileFromToken($p)
 	{
 		if (empty($_GET['code'])) {
-			_exit_html_fail('<h1>Invalid Request [CAO-095]</h1>', 400);
+			throw new \Exception('Invalid Request [CAO-095]', 400);
 		}
 
 		$this->checkState();
@@ -104,20 +104,20 @@ class oAuth2 extends \OpenTHC\Controller\Base
 					'code' => $_GET['code']
 			]);
 		} catch (\Exception $e) {
-			_exit_html_fail('<h1>Invalid Access Token [CAO-107]</h1>', 400);
+			throw new \Exception('Invalid Access Token [CAO-107]', 400);
 		}
 
 		if (empty($tok)) {
-			_exit_html_fail('<h1>Invalid Access Token [CAO-111]</h1>', 400);
+			throw new \Exception('Invalid Access Token [CAO-111]', 400);
 		}
 
 		// Token Data Verify
 		$x = json_decode(json_encode($tok), true);
 		if (empty($x['access_token'])) {
-			_exit_html_fail('<h1>Invalid Access Token [CAO-117]</h1>', 400);
+			throw new \Exception('<h1>Invalid Access Token [CAO-117]</h1>', 400);
 		}
 		if (empty($x['token_type'])) {
-			_exit_html_fail('<h1>Invalid Access Token [CAO-120],/h1>', 400);
+			throw new \Exception('<h1>Invalid Access Token [CAO-120],/h1>', 400);
 		}
 
 		try {
@@ -125,11 +125,11 @@ class oAuth2 extends \OpenTHC\Controller\Base
 			$Profile = $x->toArray();
 
 			if (empty($Profile['Contact']['id'])) {
-				_exit_html_fail('<h1>Invalid [CAO-128]</h1>', 403);
+				throw new \Exception('Invalid [CAO-128]', 403);
 			}
 
 			if (empty($Profile['Company']['id'])) {
-				_exit_html_fail('<h1>Invalid [CAO-132]</h1>', 403);
+				throw new \Exception('Invalid [CAO-132]', 403);
 			}
 
 			if (is_string($Profile['scope'])) {
@@ -139,7 +139,7 @@ class oAuth2 extends \OpenTHC\Controller\Base
 			return $Profile;
 
 		} catch (\Exception $e) {
-			_exit_html_fail(sprintf('<h1>%s [CAO-136]</h1>', __h($e->getMessage())), 500);
+			throw new \Exception(sprintf('%s [CAO-136]', __h($e->getMessage())), 500);
 		}
 
 	}
