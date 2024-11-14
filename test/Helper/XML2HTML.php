@@ -9,17 +9,28 @@ namespace OpenTHC\Test\Helper;
 
 class XML2HTML {
 
+	private $err;
+
+	private $xml;
+
 	/**
 	 *
 	 */
 	function __construct(string $source)
 	{
-		// $xml = file_get_contents($source_file);
-		// $this->xml = new \SimpleXMLElement($xml, LIBXML_NONET);
-		$this->xml = simplexml_load_file($source, \SimpleXMLElement::class, LIBXML_NONET);
-
 		$ft0 = filemtime($source);
 		$this->dt0 = new \DateTime(sprintf('@%d', $ft0));
+
+		if (is_file($source)) {
+			try {
+				$xml = file_get_contents($source);
+				$this->xml = new \SimpleXMLElement($xml, LIBXML_NONET);
+				// $this->xml = simplexml_load_file($source, \SimpleXMLElement::class, LIBXML_NONET);
+			} catch (\Exception $e) {
+				$this->err = $e->getMessage();
+				$this->xml = null;
+			}
+		}
 
 	}
 
@@ -28,9 +39,15 @@ class XML2HTML {
 	 */
 	function render(string $output_file) : void
 	{
-		ob_start();
-		$this->render_node($this->xml->testsuite);
-		$report_data = ob_get_clean();
+		$report_data = '';
+		if ( ! empty($this->err)) {
+			$report_data = '<div class="alert alert-danger">' . $this->err . '</div>';
+		} elseif ( ! empty($this->xml)) {
+			ob_start();
+			$this->render_node($this->xml->testsuite);
+			$report_data = ob_get_clean();
+		}
+
 		$output_data = $this->render_page($report_data);
 		file_put_contents($output_file, $output_data);
 	}
