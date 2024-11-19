@@ -57,32 +57,47 @@ class PHPUnit {
 
 		$cmd = new \PHPUnit\TextUI\Command();
 		$res = $cmd->run($arg, false);
-		switch ($res) {
-		case 0:
-			echo "\nTEST SUCCESS\n";
-			break;
-		case 1:
-			echo "\nTEST FAILURE\n";
-			break;
-		case 2:
-			echo "\nTEST FAILURE (ERRORS)\n";
-			break;
-		default:
-			echo "\nTEST UNKNOWN ($res)\n";
-			break;
-		}
 		$output_text = ob_get_clean();
-
 		$output_file = sprintf('%s/phpunit.txt', $this->output_path);
-
 		file_put_contents($output_file, $output_text);
 
 		// PHPUnit Transform
-		$source = sprintf('%s/phpunit.xml', $this->output_path);
-		$output = sprintf('%s/phpunit.html', $this->output_path);
-		\OpenTHC\Test\Helper::xsl_transform($source, $output);
+		$source_file = sprintf('%s/phpunit.xml', $this->output_path);
+		$output_file = sprintf('%s/phpunit.html', $this->output_path);
+		\OpenTHC\Test\Helper::xsl_transform($source_file, $output_file);
 
-		return $res;
+		$ret = [];
+		switch ($res) {
+		case 0:
+			$ret = [
+				'code' => 200,
+				'data' => $output_text,
+				'meta' => [ 'note' => 'SUCCESS' ]
+			];
+			break;
+		case 1:
+			$ret = [
+				'code' => 400,
+				'data' => $output_text,
+				'meta' => [ 'note' => 'FAILURE' ]
+			];
+			break;
+		case 2:
+			$ret = [
+				'code' => 500,
+				'data' => $output_text,
+				'meta' => [ 'note' => 'FAILURE (ERRORS)' ]
+			];
+		default:
+			$ret = [
+				'code' => 500,
+				'data' => $output_text,
+				'meta' => [ 'note' => "UNKNOWN ($res)" ]
+			];
+			break;
+		}
+
+		return $ret;
 	}
 
 }
