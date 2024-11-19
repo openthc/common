@@ -32,20 +32,13 @@ class Base extends \PHPUnit\Framework\TestCase
 	/**
 	 *
 	 */
-	function getWebDriver()
-	{
-	}
-
-	/**
-	 *
-	 */
 	function getGuzzleClient(array $cfg1=[])
 	{
 		$cfg0 = [
 			'base_uri' => '',
 			'allow_redirects' => false,
 			'cookies' => true,
-			'debug' => defined('OPENTHC_TEST_HTTP_DEBUG'), // $_ENV['debug-http'],
+			'debug' => $_ENV['OPENTHC_TEST_HTTP_DEBUG'],
 			'headers' => [
 				'openthc-service-id' => '',
 				'openthc-contact-id' => '',
@@ -72,7 +65,8 @@ class Base extends \PHPUnit\Framework\TestCase
 	 * @param $type_expect=application/json the mime type desired
 	 * @return string body
 	 */
-	function assertValidResponse($res, $code_expect=200, $type_expect=null, $dump=null) {
+	function assertValidResponse($res, $code_expect=200, $type_expect=null, $dump=null)
+	{
 
 		// var_dump($this->testHandler->getRecords());
 		if (empty($type_expect)) {
@@ -120,18 +114,29 @@ class Base extends \PHPUnit\Framework\TestCase
 
 	}
 
-	function assertValidAPIResponse($res, $code_expect=null) : array {
+	function assertValidAPIResponse($res, $code_expect=200) : array
+	{
+
+		$this->raw = json_encode($res, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
 		$this->assertNotEmpty($res);
 		$this->assertIsArray($res);
 
-		if ( ! empty($code_expect)) {
-			$this->assertArrayHasKey('code', $res);
-			$this->assertEquals($code_expect, $res['code']);
+		if (empty($dump)) {
+			if ($code_expect != $res['code']) {
+				$dump = "HTTP $code_expect != {$res['code']}";
+			}
 		}
 
+		if ( ! empty($dump)) {
+			echo "\n<<< $dump <<< {$res['code']} <<<\n{$this->raw}\n###\n";
+		}
+
+		$this->assertArrayHasKey('code', $res);
 		$this->assertArrayHasKey('data', $res);
 		$this->assertArrayHasKey('meta', $res);
+
+		$this->assertEquals($code_expect, $res['code']);
 
 		return $res;
 	}
