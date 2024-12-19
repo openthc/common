@@ -146,4 +146,14 @@ class Redis
 
 	}
 
+	/**
+	 * Publish a message to a pubsub channel
+	 */
+	static function pub(string $channel, string $messsage)
+	{
+		$subscribers = self::$_r->publish($ch, $val);
+
+		return $subscribers;
+	}
+
 }
