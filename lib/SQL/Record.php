@@ -383,6 +383,35 @@ class Record implements \ArrayAccess, \JsonSerializable
 	}
 
 	/**
+	 *
+	 */
+	function delJtag(string $key)
+	{
+		$jt0 = json_decode($this->_data['jtag'], true);
+		unset($jt0[$key]);
+		return $this->offsetSet('jtag', json_encode($jt0));
+	}
+
+	/**
+	 *
+	 */
+	function getJtag(string $key)
+	{
+		$jt0 = json_decode($this->_data['jtag'], true);
+		return $jt0[$key];
+	}
+
+	/**
+	 *
+	 */
+	function setJtag(string $key, $val)
+	{
+		$jt0 = json_decode($this->_data['jtag'], true);
+		$jt0[$key] = $val;
+		return $this->offsetSet('jtag', json_encode($jt0));
+	}
+
+	/**
 	 * Array Accessors
 	 */
 	public function toArray()
