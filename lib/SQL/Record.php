@@ -383,7 +383,7 @@ class Record implements \ArrayAccess, \JsonSerializable
 	}
 
 	/**
-	 *
+	 * Tags (aka JTags)
 	 */
 	function delTag(string $key)
 	{
@@ -409,6 +409,35 @@ class Record implements \ArrayAccess, \JsonSerializable
 		$jt0 = json_decode($this->_data['tags'], true);
 		$jt0[$key] = $val;
 		return $this->offsetSet('tags', json_encode($jt0));
+	}
+
+	/**
+	 * jTags Alias
+	 */
+	function delJTag(string $key)
+	{
+		$jt0 = json_decode($this->_data['jtag'], true);
+		unset($jt0[$key]);
+		return $this->offsetSet('jtag', json_encode($jt0));
+	}
+
+	/**
+	 *
+	 */
+	function getJTag(string $key)
+	{
+		$jt0 = json_decode($this->_data['jtag'], true);
+		return $jt0[$key];
+	}
+
+	/**
+	 *
+	 */
+	function setJTag(string $key, $val)
+	{
+		$jt0 = json_decode($this->_data['jtag'], true);
+		$jt0[$key] = $val;
+		return $this->offsetSet('jtag', json_encode($jt0));
 	}
 
 	/**
