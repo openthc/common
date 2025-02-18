@@ -24,36 +24,36 @@ function base64_decode_url($x) {
 
 function _curl_init($uri)
 {
-	$ch = curl_init($uri);
+	$req = curl_init($uri);
 
-	curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+	curl_setopt($req, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 
 	// Booleans
-	curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-	curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
-	curl_setopt($ch, CURLOPT_COOKIESESSION, false);
-	curl_setopt($ch, CURLOPT_CRLF, false);
-	curl_setopt($ch, CURLOPT_FAILONERROR, false);
-	curl_setopt($ch, CURLOPT_FILETIME, true);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-	curl_setopt($ch, CURLOPT_FORBID_REUSE, false);
-	curl_setopt($ch, CURLOPT_FRESH_CONNECT, false);
-	curl_setopt($ch, CURLOPT_HEADER, false);
-	curl_setopt($ch, CURLOPT_NETRC, false);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-	curl_setopt($ch, CURLINFO_HEADER_OUT,true);
+	curl_setopt($req, CURLOPT_AUTOREFERER, true);
+	curl_setopt($req, CURLOPT_BINARYTRANSFER, true);
+	curl_setopt($req, CURLOPT_COOKIESESSION, false);
+	curl_setopt($req, CURLOPT_CRLF, false);
+	curl_setopt($req, CURLOPT_FAILONERROR, false);
+	curl_setopt($req, CURLOPT_FILETIME, true);
+	curl_setopt($req, CURLOPT_FOLLOWLOCATION, false);
+	curl_setopt($req, CURLOPT_FORBID_REUSE, false);
+	curl_setopt($req, CURLOPT_FRESH_CONNECT, false);
+	curl_setopt($req, CURLOPT_HEADER, false);
+	curl_setopt($req, CURLOPT_NETRC, false);
+	curl_setopt($req, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($req, CURLOPT_SSL_VERIFYPEER, true);
+	curl_setopt($req, CURLINFO_HEADER_OUT, true);
 
-	// curl_setopt($ch, CURLOPT_BUFFERSIZE, 16384);
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 240);
-	curl_setopt($ch, CURLOPT_MAXREDIRS, 0);
-	// curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-	// curl_setopt($ch, CURLOPT_SSLVERSION, 3); // 2, 3 or GnuTLS
-	curl_setopt($ch, CURLOPT_TIMEOUT, 600);
+	// curl_setopt($req, CURLOPT_BUFFERSIZE, 16384);
+	curl_setopt($req, CURLOPT_CONNECTTIMEOUT, 20);
+	curl_setopt($req, CURLOPT_MAXREDIRS, 0);
+	// curl_setopt($req, CURLOPT_SSL_VERIFYHOST, 0);
+	// curl_setopt($req, CURLOPT_SSLVERSION, 3); // 2, 3 or GnuTLS
+	curl_setopt($req, CURLOPT_TIMEOUT, 60);
 
-	curl_setopt($ch, CURLOPT_USERAGENT, 'OpenTHC/420.20.196');
+	curl_setopt($req, CURLOPT_USERAGENT, 'OpenTHC/420.20.196');
 
-	return $ch;
+	return $req;
 }
 
 
