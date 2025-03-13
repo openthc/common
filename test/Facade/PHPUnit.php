@@ -39,7 +39,7 @@ class PHPUnit {
 	/**
 	 * Execute the PHPUnit
 	 */
-	function execute()
+	function execute() : array
 	{
 
 		$arg = [];
@@ -88,6 +88,7 @@ class PHPUnit {
 				'data' => $output_text,
 				'meta' => [ 'note' => 'FAILURE (ERRORS)' ]
 			];
+			break;
 		default:
 			$ret = [
 				'code' => 500,
