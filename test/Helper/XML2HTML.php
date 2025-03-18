@@ -95,9 +95,13 @@ class XML2HTML {
 					<?php
 					// echo '</section>';
 				} else {
+					$file = $node0_attr['file'];
+					$name = $node0_attr['name'];
+					$name = str_replace('\\', '/', $name);
+					$name = basename($name);
 					?>
 					<tr class="fs-3">
-						<td><?= __h($node0_attr['name']) ?></td>
+						<td title="<?= __h($file) ?>"><?= __h($name) ?></td>
 						<?php
 						printf('<td class="text-end"><strong>%s</strong></td>', $node0_attr['tests']);
 						printf('<td class="text-end"><strong>%s</strong></td>', $node0_attr['assertions']);
@@ -109,7 +113,7 @@ class XML2HTML {
 							$v = $this->__draw_zero_success_or_else($node0_attr[$k], 'text-danger');
 							printf('<td class="text-end">%s</td>', $v);
 						}
-						printf('<td class="text-end"><strong>%s</strong></td>', $node0_attr['time']);
+						printf('<td class="text-end"><strong>%0.4f</strong></td>', $node0_attr['time']);
 						?>
 					</tr>
 					<?php
@@ -205,7 +209,7 @@ class XML2HTML {
 			echo '<td class="text-end">' . $node0_attr['assertions'] . '</td>';
 			echo '<td colspan="4"></td>';
 		}
-		printf('<td class="text-end">%s</td>', $node0_attr['time']);
+		printf('<td class="text-end">%0.4f</td>', $node0_attr['time']);
 		echo '</tr>';
 	}
 
@@ -213,7 +217,7 @@ class XML2HTML {
 	{
 		echo '<div class="row mb-2">';
 		$this->__draw_card(sprintf('<div>Tests</div><strong>%d</strong>', $node0_attr['tests']));
-		$this->__draw_card(sprintf('<div>Time</div><strong>%s</strong>', $node0_attr['time']));
+		$this->__draw_card(sprintf('<div>Time</div><strong>%0.4f</strong>', $node0_attr['time']));
 		$this->__draw_card(sprintf('<div>Assertions</div><strong>%s</strong>', $node0_attr['assertions']));
 		$this->__draw_card(sprintf('<div>Warnings</div>%s', $this->__draw_zero_success_or_else($node0_attr['warnings'], 'text-warning')));
 		$this->__draw_card(sprintf('<div>Skipped</div>%s', $this->__draw_zero_success_or_else($node0_attr['skipped'], 'text-warning')));
