@@ -92,7 +92,7 @@ class Base extends \PHPUnit\Framework\TestCase
 		}
 
 		if ( ! empty($dump)) {
-			echo "\n<<< $dump <<< $code_actual <<<\n{$this->raw}\n###\n";
+			echo "\n<<< $code_expect $type_expect =?= $code_actual $type_actual <<<\n{$this->raw}\n###\n";
 		}
 
 		$this->assertEquals($code_expect, $code_actual);
@@ -129,7 +129,7 @@ class Base extends \PHPUnit\Framework\TestCase
 		}
 
 		if ( ! empty($dump)) {
-			echo "\n<<< $dump <<< {$res['code']} <<<\n{$this->raw}\n###\n";
+			echo "\n<<< $code_expect <<< {$res['code']} <<<\n{$this->raw}\n###\n";
 		}
 
 		$this->assertArrayHasKey('code', $res);
@@ -208,9 +208,14 @@ class Base extends \PHPUnit\Framework\TestCase
 		$this->assertNotEmpty($res->getHeaderLine('location'));
 		$loc = $res->getHeaderLine('location');
 
-		// $this->assertNotEmpty($res->getHeaderLine('location'));
-		// $loc = $res->getHeaderLine('location');
+		// Notify
+		$this->assertMatchesRegularExpression('/notify/', $loc);
+		$res = $sso_client->get($loc);
+		$res_html = $this->assertValidResponse($res, 302, 'text/html');
+		$this->assertNotEmpty($res->getHeaderLine('location'));
+		$loc = $res->getHeaderLine('location');
 
+		// Authorize
 		$this->assertMatchesRegularExpression('/oauth2\/authorize/', $loc);
 		// echo "\nget4($loc)\n";
 		$res = $sso_client->get($loc);
