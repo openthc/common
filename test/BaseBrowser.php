@@ -81,9 +81,13 @@ class BaseBrowser extends Base {
 		} elseif (defined('OPENTHC_TEST_WEBDRIVER_URL')) {
 			$url = OPENTHC_TEST_WEBDRIVER_URL; // v0
 		}
-		self::$wd = RemoteWebDriver::create( $url, $cfg);
 
-		self::$wd->manage()->window()->maximize();
+		if (empty($url)) {
+			self::$wd = null;
+		} else {
+			self::$wd = RemoteWebDriver::create( $url, $cfg);
+			self::$wd->manage()->window()->maximize();
+		}
 
 	}
 
@@ -105,24 +109,27 @@ class BaseBrowser extends Base {
 
 	public static function tearDownAfterClass() : void
 	{
-		$sid = self::$wd->getSessionId();
-		$sim = sprintf('int=%d; msg=%s', self::$stat_int, self::$stat_msg);
+		if ( ! empty(self::$wd)) {
+			$sid = self::$wd->getSessionId();
+			$sim = sprintf('int=%d; msg=%s', self::$stat_int, self::$stat_msg);
 
-		echo "\nDONE SESSION ID: {$sid}; stat={$sim}\n";
+			echo "\nDONE SESSION ID: {$sid}; stat={$sim}\n";
 
-		$chk = $_ENV['OPENTHC_TEST_WEBDRIVER_URL'];
-		if (preg_match('/browserstack/', $chk)) {
-			self::tearDownAfterClass_BrowserStack();
-		} elseif (preg_match('/lambdatest/', $chk)) {
-			self::tearDownAfterClass_LambdaTest();
+			$chk = $_ENV['OPENTHC_TEST_WEBDRIVER_URL'];
+			if (preg_match('/browserstack/', $chk)) {
+				self::tearDownAfterClass_BrowserStack();
+			} elseif (preg_match('/lambdatest/', $chk)) {
+				self::tearDownAfterClass_LambdaTest();
+			}
+
+			// file_put_contents(sprintf('%s/webroot/test-output/last-screenshot.png', APP_ROOT), self::$wd->takeScreenshot());
+
+			// Let Screen-Capture get a few frames of last state
+			sleep(4);
+
+			self::$wd->quit();
+
 		}
-
-		// file_put_contents(sprintf('%s/webroot/test-output/last-screenshot.png', APP_ROOT), self::$wd->takeScreenshot());
-
-		// Let Screen-Capture get a few frames of last state
-		sleep(4);
-
-		self::$wd->quit();
 
 	}
 
