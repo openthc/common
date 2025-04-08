@@ -86,7 +86,7 @@ class BaseBrowser extends Base {
 			self::$wd = null;
 		} else {
 			self::$wd = RemoteWebDriver::create( $url, $cfg);
-			self::$wd->manage()->window()->maximize();
+			// self::$wd->manage()->window()->maximize();
 		}
 
 	}
