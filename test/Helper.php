@@ -61,7 +61,8 @@ class Helper
 		file_put_contents($file, $html);
 
 		// Output Information
-		$origin = \OpenTHC\Config::get('openthc/api/origin');
+		$key = sprintf('openthc/%s/origin', $this->site);
+		$origin = \OpenTHC\Config::get($key);
 		$output = str_replace(sprintf('%s/webroot/', $this->base), '', $this->output_path);
 
 		return sprintf('%s/%s', $origin, $output);
