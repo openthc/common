@@ -156,21 +156,35 @@ class OPA
 
 		$res = json_decode($res);
 
-		if (empty($res)) {
-			return new \stdClass();
-		} else {
+		if ( ! empty($res->result)) {
 			$res = $res->result;
+		} else {
+			// if result is empty we default to not permitted
+			$res = new \stdClass();
+			$res->permit = false;
 		}
 
-		if (empty($res->access)) {
-			$res->access = 'reject';
-		}
+		// if (empty($res->access)) {
+		// 	$res->access = 'reject';
+		// }
 
-		if (empty($res->reason)) {
-			$res->reason = new \stdClass();
-		}
+		// // @deprecated
+		// if (empty($res->reason)) {
+		// 	$res->reason = new \stdClass();
+		// }
 
 		return $res;
+	}
+
+	function delPolicy(string $path)
+	{
+		$url = $this->makeUrl('/v1/policies', $path);
+		$req = _curl_init($url);
+		curl_setopt($req, CURLOPT_CUSTOMREQUEST, 'PUT');
+
+		$res = curl_exec($req);
+		$inf = curl_getinfo($req);
+
 	}
 
 	/**
