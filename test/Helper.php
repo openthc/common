@@ -30,9 +30,8 @@ class Helper
 		<meta charset="utf-8">
 		<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
 		<meta name="viewport" content="initial-scale=1, user-scalable=yes">
-		<meta name="theme-color" content="#069420">
-		<link rel="stylesheet" href="/vendor/bootstrap/bootstrap.min.css">
-		<title>Test Result ${date}</title>
+		<link rel="stylesheet" href="https://openthc.com/vendor/bootstrap/bootstrap.min.css">
+		<title>Test Result ${date} || OpenTHC</title>
 		</head>
 		<body>
 		<div class="container">

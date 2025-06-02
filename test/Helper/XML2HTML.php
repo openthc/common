@@ -234,7 +234,7 @@ class XML2HTML {
 		<meta charset="utf-8" />
 		<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
 		<meta name="viewport" content="initial-scale=1, user-scalable=yes">
-		<link rel="stylesheet" href="/vendor/bootstrap/bootstrap.min.css" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://openthc.com/vendor/bootstrap/bootstrap.min.css">
 		<style type="text/css">
 		table tr.top {
 			background-color: #dddddd;
@@ -270,7 +270,7 @@ class XML2HTML {
 			padding-bottom: 1em;
 		}
 		</style>
-		<title>OpenTHC Test Results</title>
+		<title>Test Results || OpenTHC</title>
 		</head>
 		<body>
 		<div class="container">
