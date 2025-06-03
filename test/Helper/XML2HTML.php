@@ -9,6 +9,8 @@ namespace OpenTHC\Test\Helper;
 
 class XML2HTML {
 
+	private $dt0;
+
 	private $err;
 
 	private $xml;
