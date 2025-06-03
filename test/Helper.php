@@ -9,6 +9,12 @@ namespace OpenTHC\Test;
 
 class Helper
 {
+	public $base;
+
+	public $site;
+
+	public $output_path;
+
 	function __construct($cfg=[])
 	{
 		$this->base = $cfg['base'];
@@ -31,12 +37,12 @@ class Helper
 		<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
 		<meta name="viewport" content="initial-scale=1, user-scalable=yes">
 		<link rel="stylesheet" href="https://openthc.com/vendor/bootstrap/bootstrap.min.css">
-		<title>Test Result ${date} || OpenTHC</title>
+		<title>Test Result {$date} || OpenTHC</title>
 		</head>
 		<body>
 		<div class="container">
 
-		<h1>Test Result ${date}</h1>
+		<h1>Test Result {$date}</h1>
 
 		<p>Linting: <a href="phplint.txt">phplint.txt</a></p>
 		<!-- <p><del>PHPCPD: <a href="phpcpd.txt">phpcpd.txt</a></del></p> -->
