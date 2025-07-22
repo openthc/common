@@ -180,7 +180,7 @@ function _error_handler_trap_dump($ex, $etext=null, $efile=null, $eline=null, $e
 
 	$ret['name'] = sprintf('%s: %s:"%s" @ %s#%d', $ret['type'], $ret['code'], $ret['text'], $ret['file'], $ret['line']);
 
-	$file = sprintf('/tmp/err-%s.dump', $_SERVER['UNIQUE_ID']);
+	$file = sprintf('/tmp/err-%s.dump', _ulid());
 	$dump = json_encode($ret, JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE, 8);
 	file_put_contents($file, $dump);
 
