@@ -7,28 +7,20 @@
 
 namespace OpenTHC\Controller;
 
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+
 class Base
 {
-	protected $_container;
-
-	/**
-	 * Save the Container from Slim
-	 * @param \Slim\Container $c
-	 */
-	function __construct(\Slim\Container $c)
-	{
-		$this->_container = $c;
-	}
-
 	/**
 	 * Extenders should implement this
 	 * @todo low-risk interface
-	 * @param \Slim\Http\Request $REQ
-	 * @param \Slim\Http\Response $RES
+	 * @param \Psr\Http\Message\ServerRequestInterface $REQ
+	 * @param \Psr\Http\Message\ResponseInterface $RES
 	 * @param array $ARG
 	 * @return \Slim\Http\Response
 	 */
-	function __invoke($REQ, $RES, $ARG)
+	public function __invoke(Request $REQ, Response $RES, array $ARG)
 	{
 		_exit_text('Not Implemented [OCB-025]', 501);
 	}
@@ -126,6 +118,7 @@ class Base
 
 			private $layout_file;
 			private $output_file;
+			private $foot_script;
 
 			private $head;
 			private $body; // Main Content Body

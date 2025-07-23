@@ -1,7 +1,7 @@
 {
 	"name": "openthc/common",
 	"description": "OpenTHC Common Library",
-	"license": "GPL-3.0-only",
+	"license": "MIT",
 	"autoload": {
 		"exclude-from-classmap": [
 			"vendor/erusev/parsedown-extra/test"
@@ -17,29 +17,29 @@
 		}
 	},
 	"require": {
-		"php": ">=7.3.0",
+		"php": ">=8.2.20",
 		"ext-curl": "*",
 		"ext-date": "*",
 		"ext-json": "*",
 		"ext-session": "*",
 		"ext-sockets": "*",
 		"ext-PDO": "*",
-		"docopt/docopt": "1.0.5",
+		"docopt/docopt": "1.0.6",
 		"edoceo/lowline": "v2024.0.309",
 		"edoceo/radix": "2021.0.0",
 		"erusev/parsedown-extra": "0.8.1",
-		"geoip2/geoip2": "2.13.0",
-		"firebase/php-jwt": "6.4.0",
-		"giggsey/libphonenumber-for-php": "8.13.45",
-		"guzzlehttp/guzzle": "7.9.2",
-		"league/oauth2-client": "2.7.0",
-		"slim/slim": "3.12.5",
-		"swaggest/json-schema": "0.12.42"
+		"geoip2/geoip2": "3.2.0",
+		"firebase/php-jwt": "6.11.1",
+		"giggsey/libphonenumber-for-php": "9.0.10",
+		"guzzlehttp/guzzle": "7.9.3",
+		"league/oauth2-client": "2.8.1",
+		"slim/slim": "4.14.0",
+		"swaggest/json-schema": "0.12.43"
 	},
 	"require-dev": {
 		"php-webdriver/webdriver": "1.15.2",
 		"phpmd/phpmd": "2.15.0",
-		"phpstan/phpstan": "2.1.8",
-		"phpunit/phpunit": "9.6.20"
+		"phpstan/phpstan": "2.1.19",
+		"phpunit/phpunit": "11.5.27"
 	}
 }

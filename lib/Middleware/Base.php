@@ -7,27 +7,21 @@
 
 namespace OpenTHC\Middleware;
 
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+
 class Base
 {
 	protected $_container;
 
 	/**
-	 * Save the container
-	 * @param \Slim\Container $c
-	*/
-	function __construct(\Slim\Container $c)
-	{
-		$this->_container = $c;
-	}
-
-	/**
 	 * Everyone should implement this
 	 * @todo low-risk interface
-	 * @param \Slim\Http\Request $REQ
-	 * @param \Slim\Http\Response $RES
+	 * @param Psr\Http\Message\ServerRequestInterface $REQ
+	 * @param Psr\Http\Message\ResponseInterface $RES
 	 * @param array $ARG
 	*/
-	function __invoke($REQ, $RES, $NMW)
+	function __invoke(Request $REQ, Response $RES, ?array $NMW = null)
 	{
 		return $NMW($REQ, $RES);
 	}
