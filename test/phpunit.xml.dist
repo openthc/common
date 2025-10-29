@@ -23,12 +23,13 @@
 	verbose="false"
 	>
 
-	<coverage />
-
 	<php>
 
-		<!-- If defined, it will spew debug -->
-		<!-- <env name="OPENTHC_TEST_HTTP_DEBUG" value="0" /> -->
+		<!-- PHPUnit populates $_ENV with these -->
+		<!-- And one can overwrite these values from standard process environment vars -->
+
+		<!-- If truthy, it will spew debug -->
+		<env name="OPENTHC_TEST_HTTP_DEBUG" value="0" />
 
 	</php>
 
@@ -41,5 +42,8 @@
 			<!-- <file>Service/Pub_Test.php</file> -->
 		</testsuite>
 	</testsuites>
+
+	<!-- XDEBUG_MODE=coverage (environment variable) or xdebug.mode=coverage (PHP configuration setting) has to be set -->
+	<!-- <coverage /> -->
 
 </phpunit>

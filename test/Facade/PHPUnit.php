@@ -21,8 +21,10 @@ class PHPUnit {
 		$this->output_path = $cfg['output'];
 		unset($cfg['output']);
 
+		$app_root = defined('APP_ROOT') ? APP_ROOT : getcwd();
+
 		$this->config = [];
-		$this->config['--configuration'] = sprintf('%s/test/phpunit.xml', APP_ROOT);
+		$this->config['--configuration'] = sprintf('%s/test/phpunit.xml', $app_root);
 		$this->config['--coverage-xml']  = sprintf('%s/coverage', $this->output_path);
 		$this->config['--log-junit']     = sprintf('%s/phpunit.xml', $this->output_path);
 		$this->config['--testdox-html']  = sprintf('%s/testdox.html', $this->output_path);
