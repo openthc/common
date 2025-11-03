@@ -384,6 +384,7 @@ function _http_code($code)
 		409 => 'Conflict',
 		410 => 'Gone',
 		500 => 'Server Error',
+		502 => 'Bad Gateway',
 		503 => 'Unavailable',
 		504 => 'Gateway Timeout',
 	);
