@@ -262,6 +262,22 @@ class BaseBrowser extends Base {
 	}
 
 	/**
+	 * Wrap WebDriver::getPageSource
+	 */
+	public function getPageSource()
+	{
+		return self::$wd->getPageSource();
+	}
+
+	/**
+	 * Wrap WebDriver
+	 */
+	public function getPageTitle()
+	{
+		return self::$wd->getTitle();
+	}
+
+	/**
 	 * Get an Element by Selector, does magic string promotion
 	 */
 	public function findElement($find)
@@ -286,10 +302,9 @@ class BaseBrowser extends Base {
 		}
 
 		$e = self::$wd->findElement($find);
-		$pt = $e->getLocation();
-		// var_dump($pt);
 
 		// Scroll
+		$pt = $e->getLocation();
 		self::$wd->executeScript('arguments[0].scrollIntoView({ behavior: "instant", block: "center", inline: "center" })', [ $e ]);
 
 		return $e;
@@ -301,6 +316,19 @@ class BaseBrowser extends Base {
 	public function findElements($find)
 	{
 		return self::$wd->findElements($find);
+	}
+
+	/**
+		Send the String, Slowly
+		@param $e Element
+		@param $s String to SEnd
+	*/
+	public function sendKeysSlow($e, $s)
+	{
+		$c_list = str_split($s);
+		foreach ($c_list as $c) {
+			$e->sendKeys($c);
+		}
 	}
 
 	/**
