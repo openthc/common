@@ -12,17 +12,17 @@ class Session
 {
 	/**
 	 * @todo low-risk interface
-	 * @param \Slim\Http\Request $REQ
-	 * @param \Slim\Http\Response $RES
+	 * @param \Slim\Http\Request $request
+	 * @param \Slim\Http\RequestHandler $handler
 	 * @param array $ARG
+	 * use Psr\Http\Message\ServerRequestInterface as Request;
+		// use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 	*/
-	public function __invoke($REQ, $RES, $NMW)
+	public function __invoke($request, $handler)
 	{
 		$this->open();
 
-		$RES = $NMW($REQ, $RES);
-
-		return $RES;
+		return $handler->handle($request);
 
 	}
 

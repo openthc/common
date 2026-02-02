@@ -15,11 +15,11 @@ class CORS
 	 * @param \Slim\Http\Response $RES
 	 * @param array $ARG
 	 */
-	public function __invoke($REQ, $RES, $NMW)
+	public function __invoke($request, $handler)
 	{
 		// no origin? pass-thru
 		if (empty($_SERVER['HTTP_ORIGIN'])) {
-			return $NMW($REQ, $RES);
+			return $handler->handle($request);;
 		}
 
 		$RES = $RES->withHeader('access-control-allow-headers', 'Authorization')
@@ -51,8 +51,7 @@ class CORS
 		// Allow this Origin
 		$RES = $RES->withHeader('access-control-allow-origin', $o);
 
-
-		return $NMW($REQ, $RES);
+		return $handler->handle($request);
 
 	}
 }

@@ -15,7 +15,7 @@ class Test
 	 * @param \Slim\Http\Response $RES
 	 * @param array $ARG
 	 */
-	function __invoke($REQ, $RES, $NMW) {
+	function __invoke($request, $handler) {
 
 		$test = false;
 
@@ -35,7 +35,7 @@ class Test
 			$_ENV['test'] = $test;
 		}
 
-		$RES = $NMW($REQ, $RES);
+		$RES = $handler->handle($request);
 
 		if ($test) {
 			$RES = $RES->withHeader('openthc-test-mode', '1');

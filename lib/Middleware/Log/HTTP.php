@@ -16,7 +16,7 @@ class HTTP
 	 * @param \Slim\Http\Response $RES
 	 * @param array $ARG
 	*/
-	public function __invoke($REQ, $RES, $NMW)
+	public function __invoke($request, $handler)
 	{
 		// Log the Full Body
 		$log_file = sprintf('%s/var/log/%s.http', APP_ROOT, $_SERVER['UNIQUE_ID']);
@@ -38,7 +38,7 @@ class HTTP
 		fwrite($log_pipe, "\n");
 		// file_put_contents($file, $data);
 
-		$RES = $NMW($REQ, $RES);
+		$RES = $handler->handle($request);
 
 		//$file = sprintf('%s/var/%s-res.dump', APP_ROOT, $_SERVER['UNIQUE_ID']);
 		// $file = '/tmp/res.dump';
