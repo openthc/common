@@ -24,22 +24,23 @@
 		"ext-session": "*",
 		"ext-sockets": "*",
 		"ext-PDO": "*",
-		"docopt/docopt": "1.0.5",
+		"docopt/docopt": "1.0.6",
 		"edoceo/lowline": "v2024.0.309",
 		"edoceo/radix": "2021.0.0",
 		"erusev/parsedown-extra": "0.8.1",
-		"geoip2/geoip2": "2.13.0",
+		"geoip2/geoip2": "3.3.0",
 		"firebase/php-jwt": "6.4.0",
-		"giggsey/libphonenumber-for-php": "8.13.45",
+		"giggsey/libphonenumber-for-php": "9.0.23",
 		"guzzlehttp/guzzle": "7.9.2",
-		"league/oauth2-client": "2.7.0",
-		"slim/slim": "3.12.5",
-		"swaggest/json-schema": "0.12.42"
+		"league/commonmark": "2.8.0",
+		"league/oauth2-client": "2.9.0",
+		"slim/slim": "4.15.1",
+		"swaggest/json-schema": "0.12.43"
 	},
 	"require-dev": {
-		"php-webdriver/webdriver": "1.15.2",
+		"php-webdriver/webdriver": "1.16.0",
 		"phpmd/phpmd": "2.15.0",
-		"phpstan/phpstan": "2.1.8",
-		"phpunit/phpunit": "9.6.20"
+		"phpstan/phpstan": "2.1.38",
+		"phpunit/phpunit": "12.5.8"
 	}
 }
