@@ -1,14 +1,14 @@
 <?php
 /**
  * Log Request and Response
- * @todo can we use GuzzleHttp\Psr7\str($req) ? 
+ * @todo can we use GuzzleHttp\Psr7\str($req) ?
  *
  * SPDX-License-Identifier: MIT
  */
 
 namespace OpenTHC\Middleware\Log;
 
-class HTTP extends \OpenTHC\Middleware\Base
+class HTTP
 {
 	/**
 	 * @todo low-risk interface

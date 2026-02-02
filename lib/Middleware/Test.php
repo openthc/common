@@ -7,7 +7,7 @@
 
 namespace OpenTHC\Middleware;
 
-class Test extends Base
+class Test
 {
 	/**
 	 * @todo low-risk interface

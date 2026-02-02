@@ -8,7 +8,7 @@
 
 namespace OpenTHC\Middleware;
 
-class Session extends \OpenTHC\Middleware\Base
+class Session
 {
 	/**
 	 * @todo low-risk interface

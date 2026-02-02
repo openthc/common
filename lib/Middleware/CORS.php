@@ -7,7 +7,7 @@
 
 namespace OpenTHC\Middleware;
 
-class CORS extends \OpenTHC\Middleware\Base
+class CORS
 {
 	/**
 	 * @todo low-risk interface
