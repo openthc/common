@@ -30,7 +30,6 @@ function _curl_init($uri)
 
 	// Booleans
 	curl_setopt($req, CURLOPT_AUTOREFERER, true);
-	curl_setopt($req, CURLOPT_BINARYTRANSFER, true);
 	curl_setopt($req, CURLOPT_COOKIESESSION, false);
 	curl_setopt($req, CURLOPT_CRLF, false);
 	curl_setopt($req, CURLOPT_FAILONERROR, false);
