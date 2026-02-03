@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "17490468a063ed8ce75e56807c277089",
+    "content-hash": "63bb3daf3327ecdd79fc7144bbd706ac",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -202,16 +202,16 @@
         },
         {
             "name": "edoceo/lowline",
-            "version": "v2024.0.309",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/edoceo/lowline.git",
-                "reference": "6c0df25e5412e194edcc3e94aa6e583d960890e0"
+                "reference": "7e4cc56774cd51170e64b08f89e6848c085cf9da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/edoceo/lowline/zipball/6c0df25e5412e194edcc3e94aa6e583d960890e0",
-                "reference": "6c0df25e5412e194edcc3e94aa6e583d960890e0",
+                "url": "https://api.github.com/repos/edoceo/lowline/zipball/7e4cc56774cd51170e64b08f89e6848c085cf9da",
+                "reference": "7e4cc56774cd51170e64b08f89e6848c085cf9da",
                 "shasum": ""
             },
             "require": {
@@ -219,6 +219,7 @@
                 "ext-json": "*",
                 "php": ">=7.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -232,22 +233,22 @@
             "description": "Magic Global Functions",
             "support": {
                 "issues": "https://github.com/edoceo/lowline/issues",
-                "source": "https://github.com/edoceo/lowline/tree/v2024.0.309"
+                "source": "https://github.com/edoceo/lowline/tree/master"
             },
-            "time": "2024-11-04T13:43:43+00:00"
+            "time": "2026-01-20T17:47:49+00:00"
         },
         {
             "name": "edoceo/radix",
-            "version": "v2021.0.0",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/edoceo/radix.git",
-                "reference": "c57726abed76df0952f244bf19a8982c5e234017"
+                "reference": "085790d9cf45e70b4f9696b2f69fe472d060edd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/edoceo/radix/zipball/c57726abed76df0952f244bf19a8982c5e234017",
-                "reference": "c57726abed76df0952f244bf19a8982c5e234017",
+                "url": "https://api.github.com/repos/edoceo/radix/zipball/085790d9cf45e70b4f9696b2f69fe472d060edd3",
+                "reference": "085790d9cf45e70b4f9696b2f69fe472d060edd3",
                 "shasum": ""
             },
             "require": {
@@ -264,6 +265,7 @@
                 "phpunit/phpunit": "4.2.5",
                 "phpunit/phpunit-selenium": "1.3.3"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -291,110 +293,9 @@
             ],
             "support": {
                 "issues": "https://github.com/edoceo/radix/issues",
-                "source": "https://github.com/edoceo/radix/tree/v2021.0.0"
+                "source": "https://github.com/edoceo/radix/tree/main"
             },
-            "time": "2022-08-08T16:52:29+00:00"
-        },
-        {
-            "name": "erusev/parsedown",
-            "version": "1.7.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/erusev/parsedown.git",
-                "reference": "cb17b6477dfff935958ba01325f2e8a2bfa6dab3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown/zipball/cb17b6477dfff935958ba01325f2e8a2bfa6dab3",
-                "reference": "cb17b6477dfff935958ba01325f2e8a2bfa6dab3",
-                "shasum": ""
-            },
-            "require": {
-                "ext-mbstring": "*",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8.35"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Parsedown": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Emanuil Rusev",
-                    "email": "hello@erusev.com",
-                    "homepage": "http://erusev.com"
-                }
-            ],
-            "description": "Parser for Markdown.",
-            "homepage": "http://parsedown.org",
-            "keywords": [
-                "markdown",
-                "parser"
-            ],
-            "support": {
-                "issues": "https://github.com/erusev/parsedown/issues",
-                "source": "https://github.com/erusev/parsedown/tree/1.7.x"
-            },
-            "time": "2019-12-30T22:54:17+00:00"
-        },
-        {
-            "name": "erusev/parsedown-extra",
-            "version": "0.8.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/erusev/parsedown-extra.git",
-                "reference": "91ac3ff98f0cea243bdccc688df43810f044dcef"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown-extra/zipball/91ac3ff98f0cea243bdccc688df43810f044dcef",
-                "reference": "91ac3ff98f0cea243bdccc688df43810f044dcef",
-                "shasum": ""
-            },
-            "require": {
-                "erusev/parsedown": "^1.7.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8.35"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "ParsedownExtra": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Emanuil Rusev",
-                    "email": "hello@erusev.com",
-                    "homepage": "http://erusev.com"
-                }
-            ],
-            "description": "An extension of Parsedown that adds support for Markdown Extra.",
-            "homepage": "https://github.com/erusev/parsedown-extra",
-            "keywords": [
-                "markdown",
-                "markdown extra",
-                "parsedown",
-                "parser"
-            ],
-            "support": {
-                "issues": "https://github.com/erusev/parsedown-extra/issues",
-                "source": "https://github.com/erusev/parsedown-extra/tree/0.8.x"
-            },
-            "time": "2019-12-30T23:20:37+00:00"
+            "time": "2026-01-20T18:52:42+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -5161,7 +5062,10 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "edoceo/lowline": 20,
+        "edoceo/radix": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
