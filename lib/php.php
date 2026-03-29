@@ -509,13 +509,15 @@ function _ksort_r(&$array)
  */
 function _markdown($x)
 {
-	static $PD;
+	static $cmc;
 
-	if (empty($PD)) {
-		$PD = new Parsedown();
+	if (empty($cmc)) {
+		$cmc = new League\CommonMark\CommonMarkConverter([
+			'allow_unsafe_links' => false,
+		]);
 	}
 
-	return $PD->text($x);
+	return $converter->convert($x);
 
 }
 
