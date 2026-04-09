@@ -517,7 +517,7 @@ function _markdown($x)
 		]);
 	}
 
-	return $converter->convert($x);
+	return $cmc->convert($x);
 
 }
 
