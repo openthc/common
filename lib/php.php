@@ -505,7 +505,7 @@ function _ksort_r(&$array)
 
 
 /**
- * @deprecated use _markdown_ex
+ * Turns Markdown Text into HTML
  */
 function _markdown($x)
 {
@@ -522,17 +522,12 @@ function _markdown($x)
 }
 
 /**
- * Turns Markdown Text into HTML
+ * @deprecated
+ * Only exists because of legacy Parsedown / ParsedownExtra needs
  */
 function _markdown_ex($t)
 {
-	static $p;
-	if (empty($p)) {
-		$p = new ParsedownExtra();
-	}
-
-	return $p->text($t);
-
+	return _markdown($t);
 }
 
 
