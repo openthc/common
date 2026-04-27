@@ -507,17 +507,17 @@ function _ksort_r(&$array)
 /**
  * Turns Markdown Text into HTML
  */
-function _markdown($x)
+function _markdown($x) : string
 {
-	static $cmc;
+	static $mdc;
 
-	if (empty($cmc)) {
-		$cmc = new League\CommonMark\CommonMarkConverter([
+	if (empty($mdc)) {
+		$mdc = new League\CommonMark\GithubFlavoredMarkdownConverter([
 			'allow_unsafe_links' => false,
 		]);
 	}
 
-	return $cmc->convert($x);
+	return $mdc->convert($x)->getContent();
 
 }
 
