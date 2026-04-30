@@ -492,15 +492,19 @@ function _content_read($f)
 	Sort a Keyed Array, Recursively
 	@return bool
 */
-function _ksort_r(&$array)
+function _ksort_r(&$a)
 {
-	foreach ($array as &$value) {
-		if (is_array($value)) {
-			_ksort_r($value);
+	if ( ! is_array($a)) {
+		return $a;
+	}
+
+	foreach ($a as &$v) {
+		if (is_array($v)) {
+			_ksort_r($v);
 		}
 	}
 
-	return ksort($array);
+	return ksort($a);
 }
 
 
