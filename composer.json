@@ -36,7 +36,7 @@
 	"require-dev": {
 		"php-webdriver/webdriver": "1.16.0",
 		"phpmd/phpmd": "2.15.0",
-		"phpstan/phpstan": "2.1.38",
+		"phpstan/phpstan": "2.1.54",
 		"phpunit/phpunit": "12.5.8"
 	}
 }
