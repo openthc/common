@@ -32,15 +32,15 @@
 		"firebase/php-jwt": "6.4.0",
 		"giggsey/libphonenumber-for-php": "8.13.45",
 		"guzzlehttp/guzzle": "7.9.2",
-		"league/commonmark": "2.8.0",
+		"league/commonmark": "2.8.2",
 		"league/oauth2-client": "2.7.0",
 		"slim/slim": "3.12.5",
 		"swaggest/json-schema": "0.12.42"
 	},
 	"require-dev": {
-		"php-webdriver/webdriver": "1.15.2",
+		"php-webdriver/webdriver": "1.16.0",
 		"phpmd/phpmd": "2.15.0",
-		"phpstan/phpstan": "2.1.8",
-		"phpunit/phpunit": "9.6.20"
+		"phpstan/phpstan": "2.1.54",
+		"phpunit/phpunit": "9.6.33"
 	}
 }
