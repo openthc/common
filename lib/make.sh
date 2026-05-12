@@ -13,6 +13,7 @@ function install_bootstrap()
 {
 	source_path="node_modules/bootstrap/dist"
 	target_path="webroot/vendor/bootstrap/"
+
 	mkdir -p "$target_path"
 
 	cp "$source_path/js/bootstrap.bundle.min.js"      "$target_path/bootstrap.bundle.min.js"
@@ -43,8 +44,10 @@ function install_fontawesome()
 
 function install_htmx()
 {
-	source_path="node_modules/htmx.org/dist/"
+	source_path="node_modules/htmx.org/dist"
 	target_path="webroot/vendor/htmx/"
+
+	mkdir -p "$target_path"
 
 	cp "$source_path/htmx.min.js"  "$target_path"
 }
@@ -53,6 +56,7 @@ function install_jquery()
 {
 	source_path="node_modules/jquery/dist/"
 	target_path="webroot/vendor/jquery/"
+
 	mkdir -p "$target_path"
 
 	# $output_path = sprintf('%s/webroot/vendor/jquery', APP_ROOT);
@@ -89,10 +93,12 @@ function install_lodash()
 
 function install_zxing()
 {
-	source="node_modules/@zxing/browser/umd/"
-	target="webroot/vendor/zxing/"
+	source_path="node_modules/@zxing/browser/umd/"
+	target_path="webroot/vendor/zxing/"
 
-	cp "node_modules/@zxing/browser/umd/zxing-browser.min.js" "$target/zxing-browser.min.js"
+	mkdir -p "$target_path"
+
+	cp "$source_path/zxing-browser.min.js" "$target_path/zxing-browser.min.js"
 }
 
 case "$action" in
