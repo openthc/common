@@ -44,11 +44,11 @@ class Helper
 
 		<h1>Test Result {$date}</h1>
 
-		<p>Linting: <a href="phplint.txt">phplint.txt</a></p>
+		<p>Linting: <a href="/output/test-report/phplint.txt">phplint.txt</a></p>
 		<!-- <p><del>PHPCPD: <a href="phpcpd.txt">phpcpd.txt</a></del></p> -->
-		<p>PHPStan: <a href="phpstan.xml">phpstan.xml</a> and <a href="phpstan.html">phpstan.html</a></p>
-		<p>PHPUnit: <a href="phpunit.txt">phpunit.txt</a>, <a href="phpunit.xml">phpunit.xml</a> and <a href="phpunit.html">phpunit.html</a></p>
-		<p>Textdox: <a href="testdox.txt">testdox.txt</a>, <a href="testdox.xml">testdox.xml</a> and <a href="testdox.html">testdox.html</a></p>
+		<p>PHPStan: <a href="/output/test-report/phpstan.xml">phpstan.xml</a> and <a href="/output/test-report/phpstan.html">phpstan.html</a></p>
+		<p>PHPUnit: <a href="/output/test-report/phpunit.txt">phpunit.txt</a>, <a href="/output/test-report/phpunit.xml">phpunit.xml</a> and <a href="/output/test-report/phpunit.html">phpunit.html</a></p>
+		<p>Textdox: <a href="/output/test-report/testdox.txt">testdox.txt</a>, <a href="/output/test-report/testdox.xml">testdox.xml</a> and <a href="/output/test-report/testdox.html">testdox.html</a></p>
 
 		<pre id="test-output"></pre>
 
