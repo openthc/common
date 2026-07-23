@@ -29,6 +29,13 @@ class Lock
 		$this->sem = sem_get($this->key, $max_acquire=1, 0666, true);
 	}
 
+	function __destruct()
+	{
+		if ( ! empty($this->sem)) {
+			sem_remove($this->sem);
+		}
+	}
+
 	function create() : bool
 	{
 		$ret = sem_acquire($this->sem, true);
