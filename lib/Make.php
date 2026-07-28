@@ -8,74 +8,6 @@ namespace OpenTHC;
 class Make {
 
 	/**
-	 * Composer Helper
-	 */
-	static function composer($fast=false) {
-
-		$cmd = [];
-		$cmd[] = 'composer';
-
-		// ?composer update --no-ansi --no-dev
-
-		if (empty($fast)) {
-			$cmd[] = 'install';
-			$cmd[] = '--quiet';
-			// $cmd[] = '--no-dev';
-			$cmd[] = '--no-progress';
-			$cmd[] = '--classmap-authoritative';
-			$cmd[] = '2>&1';
-		} else {
-			$cmd[] = 'dump-autoload';
-			$cmd[] = '--classmap-authoritative';
-			$cmd[] = '2>&1';
-		}
-
-		$ret = null;
-
-		echo "Composer:\n";
-		passthru(implode(' ', $cmd), $ret);
-		var_dump($ret);
-
-	}
-
-	/**
-	 *
-	 */
-	static function npm() {
-
-		if (is_file(APP_ROOT . '/package.json')) {
-			$cmd = [];
-			$cmd[] = 'npm';
-			$cmd[] = 'install';
-			$cmd[] = '--quiet';
-			$cmd[] = '2>&1';
-
-			$ret = null;
-
-			echo "NPM:\n";
-			passthru(implode(' ', $cmd), $ret);
-			var_dump($ret);
-		}
-	}
-
-	/**
-	 * Install Bootstrap
-	 */
-	static function install_bootstrap() {
-
-		$output_path = sprintf('%s/webroot/vendor/bootstrap', APP_ROOT);
-		@mkdir($output_path, 0755, true);
-
-		$source_path = sprintf('%s/node_modules/bootstrap/dist', APP_ROOT);
-
-		copy("$source_path/js/bootstrap.bundle.min.js",     "$output_path/bootstrap.bundle.min.js");
-		copy("$source_path/js/bootstrap.bundle.min.js.map", "$output_path/bootstrap.bundle.min.js.map");
-		copy("$source_path/css/bootstrap.min.css",          "$output_path/bootstrap.min.css");
-		copy("$source_path/css/bootstrap.min.css.map",      "$output_path/bootstrap.min.css.map");
-
-	}
-
-	/**
 	 * Install FontAwesome
 	 */
 	static function install_fontawesome() {
@@ -120,6 +52,16 @@ class Make {
 			copy($source_file, "$output_path/jquery-ui.min.css");
 		}
 
+	}
+
+	static function install_lodash()
+	{
+
+	}
+
+	static function install_zxing()
+	{
+		// node_modules/@zxing/browser/umd/zxing-browser.min.js
 	}
 
 	/**
