@@ -9,6 +9,9 @@ set -o pipefail
 
 action="$1"
 
+#
+# Install Bootstrap
+#
 function install_bootstrap()
 {
 	source_path="node_modules/bootstrap/dist"

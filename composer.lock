@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "content-hash": "3f9ef3bcd71d78ee5eced3dc889c8d69",
+    "content-hash": "9aec12eabba28898ff5fb49848c81cb7",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -19,22 +18,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/composer/ca-bundle/zipball/2c99cf2e92516985dea4914812b93d9daf01cdd6",
                 "reference": "2c99cf2e92516985dea4914812b93d9daf01cdd6",
-=======
-    "content-hash": "b2b52402b3e6ed07b86eb3f4fec13585",
-    "packages": [
-        {
-            "name": "composer/ca-bundle",
-            "version": "1.5.11",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "68ff39175e8e94a4bb1d259407ce51a6a60f09e6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/68ff39175e8e94a4bb1d259407ce51a6a60f09e6",
-                "reference": "68ff39175e8e94a4bb1d259407ce51a6a60f09e6",
->>>>>>> d6e738b (update deps)
                 "shasum": ""
             },
             "require": {
@@ -81,11 +64,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-<<<<<<< HEAD
                 "source": "https://github.com/composer/ca-bundle/tree/1.6.0"
-=======
-                "source": "https://github.com/composer/ca-bundle/tree/1.5.11"
->>>>>>> d6e738b (update deps)
             },
             "funding": [
                 {
@@ -97,11 +76,7 @@
                     "type": "github"
                 }
             ],
-<<<<<<< HEAD
             "time": "2026-10-20T20:14:05+00:00"
-=======
-            "time": "2026-03-30T09:16:10+00:00"
->>>>>>> d6e738b (update deps)
         },
         {
             "name": "dflydev/dot-access-data",
@@ -326,21 +301,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/php-jwt.git",
-<<<<<<< HEAD
                 "reference": "a49db6f0a5033aef5143295342f1c95521b075ff"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/googleapis/php-jwt/zipball/a49db6f0a5033aef5143295342f1c95521b075ff",
                 "reference": "a49db6f0a5033aef5143295342f1c95521b075ff",
-=======
-                "reference": "4dd1e007f22a927ac77da5a3fbb067b42d3bc224"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/php-jwt/zipball/4dd1e007f22a927ac77da5a3fbb067b42d3bc224",
-                "reference": "4dd1e007f22a927ac77da5a3fbb067b42d3bc224",
->>>>>>> d6e738b (update deps)
                 "shasum": ""
             },
             "require": {
@@ -388,11 +354,7 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/php-jwt/issues",
-<<<<<<< HEAD
                 "source": "https://github.com/googleapis/php-jwt/tree/v6.10.0"
-=======
-                "source": "https://github.com/googleapis/php-jwt/tree/v6.4.0"
->>>>>>> d6e738b (update deps)
             },
             "time": "2023-12-01T16:26:39+00:00"
         },
@@ -921,7 +883,6 @@
         },
         {
             "name": "league/commonmark",
-<<<<<<< HEAD
             "version": "2.10.3",
             "source": {
                 "type": "git",
@@ -932,18 +893,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/6efbd9c472b91db0a3350fcd601c8332c2382e1f",
                 "reference": "6efbd9c472b91db0a3350fcd601c8332c2382e1f",
-=======
-            "version": "2.8.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "59fb075d2101740c337c7216e3f32b36c204218b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/59fb075d2101740c337c7216e3f32b36c204218b",
-                "reference": "59fb075d2101740c337c7216e3f32b36c204218b",
->>>>>>> d6e738b (update deps)
                 "shasum": ""
             },
             "require": {
@@ -1037,11 +986,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2026-09-21T13:07:34+00:00"
-=======
-            "time": "2026-03-19T13:16:38+00:00"
->>>>>>> d6e738b (update deps)
         },
         {
             "name": "league/config",
@@ -2317,7 +2262,6 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-<<<<<<< HEAD
             "version": "v1.43.0",
             "source": {
                 "type": "git",
@@ -2328,18 +2272,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/4d5d331bf731e0aedbc6b2f5e61135b7b7996a72",
                 "reference": "4d5d331bf731e0aedbc6b2f5e61135b7b7996a72",
-=======
-            "version": "v1.37.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/6a21eb99c6973357967f6ce3708cd55a6bec6315",
-                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315",
->>>>>>> d6e738b (update deps)
                 "shasum": ""
             },
             "require": {
@@ -2391,11 +2323,7 @@
                 "shim"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.43.0"
-=======
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.37.0"
->>>>>>> d6e738b (update deps)
             },
             "funding": [
                 {
@@ -2415,7 +2343,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2026-09-24T15:19:04+00:00"
         },
         {
@@ -2430,22 +2357,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/9c6a5d6b01ca51d486c813e9a9c0ed55f208bb74",
                 "reference": "9c6a5d6b01ca51d486c813e9a9c0ed55f208bb74",
-=======
-            "time": "2026-04-10T17:25:58+00:00"
-        },
-        {
-            "name": "symfony/polyfill-php80",
-            "version": "v1.37.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/polyfill-php80.git",
-                "reference": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
-                "reference": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
->>>>>>> d6e738b (update deps)
                 "shasum": ""
             },
             "require": {
@@ -2496,11 +2407,7 @@
                 "shim"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/polyfill-php80/tree/v1.43.0"
-=======
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.37.0"
->>>>>>> d6e738b (update deps)
             },
             "funding": [
                 {
@@ -2520,11 +2427,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2026-09-25T15:50:05+00:00"
-=======
-            "time": "2026-04-10T16:19:22+00:00"
->>>>>>> d6e738b (update deps)
         }
     ],
     "packages-dev": [
@@ -3122,19 +3025,11 @@
         },
         {
             "name": "phpstan/phpstan",
-<<<<<<< HEAD
-            "version": "2.1.38",
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/dfaf1f530e1663aa167bc3e52197adb221582629",
-                "reference": "dfaf1f530e1663aa167bc3e52197adb221582629",
-=======
             "version": "2.1.54",
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8be50c3992107dc837b17da4d140fbbdf9a5c5bd",
                 "reference": "8be50c3992107dc837b17da4d140fbbdf9a5c5bd",
->>>>>>> d6e738b (update deps)
                 "shasum": ""
             },
             "require": {
@@ -3179,11 +3074,7 @@
                     "type": "github"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2026-01-30T17:12:46+00:00"
-=======
             "time": "2026-04-29T13:31:09+00:00"
->>>>>>> d6e738b (update deps)
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3544,7 +3435,6 @@
         },
         {
             "name": "phpunit/phpunit",
-<<<<<<< HEAD
             "version": "12.5.8",
             "source": {
                 "type": "git",
@@ -3555,18 +3445,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/37ddb96c14bfee10304825edbb7e66d341ec6889",
                 "reference": "37ddb96c14bfee10304825edbb7e66d341ec6889",
-=======
-            "version": "9.6.33",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "fea06253ecc0a32faf787bd31b261f56f351d049"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/fea06253ecc0a32faf787bd31b261f56f351d049",
-                "reference": "fea06253ecc0a32faf787bd31b261f56f351d049",
->>>>>>> d6e738b (update deps)
                 "shasum": ""
             },
             "require": {
@@ -3579,7 +3457,6 @@
                 "myclabs/deep-copy": "^1.13.4",
                 "phar-io/manifest": "^2.0.4",
                 "phar-io/version": "^3.2.1",
-<<<<<<< HEAD
                 "php": ">=8.3",
                 "phpunit/php-code-coverage": "^12.5.2",
                 "phpunit/php-file-iterator": "^6.0.0",
@@ -3596,29 +3473,6 @@
                 "sebastian/type": "^6.0.3",
                 "sebastian/version": "^6.0.0",
                 "staabm/side-effects-detector": "^1.0.5"
-=======
-                "php": ">=7.3",
-                "phpunit/php-code-coverage": "^9.2.32",
-                "phpunit/php-file-iterator": "^3.0.6",
-                "phpunit/php-invoker": "^3.1.1",
-                "phpunit/php-text-template": "^2.0.4",
-                "phpunit/php-timer": "^5.0.3",
-                "sebastian/cli-parser": "^1.0.2",
-                "sebastian/code-unit": "^1.0.8",
-                "sebastian/comparator": "^4.0.10",
-                "sebastian/diff": "^4.0.6",
-                "sebastian/environment": "^5.1.5",
-                "sebastian/exporter": "^4.0.8",
-                "sebastian/global-state": "^5.0.8",
-                "sebastian/object-enumerator": "^4.0.4",
-                "sebastian/resource-operations": "^3.0.4",
-                "sebastian/type": "^3.2.1",
-                "sebastian/version": "^3.0.2"
-            },
-            "suggest": {
-                "ext-soap": "To be able to generate mocks based on WSDL files",
-                "ext-xdebug": "PHP extension that provides line coverage as well as branch and path coverage"
->>>>>>> d6e738b (update deps)
             },
             "bin": [
                 "phpunit"
@@ -3658,11 +3512,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-<<<<<<< HEAD
                 "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.8"
-=======
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.33"
->>>>>>> d6e738b (update deps)
             },
             "funding": [
                 {
@@ -3686,61 +3536,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2026-01-27T06:12:29+00:00"
-=======
-            "time": "2026-01-27T05:25:09+00:00"
-        },
-        {
-            "name": "psr/log",
-            "version": "1.1.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-fig/log.git",
-                "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
-                "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Psr\\Log\\": "Psr/Log/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
-                }
-            ],
-            "description": "Common interface for logging libraries",
-            "homepage": "https://github.com/php-fig/log",
-            "keywords": [
-                "log",
-                "psr",
-                "psr-3"
-            ],
-            "support": {
-                "source": "https://github.com/php-fig/log/tree/1.1.4"
-            },
-            "time": "2021-05-03T11:20:27+00:00"
->>>>>>> d6e738b (update deps)
         },
         {
             "name": "sebastian/cli-parser",
@@ -5044,13 +4840,8 @@
             "time": "2026-04-10T16:19:22+00:00"
         },
         {
-<<<<<<< HEAD
             "name": "symfony/polyfill-deepclone",
             "version": "v1.43.2",
-=======
-            "name": "symfony/polyfill-php81",
-            "version": "v1.37.0",
->>>>>>> d6e738b (update deps)
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-deepclone.git",
@@ -5113,11 +4904,7 @@
                 "shim"
             ],
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/polyfill-deepclone/tree/v1.43.2"
-=======
-                "source": "https://github.com/symfony/polyfill-php81/tree/v1.37.0"
->>>>>>> d6e738b (update deps)
             },
             "funding": [
                 {
