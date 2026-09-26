@@ -36,11 +36,8 @@ function install_fontawesome()
 
 	cp "$source_path/css/all.min.css"  "$target_path/css/all.min.css"
 
-	# $source_list = glob("$source_path/webfonts/*");
-	# foreach ($source_list as $source_file) {
-	# 	$source_base = basename($source_file);
-	# 	copy($source_file, "$output_path/webfonts/$source_base");
-	# }
+	cp "$source_path/webfonts/"* "$target_path/webfonts/"
+	# rsync -av "$source_path/webfonts/" "$target_path/webfonts/"
 
 }
 
