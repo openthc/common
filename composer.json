@@ -2,6 +2,7 @@
 	"name": "openthc/common",
 	"description": "OpenTHC Common Library",
 	"license": "GPL-3.0-only",
+	"vesion": "v2026.288.1",
 	"autoload": {
 		"files": [
 			"lib/err.php",
