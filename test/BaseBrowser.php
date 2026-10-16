@@ -110,10 +110,11 @@ class BaseBrowser extends Base {
 	public static function tearDownAfterClass() : void
 	{
 		if ( ! empty(self::$wd)) {
+
 			$sid = self::$wd->getSessionId();
 			$sim = sprintf('int=%d; msg=%s', self::$stat_int, self::$stat_msg);
 
-			echo "\nDONE SESSION ID: {$sid}; stat={$sim}\n";
+			// echo "\nDONE SESSION ID: {$sid}; stat:{$sim}\n";
 
 			$chk = $_ENV['OPENTHC_TEST_WEBDRIVER_URL'];
 			if (preg_match('/browserstack/', $chk)) {

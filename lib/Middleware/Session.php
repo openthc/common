@@ -3,7 +3,7 @@
  * Common Session
  * Configure via PHP Settings (or apache2.conf)
  *
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 namespace OpenTHC\Middleware;

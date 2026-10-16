@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "content-hash": "9aec12eabba28898ff5fb49848c81cb7",
+    "content-hash": "2ed733b176b895bf39cbaec57e7ae619",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -19,22 +18,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/composer/ca-bundle/zipball/2c99cf2e92516985dea4914812b93d9daf01cdd6",
                 "reference": "2c99cf2e92516985dea4914812b93d9daf01cdd6",
-=======
-    "content-hash": "e0ef95324d565ce3322da42a2ca44039",
-    "packages": [
-        {
-            "name": "composer/ca-bundle",
-            "version": "1.5.14",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "0c8abba0634f637bd78c4e451981da368d403463"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/0c8abba0634f637bd78c4e451981da368d403463",
-                "reference": "0c8abba0634f637bd78c4e451981da368d403463",
->>>>>>> 7d71a71 (update deps)
                 "shasum": ""
             },
             "require": {
@@ -81,11 +64,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-<<<<<<< HEAD
                 "source": "https://github.com/composer/ca-bundle/tree/1.6.0"
-=======
-                "source": "https://github.com/composer/ca-bundle/tree/1.5.14"
->>>>>>> 7d71a71 (update deps)
             },
             "funding": [
                 {
@@ -97,11 +76,7 @@
                     "type": "github"
                 }
             ],
-<<<<<<< HEAD
             "time": "2026-10-20T20:14:05+00:00"
-=======
-            "time": "2026-08-21T14:57:29+00:00"
->>>>>>> 7d71a71 (update deps)
         },
         {
             "name": "dflydev/dot-access-data",
@@ -705,7 +680,6 @@
         },
         {
             "name": "guzzlehttp/promises",
-<<<<<<< HEAD
             "version": "2.6.0",
             "source": {
                 "type": "git",
@@ -716,18 +690,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/guzzle/promises/zipball/3d88c829bd5f13d13847b39067dbf09a60af2154",
                 "reference": "3d88c829bd5f13d13847b39067dbf09a60af2154",
-=======
-            "version": "2.5.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guzzle/promises.git",
-                "reference": "cde49999552d185d64715fe9c1f77a2aadd2f9f1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/cde49999552d185d64715fe9c1f77a2aadd2f9f1",
-                "reference": "cde49999552d185d64715fe9c1f77a2aadd2f9f1",
->>>>>>> 7d71a71 (update deps)
                 "shasum": ""
             },
             "require": {
@@ -782,11 +744,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-<<<<<<< HEAD
                 "source": "https://github.com/guzzle/promises/tree/2.6.0"
-=======
-                "source": "https://github.com/guzzle/promises/tree/2.5.3"
->>>>>>> 7d71a71 (update deps)
             },
             "funding": [
                 {
@@ -802,7 +760,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2026-10-18T12:46:59+00:00"
         },
         {
@@ -817,22 +774,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/guzzle/psr7/zipball/adee536f95101929f262b8c59e8a61472f347d58",
                 "reference": "adee536f95101929f262b8c59e8a61472f347d58",
-=======
-            "time": "2026-08-24T09:11:28+00:00"
-        },
-        {
-            "name": "guzzlehttp/psr7",
-            "version": "2.13.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guzzle/psr7.git",
-                "reference": "95e7828100de18b4e269fb1703be530082d5166d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/95e7828100de18b4e269fb1703be530082d5166d",
-                "reference": "95e7828100de18b4e269fb1703be530082d5166d",
->>>>>>> 7d71a71 (update deps)
                 "shasum": ""
             },
             "require": {
@@ -922,11 +863,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-<<<<<<< HEAD
                 "source": "https://github.com/guzzle/psr7/tree/2.13.2"
-=======
-                "source": "https://github.com/guzzle/psr7/tree/2.13.1"
->>>>>>> 7d71a71 (update deps)
             },
             "funding": [
                 {
@@ -942,11 +879,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2026-10-17T23:49:46+00:00"
-=======
-            "time": "2026-08-24T09:13:11+00:00"
->>>>>>> 7d71a71 (update deps)
         },
         {
             "name": "league/commonmark",
@@ -2500,28 +2433,29 @@
     "packages-dev": [
         {
             "name": "composer/pcre",
-            "version": "3.3.2",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/pcre.git",
-                "reference": "b2bed4734f0cc156ee1fe9c0da2550420d99a21e"
+                "reference": "d5a341b3fb61f3001970940afb1d332968a183ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/pcre/zipball/b2bed4734f0cc156ee1fe9c0da2550420d99a21e",
-                "reference": "b2bed4734f0cc156ee1fe9c0da2550420d99a21e",
+                "url": "https://api.github.com/repos/composer/pcre/zipball/d5a341b3fb61f3001970940afb1d332968a183ed",
+                "reference": "d5a341b3fb61f3001970940afb1d332968a183ed",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4 || ^8.0"
             },
             "conflict": {
-                "phpstan/phpstan": "<1.11.10"
+                "phpstan/phpstan": "<2.2.2"
             },
             "require-dev": {
-                "phpstan/phpstan": "^1.12 || ^2",
-                "phpstan/phpstan-strict-rules": "^1 || ^2",
-                "phpunit/phpunit": "^8 || ^9"
+                "phpstan/phpstan": "^2",
+                "phpstan/phpstan-deprecation-rules": "^2",
+                "phpstan/phpstan-strict-rules": "^2",
+                "phpunit/phpunit": "^9"
             },
             "type": "library",
             "extra": {
@@ -2559,7 +2493,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/pcre/issues",
-                "source": "https://github.com/composer/pcre/tree/3.3.2"
+                "source": "https://github.com/composer/pcre/tree/3.4.0"
             },
             "funding": [
                 {
@@ -2569,13 +2503,9 @@
                 {
                     "url": "https://github.com/composer",
                     "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                    "type": "tidelift"
                 }
             ],
-            "time": "2024-11-12T16:29:46+00:00"
+            "time": "2026-06-07T11:47:49+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -3092,11 +3022,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.54",
+            "version": "2.3.1",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8be50c3992107dc837b17da4d140fbbdf9a5c5bd",
-                "reference": "8be50c3992107dc837b17da4d140fbbdf9a5c5bd",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/6155239b488e95d26d1ebd95c6b4bb294d7f09db",
+                "reference": "6155239b488e95d26d1ebd95c6b4bb294d7f09db",
                 "shasum": ""
             },
             "require": {
@@ -3118,6 +3048,17 @@
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ondřej Mirtes"
+                },
+                {
+                    "name": "Markus Staab"
+                },
+                {
+                    "name": "Vincent Langlet"
+                }
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
             "keywords": [
@@ -3141,7 +3082,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-29T13:31:09+00:00"
+            "time": "2026-10-08T21:09:11+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3981,7 +3922,6 @@
         },
         {
             "name": "sebastian/exporter",
-<<<<<<< HEAD
             "version": "7.0.3",
             "source": {
                 "type": "git",
@@ -3992,18 +3932,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/c5e21b5de653ce0a769fb36f5cdfcb5e7a32cf23",
                 "reference": "c5e21b5de653ce0a769fb36f5cdfcb5e7a32cf23",
-=======
-            "version": "4.0.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sebastianbergmann/exporter.git",
-                "reference": "4352c1a3df741a7ba9e61af6fed51d1fee41cbf7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/4352c1a3df741a7ba9e61af6fed51d1fee41cbf7",
-                "reference": "4352c1a3df741a7ba9e61af6fed51d1fee41cbf7",
->>>>>>> 7d71a71 (update deps)
                 "shasum": ""
             },
             "require": {
@@ -4059,12 +3987,8 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/exporter/issues",
-<<<<<<< HEAD
                 "security": "https://github.com/sebastianbergmann/exporter/security/policy",
                 "source": "https://github.com/sebastianbergmann/exporter/tree/7.0.3"
-=======
-                "source": "https://github.com/sebastianbergmann/exporter/tree/4.0.9"
->>>>>>> 7d71a71 (update deps)
             },
             "funding": [
                 {
@@ -4084,11 +4008,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2026-05-20T04:37:17+00:00"
-=======
-            "time": "2026-08-11T04:55:59+00:00"
->>>>>>> 7d71a71 (update deps)
         },
         {
             "name": "sebastian/global-state",
@@ -4350,7 +4270,6 @@
         },
         {
             "name": "sebastian/recursion-context",
-<<<<<<< HEAD
             "version": "7.0.1",
             "source": {
                 "type": "git",
@@ -4361,18 +4280,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/0b01998a7d5b1f122911a66bebcb8d46f0c82d8c",
                 "reference": "0b01998a7d5b1f122911a66bebcb8d46f0c82d8c",
-=======
-            "version": "4.0.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sebastianbergmann/recursion-context.git",
-                "reference": "c85be6922b7fd365942b986b9a50397d65407611"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/c85be6922b7fd365942b986b9a50397d65407611",
-                "reference": "c85be6922b7fd365942b986b9a50397d65407611",
->>>>>>> 7d71a71 (update deps)
                 "shasum": ""
             },
             "require": {
@@ -4414,12 +4321,8 @@
             "homepage": "https://github.com/sebastianbergmann/recursion-context",
             "support": {
                 "issues": "https://github.com/sebastianbergmann/recursion-context/issues",
-<<<<<<< HEAD
                 "security": "https://github.com/sebastianbergmann/recursion-context/security/policy",
                 "source": "https://github.com/sebastianbergmann/recursion-context/tree/7.0.1"
-=======
-                "source": "https://github.com/sebastianbergmann/recursion-context/tree/4.0.7"
->>>>>>> 7d71a71 (update deps)
             },
             "funding": [
                 {
@@ -4439,65 +4342,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2025-08-13T04:44:59+00:00"
-=======
-            "time": "2026-08-11T05:25:24+00:00"
-        },
-        {
-            "name": "sebastian/resource-operations",
-            "version": "3.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sebastianbergmann/resource-operations.git",
-                "reference": "05d5692a7993ecccd56a03e40cd7e5b09b1d404e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/resource-operations/zipball/05d5692a7993ecccd56a03e40cd7e5b09b1d404e",
-                "reference": "05d5692a7993ecccd56a03e40cd7e5b09b1d404e",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.3"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "3.0-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de"
-                }
-            ],
-            "description": "Provides a list of PHP built-in functions that operate on resources",
-            "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "support": {
-                "source": "https://github.com/sebastianbergmann/resource-operations/tree/3.0.4"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/sebastianbergmann",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-03-14T16:00:52+00:00"
->>>>>>> 7d71a71 (update deps)
         },
         {
             "name": "sebastian/type",
@@ -4851,7 +4696,6 @@
         },
         {
             "name": "symfony/filesystem",
-<<<<<<< HEAD
             "version": "v7.4.21",
             "source": {
                 "type": "git",
@@ -4862,18 +4706,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/filesystem/zipball/fd0e3462be6d32a0d130e8423e4940a7688162d8",
                 "reference": "fd0e3462be6d32a0d130e8423e4940a7688162d8",
-=======
-            "version": "v5.4.54",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/filesystem.git",
-                "reference": "c4a6cc5733386414f6d17d744ee5ad8b445e349d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/c4a6cc5733386414f6d17d744ee5ad8b445e349d",
-                "reference": "c4a6cc5733386414f6d17d744ee5ad8b445e349d",
->>>>>>> 7d71a71 (update deps)
                 "shasum": ""
             },
             "require": {
@@ -4910,11 +4742,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/filesystem/tree/v7.4.21"
-=======
-                "source": "https://github.com/symfony/filesystem/tree/v5.4.54"
->>>>>>> 7d71a71 (update deps)
             },
             "funding": [
                 {
@@ -4934,11 +4762,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2026-10-06T20:05:19+00:00"
-=======
-            "time": "2026-08-30T06:54:06+00:00"
->>>>>>> 7d71a71 (update deps)
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -5112,7 +4936,6 @@
         },
         {
             "name": "symfony/process",
-<<<<<<< HEAD
             "version": "v8.1.9",
             "source": {
                 "type": "git",
@@ -5123,18 +4946,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/process/zipball/59a682fd049b2d4d37c444f5ac21b7d01b8c7189",
                 "reference": "59a682fd049b2d4d37c444f5ac21b7d01b8c7189",
-=======
-            "version": "v5.4.54",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/process.git",
-                "reference": "485d7b3f15ae329058d2407c9772c57ed4f564de"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/485d7b3f15ae329058d2407c9772c57ed4f564de",
-                "reference": "485d7b3f15ae329058d2407c9772c57ed4f564de",
->>>>>>> 7d71a71 (update deps)
                 "shasum": ""
             },
             "require": {
@@ -5166,11 +4977,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
                 "source": "https://github.com/symfony/process/tree/v8.1.9"
-=======
-                "source": "https://github.com/symfony/process/tree/v5.4.54"
->>>>>>> 7d71a71 (update deps)
             },
             "funding": [
                 {
@@ -5190,11 +4997,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
             "time": "2026-10-08T16:57:43+00:00"
-=======
-            "time": "2026-09-01T06:19:14+00:00"
->>>>>>> 7d71a71 (update deps)
         },
         {
             "name": "symfony/service-contracts",

@@ -2,7 +2,7 @@
 /**
  * A Big Wrapper for Slim to make Apps "our" way
  *
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 namespace OpenTHC;

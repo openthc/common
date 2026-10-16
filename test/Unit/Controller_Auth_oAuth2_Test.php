@@ -2,10 +2,10 @@
 /**
  * Unit test for \OpenTHC\Controller\Auth\oAuth2
  *
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
-namespace OpenTHC\Test;
+namespace OpenTHC\Test\Unit;
 
 class Mock_oAuth2 extends \OpenTHC\Controller\Auth\oAuth2
 {
@@ -114,7 +114,7 @@ class Controller_Auth_oAuth2_Test extends \OpenTHC\Test\Base
 		$_GET     = [ 'state'        => 'ABZ-XYZ', 'code' => 'MY_CODE', ];
 
 		$tokMock = $this->createMock(\League\OAuth2\Client\Token\AccessToken::class);
-		$tokMock->method('jsonSerialize')->willReturn([ 
+		$tokMock->method('jsonSerialize')->willReturn([
 			'access_token' => 'your_access_token',
 			'token_type' => 'bearer',
 		]);

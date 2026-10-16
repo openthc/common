@@ -2,7 +2,7 @@
 	"name": "openthc/common",
 	"description": "OpenTHC Common Library",
 	"license": "GPL-3.0-only",
-	"vesion": "v2026.288.1",
+	"version": "v2026.289.0",
 	"autoload": {
 		"files": [
 			"lib/err.php",
@@ -37,7 +37,7 @@
 	"require-dev": {
 		"php-webdriver/webdriver": "1.16.0",
 		"phpmd/phpmd": "2.15.0",
-		"phpstan/phpstan": "2.1.54",
+		"phpstan/phpstan": "2.3.1",
 		"phpunit/phpunit": "12.5.8"
 	}
 }

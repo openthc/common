@@ -2,7 +2,7 @@
 /**
  * CORS Headers
  *
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 namespace OpenTHC\Middleware;
