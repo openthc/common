@@ -2,7 +2,7 @@
 /**
  * Base Class for Test Cases
  *
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 namespace OpenTHC\Test;

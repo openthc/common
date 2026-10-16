@@ -1,9 +1,9 @@
 <?php
 /**
  * Log Request and Response
- * @todo can we use GuzzleHttp\Psr7\str($req) ? 
+ * @todo can we use GuzzleHttp\Psr7\str($req) ?
  *
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 namespace OpenTHC\Middleware\Log;

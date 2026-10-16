@@ -3,7 +3,7 @@
  * Creates a Semaphore Lock
  * The lock will disappear when this object loses scope or is unset
  *
- * SPDX-License-Identifier: MIT
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 
 namespace OpenTHC\CLI;
