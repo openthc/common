@@ -29,7 +29,6 @@ class PHPUnit {
 		$this->config['--log-junit']     = sprintf('%s/phpunit.xml', $this->output_path);
 		$this->config['--testdox-html']  = sprintf('%s/testdox.html', $this->output_path);
 		$this->config['--testdox-text']  = sprintf('%s/testdox.txt', $this->output_path);
-		$this->config['--testdox-xml']   = sprintf('%s/testdox.xml', $this->output_path);
 		foreach ($cfg as $k => $v) {
 			if (preg_match('/^\-\-\w/', $k)) {
 				$this->config[$k] = $v;
@@ -39,11 +38,10 @@ class PHPUnit {
 	}
 
 	/**
-	 * Execute the PHPUnit
+	 * Execute PHPUnit
 	 */
 	function execute() : array
 	{
-
 		$arg = [];
 		$arg[] = 'phpunit';
 		foreach ($this->config as $k => $v) {
@@ -53,12 +51,9 @@ class PHPUnit {
 		printf("cmd: %s\n", implode(' ', $arg));
 
 		ob_start();
-		// ob_start(function($s) {
-		//      // Do something w/String $s
-		// });
 
-		$cmd = new \PHPUnit\TextUI\Command();
-		$res = $cmd->run($arg, false);
+		$app = new \PHPUnit\TextUI\Application();
+		$res = $app->run($arg);
 		$output_text = ob_get_clean();
 		$output_file = sprintf('%s/phpunit.txt', $this->output_path);
 		file_put_contents($output_file, $output_text);
@@ -66,7 +61,9 @@ class PHPUnit {
 		// PHPUnit Transform
 		$source_file = sprintf('%s/phpunit.xml', $this->output_path);
 		$output_file = sprintf('%s/phpunit.html', $this->output_path);
-		\OpenTHC\Test\Helper::xsl_transform($source_file, $output_file);
+		if (is_file($source_file)) {
+			\OpenTHC\Test\Helper::xsl_transform($source_file, $output_file);
+		}
 
 		$ret = [];
 		switch ($res) {

@@ -23,9 +23,9 @@ class Base extends \PHPUnit\Framework\TestCase
 	/**
 	 *
 	 */
-	function __construct($name = null, array $data = [], $dataName = '')
+	protected function setUp() : void
 	{
-		parent::__construct($name, $data, $dataName);
+		parent::setUp();
 
 		$this->_pid = getmypid();
 
