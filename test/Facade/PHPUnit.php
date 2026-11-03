@@ -25,7 +25,6 @@ class PHPUnit {
 
 		$this->config = [];
 		$this->config['--configuration'] = sprintf('%s/test/phpunit.xml', $app_root);
-		$this->config['--coverage-xml']  = sprintf('%s/coverage', $this->output_path);
 		$this->config['--log-junit']     = sprintf('%s/phpunit.xml', $this->output_path);
 		$this->config['--testdox-html']  = sprintf('%s/testdox.html', $this->output_path);
 		$this->config['--testdox-text']  = sprintf('%s/testdox.txt', $this->output_path);
