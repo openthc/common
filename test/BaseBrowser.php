@@ -80,6 +80,8 @@ class BaseBrowser extends Base {
 			$url = $_ENV['OPENTHC_TEST_WEBDRIVER_URL']; // v1
 		} elseif (defined('OPENTHC_TEST_WEBDRIVER_URL')) {
 			$url = OPENTHC_TEST_WEBDRIVER_URL; // v0
+		} elseif ( ! empty(getenv('OPENTHC_TEST_WEBDRIVER_URL'))) {
+			$url = getenv('OPENTHC_TEST_WEBDRIVER_URL');
 		}
 
 		if (empty($url)) {
@@ -97,13 +99,13 @@ class BaseBrowser extends Base {
 	 */
 	function tearDown() : void
 	{
-		if (self::$stat != 'FAILED') {
-			self::$stat = ($this->hasFailed() ? 'FAILED' : 'PASSED');;
-			// self::$stat = $this->getStatus();
-		}
+		$status = $this->status();
+		$isFailed = $status->isFailure() || $status->isError();
 
-		self::$stat_int = $this->getStatus();
-		self::$stat_msg = $this->getStatusMessage();
+		self::$stat = ($isFailed ? 'FAILED' : 'PASSED');
+
+		self::$stat_int = $isFailed ? 1 : 0; // Or whatever int mapping OpenTHC previously expected
+		self::$stat_msg = $status->message();
 
 	}
 
@@ -116,7 +118,7 @@ class BaseBrowser extends Base {
 
 			// echo "\nDONE SESSION ID: {$sid}; stat:{$sim}\n";
 
-			$chk = $_ENV['OPENTHC_TEST_WEBDRIVER_URL'];
+			$chk = getenv('OPENTHC_TEST_WEBDRIVER_URL');
 			if (preg_match('/browserstack/', $chk)) {
 				self::tearDownAfterClass_BrowserStack();
 			} elseif (preg_match('/lambdatest/', $chk)) {
@@ -150,7 +152,7 @@ class BaseBrowser extends Base {
 		// // "passed","failed","skipped", "ignored", "unknown", "error"
 
 		$sid = self::$wd->getSessionId();
-		$url = $_ENV['OPENTHC_TEST_WEBDRIVER_URL'];
+		$url = getenv('OPENTHC_TEST_WEBDRIVER_URL');
 		$url = parse_url($url);
 		$cfg = [];
 		$cfg['username'] = $url['user'];
@@ -196,7 +198,7 @@ class BaseBrowser extends Base {
 	public static function tearDownAfterClass_BrowserStack() : void
 	{
 		$sid = self::$wd->getSessionId();
-		$url = $_ENV['OPENTHC_TEST_WEBDRIVER_URL'];
+		$url = getenv('OPENTHC_TEST_WEBDRIVER_URL');
 		$url = parse_url($url);
 		$cfg = [];
 		$cfg['username'] = $url['user'];
