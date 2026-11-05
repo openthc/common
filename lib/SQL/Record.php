@@ -457,16 +457,21 @@ class Record implements \ArrayAccess, \JsonSerializable
 	/**
 		@return Boolean
 	*/
-	public function offsetExists($k) { return isset($this->_data[$k]); }
+	public function offsetExists($k) : bool
+	{
+		return isset($this->_data[$k]);
+	}
 
 	/**
 		@return Data
 	*/
+	#[\ReturnTypeWillChange]
 	public function offsetGet($k) { return $this->_data[$k]; }
 
 	/**
 		@return void
 	*/
+	#[\ReturnTypeWillChange]
 	public function offsetSet($k, $v)
 	{
 		// If Different than current value
@@ -490,6 +495,7 @@ class Record implements \ArrayAccess, \JsonSerializable
 	/**
 		@return void
 	*/
+	#[\ReturnTypeWillChange]
 	public function offsetUnset($k) { unset($this->_data[$k]); }
 
 	function jsonSerialize()
