@@ -1,56 +1,36 @@
 <?php
 /**
- * PSR7 Reponse w/Features
+ * PSR7 Reponse w/Attributes
+ * @todo should move to setting attributes on REQ in the Middleware
+ * Set it early, then the controller runs and after that the middleware can see the modified attributes
  *
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
 namespace OpenTHC\HTTP;
 
-class Response extends \Slim\Http\Response
+class Response extends \GuzzleHttp\Psr7\Response
 {
 	private $_attr = [];
 
-	/**
-	 * Constructor
-	 * @todo low-risk interface
-	 * @todo how are we using this class? Found only once it in CRE
-	 * @param \Psr\Http\Message\ResponseInterface $c
-	 * @param \Psr\Http\Message\StreamFactoryInterface $h
-	 */
-	function __construct($c=200, $h=null)
-	{
-		$h = new \Slim\Http\Headers([
-			'content-type' => 'text/html; charset=utf-8'
-		]);
-		parent::__construct($c, $h);
-	}
-
-	/**
-	 *
-	 */
-	function getAttribute(string $key)
+	function getAttribute($key)
 	{
 		return $this->_attr[$key];
 	}
 
-	/**
-	 *
-	 */
-	function withAttribute(string $key, $val)
+	function withAttribute($key, $val)
 	{
 		$obj1 = clone $this;
 		$obj1->_attr[ $key ] = $val;
 		return $obj1;
 	}
 
-	/**
-	 * Update JSON
-	 */
 	function withJSON($data, $code=200, $flag=null)
 	{
-		$flag = intval($flag);
-		$flag = ($flag | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+		if (empty($flag)) {
+			$flag = JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
+		}
+
 		return parent::withJSON($data, $code, $flag);
 	}
 
