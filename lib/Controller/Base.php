@@ -12,15 +12,6 @@ class Base
 	protected $_container;
 
 	/**
-	 * Save the Container from Slim
-	 * @param \Slim\Container $c
-	 */
-	function __construct(\Slim\Container $c)
-	{
-		$this->_container = $c;
-	}
-
-	/**
 	 * Extenders should implement this
 	 * @todo low-risk interface
 	 * @param \Slim\Http\Request $REQ
