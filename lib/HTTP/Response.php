@@ -31,7 +31,14 @@ class Response extends \GuzzleHttp\Psr7\Response
 			$flag = JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
 		}
 
-		return parent::withJSON($data, $code, $flag);
+		// return parent::withJSON($data, $code, $flag);
+		$data = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+		$this->getBody()->write($data);
+
+		return $this
+			->withHeader('content-type', 'application/json')
+			->withStatus($code);
+
 	}
 
 }
